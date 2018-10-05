@@ -24,14 +24,22 @@ router.post('/manager', (req, res) => {
  * PUT routes
  */
 // edits an employee's record 
-router.put('/', (req, res) => {
+router.put('/employee', (req, res) => {
+
+});
+// edits a manager's record 
+router.put('/manager', (req, res) => {
 
 });
 /**
  * DELETE routes
  */
 // deletes an employee's record 
-router.delete('/', (req, res) => {
+router.delete('/employee', (req, res) => {
+
+});
+// deletes a manager 
+router.delete('/manager', (req, res) => {
 
 });
 module.exports = router;

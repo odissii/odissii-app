@@ -7,14 +7,17 @@ const router = express.Router();
  */
 // gets all feedback where a manager ID matches the req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images  
+// should set a limit of responses
 router.get('/', (req, res) => {
     
 });
 // gets all feedback from all managers (for a supervisor) where a supervisor ID matches the req.user.id
+// should set a limit of responses
 router.get('/managers/all', (req, res) => {
     
 });
 // gets all feedback for a specific employee where a manager ID or supervisor ID matches the req.user.id
+// should set a limit of responses
 router.get('/employee', (req, res) => {
     
 });
