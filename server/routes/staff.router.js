@@ -5,7 +5,8 @@ const router = express.Router();
 /**
  * GET routes
  */
-// gets all employees or all managers  
+// gets all employees or all managers 
+// should join with person and get first_name, last_name, username, person.id, role_id
 router.get('/', (req, res) => {
     
 });
