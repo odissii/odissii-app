@@ -5,7 +5,8 @@ const router = express.Router();
 /**
  * GET routes
  */
-// gets all feedback where a manager ID matches the req.user.id  
+// gets all feedback where a manager ID matches the req.user.id
+// will need to do a full join with the feedback_images table to get all associated feedback images  
 router.get('/', (req, res) => {
     
 });
