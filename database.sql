@@ -1,45 +1,45 @@
--- CREATE TABLE person (
---     id SERIAL PRIMARY KEY,
---     username VARCHAR (80) UNIQUE NOT NULL,
---     password VARCHAR (1000) NOT NULL
--- );
-
--- Supervisors are top-level users who monitor managers
--- and the feedback they give to their employees over time.
--- Has many managers
-CREATE TABLE supervisor (
+-- role is a table of potential user roles within the application
+-- initial values are "supervisor" and "manager"
+CREATE TABLE role (
   id SERIAL PRIMARY KEY,
-  employee_id VARCHAR (255) UNIQUE NOT NULL,
-  username VARCHAR (80) UNIQUE NOT NULL,
-  password VARCHAR (255) NOT NULL,
-  first_name VARCHAR (255) NOT NULL,
-  last_name VARCHAR (255) NOT NULL,
-  email_address VARCHAR (255)
+  name VARCHAR (255) UNIQUE NOT NULL
 );
 
--- Managers are primary users who are responsible for
--- generating feedback for a given group of employees.
--- Has one supervisor. Has many employees.
-CREATE TABLE manager (
-  id SERIAL PRIMARY KEY,
-  supervisor_ref INT NOT NULL REFERENCES "supervisor",
-  employee_id VARCHAR (255) UNIQUE NOT NULL,
-  username VARCHAR (80) UNIQUE NOT NULL,
-  password VARCHAR (255) NOT NULL,
-  first_name VARCHAR (255) NOT NULL,
-  last_name VARCHAR (255) NOT NULL,
-  email_address VARCHAR (255)
+-- the user of the application
+-- identified as either a "supervisor" or "manager" by their "role_id"
+CREATE TABLE person (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR (80) UNIQUE NOT NULL,
+    password VARCHAR (1000) NOT NULL,
+    employeeId VARCHAR (255) NOT NULL,
+    first_name VARCHAR (255) NOT NULL,
+    last_name VARCHAR (255) NOT NULL,
+    email_address VARCHAR (500) NOT NULL,
+    role_id INT NOT NULL REFERENCES "role"
 );
 
--- Employees are non-users for whom feedback is created.
--- Has one manager.
+-- junction table to link a "supervisor" person to a "manager" person
+CREATE TABLE supervisor_manager (
+  id SERIAL PRIMARY KEY,
+  supervisor_id INT NOT NULL REFERENCES "person",
+  manager_id INT NOT NULL REFERENES "person"
+);
+
+-- junction table to link a "manager" person to an employee
+CREATE TABLE manager_employee (
+  id SERIAL PRIMARY KEY,
+  manager_id INT NOT NULL REFERENCES "person",
+  employee_id INT NOT NULL REFERENCES "employee"
+);
+
+-- table for employees, who are non-users for whom managers provide feedback
 CREATE TABLE employee (
   id SERIAL PRIMARY KEY,
-  manager_ref INT NOT NULL REFERENCES "manager",
-  employee_id VARCHAR (255) UNIQUE NOT NULL,
+  employeeId VARCHAR (255) UNIQUE NOT NULL,
   first_name VARCHAR (255) NOT NULL,
   last_name VARCHAR (255) NOT NULL,
-  image_path VARCHAR (255)
+  image_path VARCHAR (255),
+  manager_id INT NOT NULL REFERENCES "person",
 );
 
 -- Feedback entries created by one manager for one employee
@@ -48,14 +48,20 @@ CREATE TABLE employee (
 -- and the date of the most recent edit to this feedback, if any
 CREATE TABLE feedback (
   id SERIAL PRIMARY KEY,
-  manager_ref INT NOT NULL REFERENCES "manager",
-  employee_ref INT NOT NULL REFERENCES "employee",
+  manager_id INT NOT NULL REFERENCES "manager",
+  employee_id INT NOT NULL REFERENCES "employee",
   date_created DATETIME NOT NULL DEFAULT CURRENT_DATE,
   quality VARCHAR (50) NOT NULL,
   task_related BOOLEAN DEFAULT false,
   culture_releated BOOLEAN DEFAULT false,
-  details VARCHAR (1000) NOT NULL,
+  details VARCHAR NOT NULL,
   image_path VARCHAR (255),
-  follow_up_date DATETIME,
   date_edited DATETIME,
+);
+
+-- a table of reminders for a manager to follow up with an employee
+CREATE TABLE follow_up (
+  id SERIAL PRIMARY KEY,
+  employee_id INT NOT NULL REFERENCES "employee",
+  follow_up_date DATETIME,
 );
