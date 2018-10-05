@@ -41,8 +41,7 @@ CREATE TABLE employee (
   employeeId VARCHAR (255) UNIQUE NOT NULL,
   first_name VARCHAR (255) NOT NULL,
   last_name VARCHAR (255) NOT NULL,
-  image_path VARCHAR (255),
-  manager_id INT NOT NULL REFERENCES "person"
+  image_path VARCHAR (255)
 );
 
 -- Feedback entries created by one manager for one employee
@@ -58,10 +57,14 @@ CREATE TABLE feedback (
   task_related BOOLEAN DEFAULT false,
   culture_releated BOOLEAN DEFAULT false,
   details VARCHAR NOT NULL,
-  image_path VARCHAR (255),
   date_edited TIMESTAMP
 );
-
+--a table for all of the images associated with feedback 
+CREATE TABLE feedback_images (
+	id SERIAL PRIMARY KEY, 
+	image_path VARCHAR (255),
+	feedback_id INT NOT NULL REFERENCES "feedback"
+);
 -- a table of reminders for a manager to follow up with an employee
 CREATE TABLE follow_up (
   id SERIAL PRIMARY KEY,
