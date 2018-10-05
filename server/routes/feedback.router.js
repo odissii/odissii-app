@@ -22,7 +22,10 @@ router.get('/employee', (req, res) => {
 router.get('/confirmation', (req, res) => {
     
 });
-// 
+// gets all follow-up records for an employee if no feedback has been given after the follow-up date
+router.get('/followup', (req, res) => {
+    
+});
 /**
  * POST routes 
  */
