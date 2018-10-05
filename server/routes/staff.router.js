@@ -13,7 +13,11 @@ router.get('/', (req, res) => {
  * POST routes 
  */
 // creates a new employee 
-router.post('/', (req, res) => {
+router.post('/employee', (req, res) => {
+
+});
+// creates a new manager 
+router.post('/manager', (req, res) => {
 
 });
 /**
