@@ -25,7 +25,7 @@ CREATE TABLE person (
 CREATE TABLE supervisor_manager (
   id SERIAL PRIMARY KEY,
   supervisor_id INT NOT NULL REFERENCES "person",
-  manager_id INT NOT NULL REFERENES "person"
+  manager_id INT NOT NULL REFERENCES "person"
 );
 
 -- junction table to link a "manager" person to an employee
