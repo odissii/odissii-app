@@ -42,7 +42,7 @@ CREATE TABLE employee (
   first_name VARCHAR (255) NOT NULL,
   last_name VARCHAR (255) NOT NULL,
   image_path VARCHAR (255),
-  manager_id INT NOT NULL REFERENCES "person",
+  manager_id INT NOT NULL REFERENCES "person"
 );
 
 -- Feedback entries created by one manager for one employee
@@ -51,20 +51,20 @@ CREATE TABLE employee (
 -- and the date of the most recent edit to this feedback, if any
 CREATE TABLE feedback (
   id SERIAL PRIMARY KEY,
-  manager_id INT NOT NULL REFERENCES "manager",
-  employee_id INT NOT NULL REFERENCES "employee",
-  date_created DATETIME NOT NULL DEFAULT CURRENT_DATE,
+  manager_id INT NOT NULL REFERENCES "person",
+  employee_id INT NOT NULL REFERENCES "person",
+  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
   quality VARCHAR (50) NOT NULL,
   task_related BOOLEAN DEFAULT false,
   culture_releated BOOLEAN DEFAULT false,
   details VARCHAR NOT NULL,
   image_path VARCHAR (255),
-  date_edited DATETIME,
+  date_edited TIMESTAMP
 );
 
 -- a table of reminders for a manager to follow up with an employee
 CREATE TABLE follow_up (
   id SERIAL PRIMARY KEY,
   employee_id INT NOT NULL REFERENCES "employee",
-  follow_up_date DATETIME,
-);
+  follow_up_date TIMESTAMP
+  );
