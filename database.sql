@@ -1,3 +1,6 @@
+-- The database should be called "odissii" when it is created.
+-- The name of the database is recorded in server/modules/pool.js
+
 -- role is a table of potential user roles within the application
 -- initial values are "supervisor" and "manager"
 CREATE TABLE role (
