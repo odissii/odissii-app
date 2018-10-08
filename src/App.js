@@ -9,6 +9,11 @@ import {
 import Header from './components/Header/Header';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
+import DashboardView from './components/DashboardView/DashboardView';
+import EmployeesView from './components/EmployeesView/EmployeesView';
+import FeedbackFormView from './components/FeedbackFormView/FeedbackFormView';
+import EmployeeFormView from './components/EmployeeFormView/EmployeeFormView';
+import SettingsView from './components/SettingsView/SettingsView';
 import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
 
@@ -28,6 +33,26 @@ const App = () => (
           path="/register"
           component={RegisterPage}
         />
+        <Route 
+          path="/dashboard"
+          component={DashboardView}
+        />
+        <Route 
+          path="/employees"
+          component={EmployeesView}
+        />
+        <Route 
+          path="/feedback/new"
+          component={FeedbackFormView}
+        />
+        <Route 
+          path="/employee/new"
+          component={EmployeeFormView}
+        />
+        <Route 
+          path="/settings"
+          component={SettingsView}
+        />
         <Route
           path="/user"
           component={UserPage}
@@ -38,7 +63,6 @@ const App = () => (
         />
         {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
-
       </Switch>
     </Router>
   </div>
