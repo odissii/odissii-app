@@ -8,6 +8,8 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 import SupervisorDashboard from './SupervisorDashboard/SupervisorDashboard';
 import ManagerDashboard from './ManagerDashboard/ManagerDashboard';
 
+import { USER_ROLES } from '../../constants';
+
 const mapStateToProps = state => ({
   user: state.user,
 });
@@ -24,12 +26,21 @@ class DashboardView extends React.Component {
   }
 
   render(){
+    const {user} = this.props;
+    
+    let userDashboard;
+    if (user.role === USER_ROLES.SUPERVISOR) {
+      userDashboard = <SupervisorDashboard />
+    } else if (user.role === USER_ROLES.MANAGER) {
+      userDashboard = <ManagerDashboard />
+    }
+
     return (
       <div>
         <Nav />
         <div>
           This is the dashboard. 
-          Either the SupervisorDashboard or ManagerDashboard view will show here.
+          {userDashboard}
         </div>
       </div>
       
