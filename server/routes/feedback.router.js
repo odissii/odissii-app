@@ -30,6 +30,10 @@ router.get('/confirmation', (req, res) => {
 router.get('/followup', (req, res) => {
     
 });
+// gets all follow-up records for all employees if no feedback has been given after the follow-up date
+router.get('/followup/all', (req, res) => {
+    
+});
 /**
  * POST routes 
  */
