@@ -25,6 +25,61 @@ const userName = (state = null, action) => {
   }
 };
 
+const first_name = (state = null, action) => {
+  switch (action.type) {
+    case USER_ACTIONS.SET_USER:
+      return action.user.first_name || state;
+    case USER_ACTIONS.UNSET_USER:
+      return null;
+    default:
+      return state;
+  }
+};
+
+const last_name = (state = null, action) => {
+  switch (action.type) {
+    case USER_ACTIONS.SET_USER:
+      return action.user.last_name || state;
+    case USER_ACTIONS.UNSET_USER:
+      return null;
+    default:
+      return state;
+  }
+};
+
+const employeeId = (state = null, action) => {
+  switch (action.type) {
+    case USER_ACTIONS.SET_USER:
+      return action.user.employeeId || state;
+    case USER_ACTIONS.UNSET_USER:
+      return null;
+    default:
+      return state;
+  }
+};
+
+const email_address = (state = null, action) => {
+  switch (action.type) {
+    case USER_ACTIONS.SET_USER:
+      return action.user.email_address || state;
+    case USER_ACTIONS.UNSET_USER:
+      return null;
+    default:
+      return state;
+  }
+};
+
+const role = (state = null, action) => {
+  switch (action.type) {
+    case USER_ACTIONS.SET_USER:
+      return action.user.role || state;
+    case USER_ACTIONS.UNSET_USER:
+      return null;
+    default:
+      return state;
+  }
+};
+
 //isLoading holds the boolean that tracks whether or not this async call is out in the internet or not
 const isLoading = (state = false, action) => {
   switch (action.type) {
@@ -41,5 +96,10 @@ const isLoading = (state = false, action) => {
 export default combineReducers({
   id,
   userName,
+  employeeId,
+  first_name,
+  last_name,
+  email_address,
+  role,
   isLoading,
 });

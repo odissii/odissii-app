@@ -10,7 +10,8 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   pool.query(`SELECT 
     "person"."id", 
-    "person"."username", 
+    "person"."username",
+    "person"."employeeId", 
     "person"."first_name", 
     "person"."last_name", 
     "person"."email_address", 
