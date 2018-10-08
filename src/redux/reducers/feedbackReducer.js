@@ -17,19 +17,7 @@ const feedback = (state = feedbackTypes, action) => {
     }
     return state; 
 } 
-const followUpRecords = {
-    employeeFollowUp: [],
-    allFollowUpRecords: []
-}
-const followUp = (state = followUpRecords, action) => {
-    if (action.type === FEEDBACK_ACTIONS.SET_EMPLOYEE_FOLLOWUP_RECORDS){
-        return {...state, employeeFollowUp: action.payload}; 
-    } else if (action.type === FEEDBACK_ACTIONS.SET_ALL_FOLLOWUP_RECORDS){
-        return {...state, allFollowUpRecords: action.payload}; 
-    } return state; 
-}
 
 export default combineReducers({
    feedback,
-   followUp
   });
