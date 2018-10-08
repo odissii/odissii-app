@@ -2,6 +2,17 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const ROLES = [
+  {
+    id: 1,
+    name: 'supervisor',
+  },
+  {
+    id: 2,
+    name: 'manager'
+  }
+];
+
 class RegisterPage extends Component {
   constructor(props) {
     super(props);
@@ -9,6 +20,11 @@ class RegisterPage extends Component {
     this.state = {
       username: '',
       password: '',
+      employeeId: '',
+      first_name: '',
+      last_name: '',
+      email_address: '',
+      role_id: '',
       message: '',
     };
   }
@@ -21,9 +37,25 @@ class RegisterPage extends Component {
         message: 'Choose a username and password!',
       });
     } else {
+      
+      const {
+        username, 
+        password, 
+        employeeId, 
+        first_name, 
+        last_name, 
+        email_address, 
+        role_id
+      } = this.state;
+
       const body = {
-        username: this.state.username,
-        password: this.state.password,
+        username, 
+        password, 
+        employeeId, 
+        first_name, 
+        last_name, 
+        email_address, 
+        role_id
       };
 
       // making the request to the server to post the new user's registration
@@ -91,6 +123,60 @@ class RegisterPage extends Component {
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
               />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="employeeId">
+            Employee Id:
+              <input
+                type="text"
+                name="employeeId"
+                value={this.state.employeeId}
+                onChange={this.handleInputChangeFor('employeeId')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="first_name">
+            First Name:
+              <input
+                type="text"
+                name="first_name"
+                value={this.state.first_name}
+                onChange={this.handleInputChangeFor('first_name')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="last_name">
+            Last Name:
+              <input
+                type="text"
+                name="last_name"
+                value={this.state.last_name}
+                onChange={this.handleInputChangeFor('last_name')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="email_address">
+            Email Address:
+              <input
+                type="email"
+                name="email_address"
+                value={this.state.email_address}
+                onChange={this.handleInputChangeFor('email_address')}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="role_id">
+              <select value={this.state.role_id} onChange={this.handleInputChangeFor('role_id')}>
+                <option value="" disabled>Select user type</option>
+                {ROLES.map(role => (
+                  <option key={role.id} value={role.id}>{role.name}</option>
+                ))}
+              </select>
             </label>
           </div>
           <div>

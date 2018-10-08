@@ -8,6 +8,8 @@ CREATE TABLE role (
   name VARCHAR (255) UNIQUE NOT NULL
 );
 
+INSERT INTO role ("name") VALUES ('supervisor'), ('manager');
+
 -- the user of the application
 -- identified as either a "supervisor" or "manager" by their "role_id"
 CREATE TABLE person (
