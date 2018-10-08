@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import user from './userReducer';
 import login from './loginReducer';
+import people from './peopleReducer';
 import feedback from './feedbackReducer';
 
 //Lets make a bigger object for our store, with the objects from our reducers.
@@ -8,6 +9,7 @@ import feedback from './feedbackReducer';
 const store = combineReducers({
   user,
   login,
+  people,
   feedback
 });
 
