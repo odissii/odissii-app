@@ -23,14 +23,12 @@ router.get('/allEmployees', (req, res) => {
 /**
  * POST routes 
  */
-// creates a new employee in the employee table
+// creates a new employee in the employee table and returns its id
+// then adds employee to employee_manager junction table
 router.post('/employee', (req, res) => {
 
 });
-// adds employee to employee_manager junction table
-router.post('/employee/junction', (req, res) => {
 
-});
 // creates a new manager in the person table 
 router.post('/manager', (req, res) => {
 

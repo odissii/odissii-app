@@ -6,7 +6,7 @@ import axios from 'axios';
 function* fetchEmployees(){
     try {
         const employeeResponse = yield call(axios.get, '/api/staff/employees');
-        const responseAction = {type: PEOPLE_ACTIONS.SET_EMPLOYEES, payload: employeeResponse.data};
+        const responseAction = {type: PEOPLE_ACTIONS.SET_MANAGER_EMPLOYEES, payload: employeeResponse.data};
         yield put(responseAction);
     } catch(error){
         console.log('Cannot get employees', error); 
@@ -25,7 +25,7 @@ function* fetchAllEmployees(){
 }
 
 //will be called to add a new employee & then it'll fetch all the employees
-function* addEmployee(){
+function* addEmployee(action){
     try {
         yield call(axios.post, '/api/staff/employee', action.payload);
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
@@ -35,7 +35,7 @@ function* addEmployee(){
 }
 
 //will be called to delete an employee & then it'll fetch all the employees
-function* deleteEmployee(){
+function* deleteEmployee(action){
     try {
         yield call(axios.delete, '/api/staff/employee', action.payload);
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
@@ -45,7 +45,7 @@ function* deleteEmployee(){
 }
 
 //will be called to updated an employee & then it'll fetch all the employees
-function* updateEmployee(){
+function* updateEmployee(action){
     try {
         yield call(axios.put, '/api/staff/employee', action.payload);
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
