@@ -10,33 +10,25 @@ const router = express.Router();
 router.get('/managers', (req, res) => {
     
 });
-
 router.get('/employees', (req, res) => {
     
 });
-
 //this is getting all employees that exist
 router.get('/allEmployees', (req, res) => {
 
 });
-
 /**
  * POST routes 
  */
-// creates a new employee in the employee table
+// creates a new employee in the employee table and returns its id
+// then adds employee to employee_manager junction table
 router.post('/employee', (req, res) => {
 
 });
-// adds employee to employee_manager junction table
-router.post('/employee/junction', (req, res) => {
 
-});
 // creates a new manager in the person table 
+// then adds manager to the supervisor_manager junction table
 router.post('/manager', (req, res) => {
-
-});
-// add to the supervisor_manager junction table
-router.post('/manager/junction', (req, res) => {
 
 });
 /**
@@ -53,16 +45,13 @@ router.put('/manager', (req, res) => {
 /**
  * DELETE routes
  */
-// deletes an employee's record 
+//deletes employee from junction table and then deletes an employee's record 
 router.delete('/employee', (req, res) => {
 
 });
-// deletes a manager 
+// deletes a manager/employee relationship then deletes a manager record
 router.delete('/manager', (req, res) => {
 
 });
-// deletes a manager/employee relationship 
-router.delete('/manager/junction', (req, res) => {
 
-});
 module.exports = router;
