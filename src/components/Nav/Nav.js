@@ -36,45 +36,22 @@ class Nav extends Component {
         <div className="navbar">
           <BottomNavigation value={value} onChange={this.handleChange}>
             <BottomNavigationAction icon={<ShowChart />} component={Link} to={"/dashboard"} />
-            <BottomNavigationAction icon={<Group />} component={Link} to={"/employees"}/>
-            <BottomNavigationAction icon={<Create />} component={Link} to={"/feedback/new"} />
+            <BottomNavigationAction icon={<Group />} component={Link} to={"/employees"} />
+            <BottomNavigationAction icon={<PersonAdd />} component={Link} to={"/employee/new"} />
             <BottomNavigationAction icon={<Menu />} component={Link} to={"/settings"} />
           </BottomNavigation>
         </div>
       )
       // if manager logged in, will render appropriate nav bar
-    } else if (this.props.user && this.props.user.role_id === 'manager') {
+    } else if (this.props.user && this.props.user.role === 'manager') {
       content = (
         <div className="navbar">
-          <div>
-            <ul>
-              <li>
-                <Link to="/user">
-                  User Home
-          </Link>
-              </li>
-              <li>
-                <Link to="/dashboard">
-                  Dashboard
-          </Link>
-              </li>
-              <li>
-                <Link to="/employees">
-                  Employees
-          </Link>
-              </li>
-              <li>
-                <Link to="/feedback/new">
-                  Give Feedback
-          </Link>
-              </li>
-              <li>
-                <Link to="/settings">
-                  Settings
-          </Link>
-              </li>
-            </ul>
-          </div>
+          <BottomNavigation value={value} onChange={this.handleChange}>
+            <BottomNavigationAction icon={<ShowChart />} component={Link} to={"/dashboard"} />
+            <BottomNavigationAction icon={<Group />} component={Link} to={"/employees"} />
+            <BottomNavigationAction icon={<Create />} component={Link} to={"/feedback/new"} />
+            <BottomNavigationAction icon={<Menu />} component={Link} to={"/settings"} />
+          </BottomNavigation>
         </div>
       )
     }
