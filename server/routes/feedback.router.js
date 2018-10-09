@@ -5,18 +5,18 @@ const router = express.Router();
 /**
  * GET routes
  */
-// gets all feedback where a manager ID matches the req.user.id
+// gets all feedback for a specific supervisor, referenced by req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/', (req, res) => {
     
 });
-// gets all feedback from all managers (for a supervisor) where a supervisor ID matches the req.user.id
+// gets all feedback created by all supervisors associated with a specific manager, who is referenced by req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
-router.get('/managers/all', (req, res) => {
+router.get('/supervisors/all', (req, res) => {
     
 });
 // gets all feedback for a specific employee where a manager ID or supervisor ID matches the req.user.id
