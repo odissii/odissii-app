@@ -8,6 +8,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 
 
 import Nav from '../Nav/Nav';
@@ -19,7 +21,7 @@ const mapStateToProps = state => ({
   user: state.user,
 });
 
-const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNedded'];
+const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNeeded'];
 
 class FeedbackFormView extends React.Component {
   constructor(props) {
@@ -62,7 +64,19 @@ class FeedbackFormView extends React.Component {
   };
 
   render() {
-    const {quality, taskRelated, cultureRelated, details} = this.state;
+    const {quality, taskRelated, cultureRelated, details, followUpNeeded, followUpDate} = this.state;
+    
+    // let followUpDateField;
+    // if (followUpNeeded) {
+    //   followUpDateField = (
+    //     <TextField 
+    //       label="Follow-Up Date"
+    //       type="date"
+    //     />
+    //   );
+      
+    // }
+    
     return (
       <div>
         <Nav />
@@ -77,33 +91,57 @@ class FeedbackFormView extends React.Component {
             value={quality}
             onChange={this.handleInputChange('quality')}
           >
-            <FormControlLabel value="praise" label="Praise" labelPlacement="start" control={<Radio />}/>
-            <FormControlLabel value="instruct" label="Instruct" labelPlacement="start" control={<Radio />}/>
-            <FormControlLabel value="correct" label="Correct" labelPlacement="start" control={<Radio />}/>
+            <FormControlLabel value="praise" label="Praise" control={<Radio />}/>
+            <FormControlLabel value="instruct" label="Instruct" control={<Radio />}/>
+            <FormControlLabel value="correct" label="Correct" control={<Radio />}/>
           </RadioGroup>
           <FormLabel>This feedback is:</FormLabel>
           <FormGroup>
             <FormControlLabel 
               control={
                 <Switch 
-                  checked={this.state.taskRelated}
+                  checked={taskRelated}
                   onChange={this.handleInputChange('taskRelated')}
                 />
               }
               label="Task-Related"
-              labelPlacement="start"
             />
             <FormControlLabel 
               control={
                 <Switch 
-                  checked={this.state.cultureRelated}
+                  checked={cultureRelated}
                   onChange={this.handleInputChange('cultureRelated')}
                 />
               }
               label="Culture-Related"
-              labelPlacement="start"
             />
           </FormGroup>
+          <FormControlLabel 
+            label="Follow-Up Needed?"
+            control={
+              <Checkbox 
+                checked={followUpNeeded}
+                onChange={this.handleInputChange('followUpNeeded')}
+              />
+            }
+          />
+          {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
+          {followUpNeeded
+          ? <TextField 
+              type="date"
+              label="Follow-Up Date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          : null}
+          <TextField 
+            label="Feedback Details"
+            placeholder="Type or dictate feedback details"
+            value={details}
+            onChange={this.handleInputChange('details')}
+            multiline
+          />
         </FormControl>
       </div>
       
