@@ -36,17 +36,35 @@ router.get('/confirmation', (req, res) => {
  */
 // posts a new feedback record
 router.post('/', (req, res) => {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() && req.user.role === 'supervisor') {
+    const data = req.body;
+
     const queryText = 
     `INSERT INTO "feedback" (
-      "manager_id", 
+      "supervisor_id", 
       "employee_id", 
       "date_created", 
       "quality", 
       "task_related", 
       "culture_related", 
       "details"
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7);`;
+    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7);`;
+
+    pool.query(queryText, [
+      data.supervisorId, 
+      data.employeeId,
+      data.dateCreated,
+      data.quality,
+      data.taskRelated,
+      data.cultureRelated,
+      data.details
+    ]).then(response => {
+      console.log(`/api/feedback POST success:`, response);
+      res.sendStatus(201);
+    }).catch(error => {
+      console.log(`/api/feedback POST error:`, error);
+      res.sendStatus(500);
+    });
   } else {
     res.sendStatus(401);
   }

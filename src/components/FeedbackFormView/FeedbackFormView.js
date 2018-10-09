@@ -78,8 +78,12 @@ class FeedbackFormView extends React.Component {
   }
   
   componentDidUpdate() {
-    if (!this.props.user.isLoading && this.props.user.userName === null) {
-      this.props.history.push('/home');
+    const {user, history} = this.props;
+    if (!user.isLoading && user.userName === null) {
+      history.push('/home');
+    }
+    if (!user.isLoading && user.userName && user.role !== 'supervisor') {
+      history.push('/home');
     }
   }
 
@@ -113,6 +117,11 @@ class FeedbackFormView extends React.Component {
       cultureRelated,
       details,
     };
+
+    this.props.dispatch({
+      type: FEEDBACK_ACTIONS.ADD_FEEDBACK,
+      payload: data
+    });
 
     console.log('form submitted:', data);
   };

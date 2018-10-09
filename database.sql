@@ -57,7 +57,7 @@ CREATE TABLE feedback (
   "date_created" TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
   "quality" VARCHAR (50) NOT NULL,
   "task_related" BOOLEAN DEFAULT false,
-  "culture_releated" BOOLEAN DEFAULT false,
+  "culture_related" BOOLEAN DEFAULT false,
   "details" VARCHAR NOT NULL,
   "date_edited" TIMESTAMP
 );
