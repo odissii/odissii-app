@@ -1,8 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormControl, Select, MenuItem} from '@material-ui/core';
+import { USER_ROLES } from '../../../constants';
+import { FormControl, Select, MenuItem, OutlinedInput } from '@material-ui/core';
+
+const mapStateToProps = state => ({
+    user: state.user,
+  })
 
 class EmployeeFilter extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            filter: '',
+        }
+    }
   render(){
       let content = null;
       if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
@@ -12,7 +23,9 @@ class EmployeeFilter extends React.Component {
                   <Select
                     value={this.state.filter}
                     onChange={this.handleChange}
-                    input={<outlinedInput name="filter"/>}>
+                    input={<OutlinedInput 
+                        labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                        name="filter"/>}>
                       <MenuItem value="" disabled>Filter By:</MenuItem>
                       <MenuItem>Date of Last Feedback</MenuItem>
                       <MenuItem>Least Feedback</MenuItem>
@@ -28,7 +41,9 @@ class EmployeeFilter extends React.Component {
                   <Select
                     value={this.state.filter}
                     onChange={this.handleChange}
-                    input={<outlinedInput name="filter"/>}>
+                    input={<OutlinedInput 
+                        labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                        name="filter"/>}>
                       <MenuItem value="" disabled>Filter By:</MenuItem>
                       <MenuItem>Date of Last Feedback</MenuItem>
                       <MenuItem>Least Feedback</MenuItem>
