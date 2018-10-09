@@ -23,17 +23,17 @@ CREATE TABLE person (
     "role_id" INT NOT NULL REFERENCES "role"
 );
 
--- junction table to link a "supervisor" person to a "manager" person
-CREATE TABLE supervisor_manager (
-  "id" SERIAL PRIMARY KEY,
-  "supervisor_id" INT NOT NULL REFERENCES "person",
-  "manager_id" INT NOT NULL REFERENCES "person"
-);
-
--- junction table to link a "manager" person to an employee
-CREATE TABLE manager_employee (
+-- junction table to link a "manager" person to a "supervisor" person
+CREATE TABLE manager_supervisor (
   "id" SERIAL PRIMARY KEY,
   "manager_id" INT NOT NULL REFERENCES "person",
+  "supervisor_id" INT NOT NULL REFERENCES "person"
+);
+
+-- junction table to link a "supervisor" person to an employee
+CREATE TABLE supervisor_employee (
+  "id" SERIAL PRIMARY KEY,
+  "supervisor_id" INT NOT NULL REFERENCES "person",
   "employee_id" INT NOT NULL REFERENCES "employee"
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE employee (
 -- and the date of the most recent edit to this feedback, if any
 CREATE TABLE feedback (
   "id" SERIAL PRIMARY KEY,
-  "manager_id" INT NOT NULL REFERENCES "person",
+  "supervisor_id" INT NOT NULL REFERENCES "person",
   "employee_id" INT NOT NULL REFERENCES "person",
   "date_created" TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
   "quality" VARCHAR (50) NOT NULL,
