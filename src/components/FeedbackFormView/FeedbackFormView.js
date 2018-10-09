@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
@@ -18,6 +21,38 @@ import Nav from '../Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
 
+// CREATE TABLE employee (
+//   id SERIAL PRIMARY KEY,
+//   employeeId VARCHAR (255) UNIQUE NOT NULL,
+//   first_name VARCHAR (255) NOT NULL,
+//   last_name VARCHAR (255) NOT NULL,
+//   image_path VARCHAR (255)
+// );
+// dummy data for employees
+const employees = [
+  {
+    id: 1,
+    employeeId: '123ABC',
+    first_name: 'Ricky',
+    last_name: 'Bobby',
+    image_path: 'some/path'
+  },
+  {
+    id: 2,
+    employeeId: '3F85R',
+    first_name: 'John',
+    last_name: 'Johnson',
+    image_path: 'some/path'
+  },
+  {
+    id: 3,
+    employeeId: '87FY44',
+    first_name: 'Becky',
+    last_name: 'Beckyson',
+    image_path: 'some/path'
+  }
+];
+
 const mapStateToProps = state => ({
   user: state.user,
 });
@@ -28,12 +63,13 @@ class FeedbackFormView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      employeeId: '',
       quality: 'praise',
       taskRelated: false,
       cultureRelated: false,
-      details: '',
       followUpNeeded: false,
       followUpDate: undefined,
+      details: '',
     };
   }
 
@@ -65,7 +101,20 @@ class FeedbackFormView extends React.Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    console.log('form submitted:', this.state);
+    const {employeeId, quality, taskRelated, cultureRelated, followUpNeeded, followUpDate, details} = this.state;
+    const supervisorId = this.props.user.id;
+
+    const data = {
+      supervisorId,
+      employeeId,
+      dateCreated: Date.now(),
+      quality,
+      taskRelated,
+      cultureRelated,
+      details,
+    };
+
+    console.log('form submitted:', data);
   };
 
   backToPreviousPage = event => {
@@ -73,8 +122,7 @@ class FeedbackFormView extends React.Component {
   };
 
   render() {
-    const {quality, taskRelated, cultureRelated, details, followUpNeeded, followUpDate} = this.state;
-
+    const {employeeId, quality, taskRelated, cultureRelated, details, followUpNeeded, followUpDate} = this.state;
     return (
       <div>
         <Nav />
@@ -82,7 +130,22 @@ class FeedbackFormView extends React.Component {
           This is the feedback form.
         </div>
         <form onSubmit={this.handleFormSubmit}>
-          <FormControl>
+          <FormControl required>
+            <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
+            <NativeSelect
+              value={employeeId}
+              onChange={this.handleInputChange('employeeId')}
+              input={<Input name="employee" id="employeeId" />}
+            >
+              <option value="" disabled>Select an employee...</option>
+              {employees.map(employee => (
+                <option key={employee.id} value={employee.id}>
+                  {`${employee.first_name} ${employee.last_name}`}
+                </option>
+              ))}
+            </NativeSelect>
+          </FormControl>
+          <FormControl required>
             <FormLabel>Feedback Quality</FormLabel>
             <RadioGroup
               aria-label="feedback-type"
@@ -128,18 +191,20 @@ class FeedbackFormView extends React.Component {
                 />
               }
             />
+          </FormControl>
             {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
-            {followUpNeeded
-            ? <TextField 
+          {followUpNeeded
+          ? <FormControl>
+              <TextField 
                 type="date"
                 label="Follow-Up Date"
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
-            : null}
-          </FormControl>
-          <TextField 
+            </FormControl> 
+          : null}
+          <TextField required
             label="Feedback Details"
             placeholder="Type or dictate feedback details"
             value={details}
@@ -148,7 +213,7 @@ class FeedbackFormView extends React.Component {
           />
           <div>
             <Button onClick={this.backToPreviousPage}>Cancel</Button>
-            <Button type="submit" color="primary" variant="raised">Submit</Button>
+            <Button type="submit" color="primary" variant="contained">Submit</Button>
           </div>
         </form>
       </div>

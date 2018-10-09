@@ -36,7 +36,20 @@ router.get('/confirmation', (req, res) => {
  */
 // posts a new feedback record
 router.post('/', (req, res) => {
-
+  if (req.isAuthenticated()) {
+    const queryText = 
+    `INSERT INTO "feedback" (
+      "manager_id", 
+      "employee_id", 
+      "date_created", 
+      "quality", 
+      "task_related", 
+      "culture_related", 
+      "details"
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7);`;
+  } else {
+    res.sendStatus(401);
+  }
 });
 // adds images associated with a feedback record, using the ID of the feedback record
 // this must occur after the feedback post   
