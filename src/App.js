@@ -12,6 +12,7 @@ import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import DashboardView from './components/DashboardView/DashboardView';
 import EmployeesView from './components/EmployeesView/EmployeesView';
+import IndividualEmployeeSummaryView from './components/EmployeesView/IndividualEmployeeSummaryView/IndividualEmployeeSummaryView';
 import FeedbackFormView from './components/FeedbackFormView/FeedbackFormView';
 import EmployeeFormView from './components/EmployeeFormView/EmployeeFormView';
 import SettingsView from './components/SettingsView/SettingsView';
@@ -43,6 +44,10 @@ const App = () => (
         <Route 
           path="/employees"
           component={EmployeesView}
+        />
+        <Route
+          path="/individualEmployee"
+          component={IndividualEmployeeSummaryView}
         />
         <Route 
           path="/feedback/new"
