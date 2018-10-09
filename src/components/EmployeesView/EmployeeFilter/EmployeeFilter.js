@@ -2,10 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { USER_ROLES } from '../../../constants';
 import { FormControl, Select, MenuItem, OutlinedInput } from '@material-ui/core';
+import '../employee.css';
 
 const mapStateToProps = state => ({
     user: state.user,
   })
+
+const styles = {
+    formControl: {
+        height: 20,
+        width: 150,
+    }
+}
 
 class EmployeeFilter extends React.Component {
     constructor(props) {
@@ -18,8 +26,8 @@ class EmployeeFilter extends React.Component {
       let content = null;
       if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
           content = (
-              <form>
-                  <FormControl variant="outlined">
+              <form className="filter">
+                  <FormControl variant="outlined" style={styles.formControl}>
                   <Select
                     value={this.state.filter}
                     onChange={this.handleChange}
@@ -37,7 +45,7 @@ class EmployeeFilter extends React.Component {
       } else if (this.props.user && this.props.user.role === 'manager') {
         content = (
             <form>
-                  <FormControl variant="outlined">
+                  <FormControl variant="outlined"style={styles.formControl}>
                   <Select
                     value={this.state.filter}
                     onChange={this.handleChange}

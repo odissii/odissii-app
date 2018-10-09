@@ -45,10 +45,10 @@ class Nav extends Component {
       content = (
         <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
-            <BottomNavigationAction icon={<ShowChart />} component={Link} to={"/dashboard"} />
-            <BottomNavigationAction icon={<Group />} component={Link} to={"/employees"} />
-            <BottomNavigationAction icon={<PersonAdd />} component={Link} to={"/employee/new"} />
-            <BottomNavigationAction icon={<Menu />} component={Link} to={"/settings"} />
+            <BottomNavigationAction className="nav" icon={<ShowChart />} component={Link} to={"/dashboard"} />
+            <BottomNavigationAction className="nav" icon={<Group />} component={Link} to={"/employees"} />
+            <BottomNavigationAction className="nav" icon={<PersonAdd />} component={Link} to={"/employee/new"} />
+            <BottomNavigationAction className="nav" icon={<Menu />} component={Link} to={"/settings"} />
           </BottomNavigation>
         </div>
       )
@@ -57,10 +57,10 @@ class Nav extends Component {
       content = (
         <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
-            <BottomNavigationAction icon={<ShowChart />} component={Link} to={"/dashboard"} />
-            <BottomNavigationAction icon={<Group />} component={Link} to={"/employees"} />
-            <BottomNavigationAction icon={<Create />} component={Link} to={"/feedback/new"} />
-            <BottomNavigationAction icon={<Menu />} component={Link} to={"/settings"} />
+            <BottomNavigationAction className="nav" icon={<ShowChart />} component={Link} to={"/dashboard"} />
+            <BottomNavigationAction className="nav" icon={<Group />} component={Link} to={"/employees"} />
+            <BottomNavigationAction className="nav" icon={<Create />} component={Link} to={"/feedback/new"} />
+            <BottomNavigationAction className="nav" icon={<Menu />} component={Link} to={"/settings"} />
           </BottomNavigation>
         </div>
       )
