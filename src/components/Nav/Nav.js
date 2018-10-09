@@ -25,31 +25,45 @@ class Nav extends Component {
 
   render() {
     let content = null;
-    //supervisor
-    if (this.props.user && this.props.user.role_id === '1') {
+    // if supervisor logged in, will render appropriate nav bar
+    if (this.props.user && this.props.user.role === 'supervisor') {
       content = (
+        <div className="navbar">
         <div>
-
+          <ul>
+            <li>
+              <Link to="/user">
+                User Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/dashboard">
+                Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link to="/employees">
+                Employees
+              </Link>
+            </li>
+            <li>
+              <Link to="/feedback/new">
+                Give Feedback
+              </Link>
+            </li>
+            <li>
+              <Link to="/settings">
+                Settings
+              </Link>
+            </li>
+          </ul>
         </div>
-      )
-      // manager
-    } else if (this.props.user && this.props.user.role_id === '2') {
-      content = (
-        <div>
-
-        </div>
-      )
-    }
-    return (
-      <div>
-        {content}
       </div>
-    )
-  }
-}
-
-const Nav = () => (
-  <div className="navbar">
+      )
+      // if manager logged in, will render appropriate nav bar
+    } else if (this.props.user && this.props.user.role_id === 'manager') {
+      content = (
+        <div className="navbar">
     <div>
       <ul>
         <li>
@@ -73,11 +87,6 @@ const Nav = () => (
           </Link>
         </li>
         <li>
-          <Link to="/employee/new">
-            Add Employee
-          </Link>
-        </li>
-        <li>
           <Link to="/settings">
             Settings
           </Link>
@@ -85,6 +94,14 @@ const Nav = () => (
       </ul>
     </div>
   </div>
-);
+      )
+    }
+    return (
+      <div>
+        {content}
+      </div>
+    )
+  }
+}
 
-export default Nav;
+export default connect(mapStateToProps)(Nav);
