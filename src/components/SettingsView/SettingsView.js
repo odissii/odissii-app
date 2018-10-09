@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Nav from '../../components/Nav/Nav';
-
+import { triggerLogout } from '../../redux/actions/loginActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 const mapStateToProps = state => ({
@@ -20,12 +20,17 @@ class SettingsView extends React.Component {
     }
   }
 
+  logout = () => {
+    this.props.dispatch(triggerLogout());
+  }
+
   render(){
     return (
       <div>
         <Nav />
         <div>
           This is the settings view. Logout and other options will go here.
+          <button onClick={this.logout}>Log Out</button>
         </div>
       </div>
       
