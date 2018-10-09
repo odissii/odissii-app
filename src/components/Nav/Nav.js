@@ -11,8 +11,28 @@ const Nav = () => (
           </Link>
         </li>
         <li>
-          <Link to="/info">
-            Info Page
+          <Link to="/dashboard">
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link to="/employees">
+            Employees
+          </Link>
+        </li>
+        <li>
+          <Link to="/feedback/new">
+            Give Feedback
+          </Link>
+        </li>
+        <li>
+          <Link to="/employee/new">
+            Add Employee
+          </Link>
+        </li>
+        <li>
+          <Link to="/settings">
+            Settings
           </Link>
         </li>
       </ul>
