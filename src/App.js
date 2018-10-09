@@ -6,16 +6,24 @@ import {
   Switch,
 } from 'react-router-dom';
 
+import GridContainer from './components/GridContainer/GridContainer';
 import Header from './components/Header/Header';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
+import DashboardView from './components/DashboardView/DashboardView';
+import EmployeesView from './components/EmployeesView/EmployeesView';
+import FeedbackFormView from './components/FeedbackFormView/FeedbackFormView';
+import EmployeeFormView from './components/EmployeeFormView/EmployeeFormView';
+import SettingsView from './components/SettingsView/SettingsView';
 import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
+
+
 
 import './styles/main.css';
 
 const App = () => (
-  <div>
+  <GridContainer>
     <Header title="Project Base" />
     <Router>
       <Switch>
@@ -28,6 +36,26 @@ const App = () => (
           path="/register"
           component={RegisterPage}
         />
+        <Route 
+          path="/dashboard"
+          component={DashboardView}
+        />
+        <Route 
+          path="/employees"
+          component={EmployeesView}
+        />
+        <Route 
+          path="/feedback/new"
+          component={FeedbackFormView}
+        />
+        <Route 
+          path="/employee/new"
+          component={EmployeeFormView}
+        />
+        <Route 
+          path="/settings"
+          component={SettingsView}
+        />
         <Route
           path="/user"
           component={UserPage}
@@ -36,12 +64,10 @@ const App = () => (
           path="/info"
           component={InfoPage}
         />
-        {/* OTHERWISE (no path!) */}
         <Route render={() => <h1>404</h1>} />
-
       </Switch>
     </Router>
-  </div>
+  </GridContainer>
 );
 
 export default App;
