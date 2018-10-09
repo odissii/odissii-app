@@ -13,19 +13,29 @@ const mapStateToProps = state => ({
   user: state.user,
 })
 
+const styles = {
+  stickToBottom: {
+    width: '100%',
+    position: 'fixed',
+    bottom: 0,
+  },
+};
+
 class Nav extends Component {
+  constructor(props) {
+    super(props);
+    this.state ={
+      value: 'dashboard',
+    }
+  }
+
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
   }
 
-  state = {
-    value: 'dashboard',
-  };
-
   handleChange = (event, value) => {
     this.setState({ value });
   };
-
 
   render() {
     let content = null;
@@ -34,7 +44,7 @@ class Nav extends Component {
     if (this.props.user && this.props.user.role === 'supervisor') {
       content = (
         <div className="navbar">
-          <BottomNavigation value={value} onChange={this.handleChange}>
+          <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
             <BottomNavigationAction icon={<ShowChart />} component={Link} to={"/dashboard"} />
             <BottomNavigationAction icon={<Group />} component={Link} to={"/employees"} />
             <BottomNavigationAction icon={<PersonAdd />} component={Link} to={"/employee/new"} />
@@ -46,7 +56,7 @@ class Nav extends Component {
     } else if (this.props.user && this.props.user.role === 'manager') {
       content = (
         <div className="navbar">
-          <BottomNavigation value={value} onChange={this.handleChange}>
+          <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
             <BottomNavigationAction icon={<ShowChart />} component={Link} to={"/dashboard"} />
             <BottomNavigationAction icon={<Group />} component={Link} to={"/employees"} />
             <BottomNavigationAction icon={<Create />} component={Link} to={"/feedback/new"} />
