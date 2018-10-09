@@ -4,7 +4,8 @@ class ManagerEmployees extends React.Component {
   render(){
     return (
       <div>
-        These are the employees for a manager.
+        <div id="allEmpHeader">All Employees</div>
+        
       </div>
     )
   }

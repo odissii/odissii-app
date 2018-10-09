@@ -24,21 +24,23 @@ class EmployeesView extends React.Component {
   }
 
   render() {
-    const {user} = this.props;
-    
     let userEmployees;
-    if (user.role === USER_ROLES.SUPERVISOR) {
-      userEmployees = <SupervisorEmployees />
-    } else if (user.role === USER_ROLES.MANAGER) {
-      userEmployees = <ManagerEmployees />
+
+    if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
+      userEmployees = ( 
+      <SupervisorEmployees />
+      )
+    } else if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
+      userEmployees = (
+      <ManagerEmployees />
+      )
     }
     return (
       <div>
-        <Nav />
         <div>
-          This is the employees view.
           {userEmployees}
         </div>
+        <Nav />
       </div>
       
     );
