@@ -2,8 +2,19 @@ import React from 'react';
 import { Typography, Grid } from '@material-ui/core'; 
 import IndividualManagerGraph from './Graphs/IndividualManagerGraph';
 import ManagerOverviewGraph from './Graphs/ManagerOverviewGraph'; 
+import { connect } from 'react-redux';
+import { USER_ACTIONS } from '../../../redux/actions/userActions';
 
+const mapStateToProps = state => ({
+  user: state.user,
+  people: state.people,
+  feedback: state.feedback
+});
 class ManagerDashboard extends React.Component {
+  
+  componentDidMount(){
+    this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+  }
   render(){
     return (
       <div>
@@ -25,4 +36,4 @@ class ManagerDashboard extends React.Component {
     );
   }
 }
-export default ManagerDashboard;
+export default connect(mapStateToProps)(ManagerDashboard);
