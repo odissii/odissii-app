@@ -53,7 +53,7 @@ CREATE TABLE employee (
 CREATE TABLE feedback (
   id SERIAL PRIMARY KEY,
   supervisor_id INT NOT NULL REFERENCES "person",
-  employee_id INT NOT NULL REFERENCES "person",
+  employee_id INT NOT NULL REFERENCES "employee",
   date_created TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
   quality VARCHAR (50) NOT NULL,
   task_related BOOLEAN DEFAULT false,
