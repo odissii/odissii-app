@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {USER_ACTIONS } from '../../redux/actions/userActions';
 import { triggerLogout } from '../../redux/actions/loginActions';
-
+import { BottomNavigation, BottomNavigationAction} from '@material-ui/core';
+import {group_add, person_add, creat, show_chart, menu } from '@material-ui/icons';
 const mapStateToProps = state => ({
   user: state.user,
 })
