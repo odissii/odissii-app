@@ -20,6 +20,7 @@ import Nav from '../Nav/Nav';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
+import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 
 // CREATE TABLE employee (
 //   id SERIAL PRIMARY KEY,
@@ -68,7 +69,7 @@ class FeedbackFormView extends React.Component {
       taskRelated: false,
       cultureRelated: false,
       followUpNeeded: false,
-      followUpDate: undefined,
+      followUpDate: '',
       details: '',
     };
   }
@@ -122,6 +123,16 @@ class FeedbackFormView extends React.Component {
       type: FEEDBACK_ACTIONS.ADD_FEEDBACK,
       payload: data
     });
+
+    if (followUpNeeded) {
+      this.props.dispatch({
+        type: FOLLOW_UP_ACTIONS.ADD_FOLLOWUP,
+        payload: {
+          employeeId,
+          followUpDate
+        }
+      });
+    }
 
     console.log('form submitted:', data);
   };
@@ -211,6 +222,8 @@ class FeedbackFormView extends React.Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={followUpDate}
+                  onChange={this.handleInputChange('followUpDate')}
                 />
               </FormControl> 
             : null}

@@ -2,7 +2,7 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 
-router.get('/pending', (req, res) => {
+router.get('/pending/all', (req, res) => {
   if (req.isAuthenticated()) {
     pool.query(`SELECT * FROM "follow_up" WHERE "completed" = false;`)
     .then(response => {
@@ -39,6 +39,7 @@ router.get('/pending/employee/:id', (req, res) => {
   }
 });
 
+// the body of this post should be an object with both employeeId and followUpDate
 router.post('/', (req, res) => {
   if (req.isAuthenticated() && req.user.role === 'supervisor') {
     const data = req.body;
@@ -63,7 +64,7 @@ router.put('/:id/complete', (req, res) => {
   if (req.isAuthenticated()) {
     const followUpId = req.params.id;
     const queryText = `UPDATE "follow_up" SET "completed" = true WHERE "id" = $1;`;
-    
+
     pool.query(queryText, [followUpId])
     .then(response => {
       console.log(`/api/folllowup/${followUpId}/complete PUT success:`, response);
