@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { FEEDBACK_ACTIONS } from '../actions/feedbackActions';
 import axios from 'axios';
 
@@ -34,6 +34,7 @@ function* fetchAllFeedbackByManagerSupervisors(){
 }
 // adds a new feedback record
 function* addFeedback(action){
+    console.log('addFeedback saga called:', action);
     try{
        yield call(axios.post, '/api/feedback/', action.payload);
        yield put({type: FEEDBACK_ACTIONS.FETCH_ALL_FEEDBACK_BY_CURRENT_SUPERVISOR}); 
