@@ -37,6 +37,8 @@ class Nav extends Component {
     this.setState({ value });
   };
 
+  
+
   render() {
     let content = null;
     const { value } = this.state;

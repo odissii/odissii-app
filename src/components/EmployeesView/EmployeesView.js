@@ -8,6 +8,7 @@ import SupervisorEmployees from './SupervisorEmployees/SupervisorEmployees';
 import ManagerEmployees from './ManagerEmployees/ManagerEmployees';
 import { USER_ROLES } from '../../constants';
 
+
 const mapStateToProps = state => ({
   user: state.user,
 });
