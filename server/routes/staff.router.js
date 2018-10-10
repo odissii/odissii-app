@@ -15,7 +15,19 @@ router.get('/employees', (req, res) => {
 });
 //this is getting all employees that exist
 router.get('/allEmployees', (req, res) => {
-
+    console.log('all employees GET');
+    if(req.isAuthenticated()) {
+        const query = `SELECT * FROM "employee";`;
+        pool.query(query)
+        .then((response) => {
+            res.send(response.rows);
+        }).catch((error) => {
+            console.log('all employee GET failed', error);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(403);
+    }
 });
 /**
  * POST routes 

@@ -6,7 +6,7 @@ import '../employee.css';
 
 const mapStateToProps = state => ({
     user: state.user,
-  })
+})
 
 const styles = {
     formControl: {
@@ -22,51 +22,51 @@ class EmployeeFilter extends React.Component {
             filter: '',
         }
     }
-  render(){
-      let content = null;
-      if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
-          content = (
-              <form className="filter">
-                  <FormControl variant="outlined" style={styles.formControl}>
-                  <Select
-                    value={this.state.filter}
-                    onChange={this.handleChange}
-                    input={<OutlinedInput 
-                        labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
-                        name="filter"/>}>
-                      <MenuItem value="" disabled>Filter By:</MenuItem>
-                      <MenuItem>Date of Last Feedback</MenuItem>
-                      <MenuItem>Least Feedback</MenuItem>
-                      <MenuItem>Most Feedback</MenuItem>
-                  </Select>
-                  </FormControl>
-              </form>
-          )
-      } else if (this.props.user && this.props.user.role === 'manager') {
-        content = (
-            <form>
-                  <FormControl variant="outlined"style={styles.formControl}>
-                  <Select
-                    value={this.state.filter}
-                    onChange={this.handleChange}
-                    input={<OutlinedInput 
-                        labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
-                        name="filter"/>}>
-                      <MenuItem value="" disabled>Filter By:</MenuItem>
-                      <MenuItem>Date of Last Feedback</MenuItem>
-                      <MenuItem>Least Feedback</MenuItem>
-                      <MenuItem>Most Feedback</MenuItem>
-                  </Select>
-                  </FormControl>
-              </form>
+    render() {
+        let content = null;
+        if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
+            content = (
+                <form className="filter">
+                    <FormControl variant="outlined" style={styles.formControl}>
+                        <Select
+                            value={this.state.filter}
+                            onChange={this.handleChange}
+                            input={<OutlinedInput
+                                labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                                name="filter" />}>
+                            <MenuItem value="" disabled>Filter By:</MenuItem>
+                            <MenuItem>Date of Last Feedback</MenuItem>
+                            <MenuItem>Least Feedback</MenuItem>
+                            <MenuItem>Most Feedback</MenuItem>
+                        </Select>
+                    </FormControl>
+                </form>
+            )
+        } else if (this.props.user && this.props.user.role === 'manager') {
+            content = (
+                <form>
+                    <FormControl variant="outlined" style={styles.formControl}>
+                        <Select
+                            value={this.state.filter}
+                            onChange={this.handleChange}
+                            input={<OutlinedInput
+                                labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                                name="filter" />}>
+                            <MenuItem value="" disabled>Filter By:</MenuItem>
+                            <MenuItem>Date of Last Feedback</MenuItem>
+                            <MenuItem>Least Feedback</MenuItem>
+                            <MenuItem>Most Feedback</MenuItem>
+                        </Select>
+                    </FormControl>
+                </form>
+            )
+        }
+        return (
+            <div>
+                {content}
+            </div>
         )
-      }
-    return (
-      <div>
-        {content}
-      </div>
-    )
-  }
+    }
 }
 
 export default connect(mapStateToProps)(EmployeeFilter);

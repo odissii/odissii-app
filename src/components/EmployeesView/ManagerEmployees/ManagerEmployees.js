@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
   user: state.user,
 })
 class ManagerEmployees extends React.Component {
-  render(){
+  render() {
     return (
       <div>
         <EmployeeAppBar />

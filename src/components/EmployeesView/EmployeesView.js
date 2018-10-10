@@ -16,7 +16,7 @@ class EmployeesView extends React.Component {
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
   }
-  
+
   componentDidUpdate() {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push('/home');
@@ -27,12 +27,12 @@ class EmployeesView extends React.Component {
     let userEmployees;
 
     if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
-      userEmployees = ( 
-      <SupervisorEmployees />
+      userEmployees = (
+        <SupervisorEmployees />
       )
     } else if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
       userEmployees = (
-      <ManagerEmployees />
+        <ManagerEmployees />
       )
     }
     return (
@@ -42,7 +42,7 @@ class EmployeesView extends React.Component {
         </div>
         <Nav />
       </div>
-      
+
     );
   }
 }
