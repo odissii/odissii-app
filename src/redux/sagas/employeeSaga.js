@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 import { PEOPLE_ACTIONS } from '../actions/peopleActions';
 import axios from 'axios'; 
 
@@ -16,6 +16,7 @@ function* fetchEmployees(){
 //will be called to fetch all employees in the database
 function* fetchAllEmployees(){
     try {
+        console.log('in fetchAllEmployees saga')
         const allEmployeeResponse = yield call(axios.get, '/api/staff/allEmployees');
         const responseAction = {type: PEOPLE_ACTIONS.SET_ALL_EMPLOYEES, payload: allEmployeeResponse.data};
         yield put(responseAction);

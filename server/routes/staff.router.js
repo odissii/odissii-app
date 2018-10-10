@@ -20,6 +20,7 @@ router.get('/allEmployees', (req, res) => {
         const query = `SELECT * FROM "employee";`;
         pool.query(query)
         .then((response) => {
+            console.log(response.rows);
             res.send(response.rows);
         }).catch((error) => {
             console.log('all employee GET failed', error);

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import EmployeeFilter from '../EmployeeFilter/EmployeeFilter';
 import EmployeeAppBar from '../EmployeeAppBar/EmployeeAppBar';
+import EmployeeList from '../EmployeeList/EmployeeList';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -12,6 +13,7 @@ class ManagerEmployees extends React.Component {
       <div>
         <EmployeeAppBar />
         <EmployeeFilter />
+        <EmployeeList />
       </div>
     )
   }
