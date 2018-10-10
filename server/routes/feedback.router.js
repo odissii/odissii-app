@@ -12,12 +12,22 @@ const router = express.Router();
 router.get('/', (req, res) => {
     
 });
-// gets all feedback from all managers (for a supervisor) where a supervisor ID matches the req.user.id
+// gets all feedback from all supervisors (for a manager) where a manager ID matches the req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
-router.get('/managers/all', (req, res) => {
-    
+router.get('/supervisors/all', (req, res) => {
+    if (req.isAuthenticated){
+        const query = `SELECT "feedback"."id", "feedback"."supervisor_id", "employee_id", "date_created", "quality", "task_related", "culture_related", "details", "date_edited", "supervisor_manager"."manager_id" FROM "feedback" JOIN "supervisor_manager" ON "supervisor_manager"."supervisor_id" = "feedback"."supervisor_id" WHERE "manager_id" = $1;`;
+        pool.query(query, [req.user.id]).then((results) => {
+            res.send(results.rows); 
+        }).catch((error) => {
+            console.log('Error getting supervisor feedback', error);
+            res.sendStatus(500);
+        })
+    } else {
+        res.sendStatus(403);
+    }
 });
 // gets all feedback for a specific employee where a manager ID or supervisor ID matches the req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images
