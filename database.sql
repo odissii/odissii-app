@@ -71,5 +71,6 @@ CREATE TABLE feedback_images (
 CREATE TABLE follow_up (
   "id" SERIAL PRIMARY KEY,
   "employee_id" INT NOT NULL REFERENCES "employee",
-  "follow_up_date" TIMESTAMP
-  );
+  "follow_up_date" TIMESTAMPTZ,
+  "completed" BOOLEAN DEFAULT false
+);
