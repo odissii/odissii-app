@@ -26,7 +26,8 @@ router.get('/supervisors/all', (req, res) => {
 router.get('/employee', (req, res) => {
     console.log('in GET /employee');
     const empFeedbackQuery = `SELECT "date_created", "quality", "details"
-                                FROM "feedback" WHERE "employee_id" = 1;`;
+                                FROM "feedback" WHERE "employee_id" = 1
+                                LIMIT 10;`;
     pool.query(empFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {
