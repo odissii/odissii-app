@@ -1,31 +1,105 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
+import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
+import { USER_ACTIONS } from '../../../redux/actions/userActions';
+//chart
+import { Bar } from 'react-chartjs-2';
+//Material Table
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
-import Chart from 'chart.js';
-
-
+const mapStateToProps = state => ({
+    user: state.user,
+    feedback: state.feedback.feedback,
+});
 
 class IndividualEmployeeSummaryView extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            chartData: {},
+        };
+    } //end of constructor
 
+    componentDidMount() {
+        this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+        this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
+    }
 
     render() {
-        let stackedBar = new Chart({
-            type: 'bar',
-            data: [1, 2, 3],
-            options: {
-                scales: {
-                    xAxes: [{ stacked: true }],
-                    yAxes: [{ stacked: true }]
-                }
+        const options = {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
             }
-        });
-        return(
+        }
+
+        let data = {
+            datasets: [{
+                label: 'Praise',
+                data: [20],
+                backgroundColor: '#0f77e6',
+                borderWidth: 1,
+                stack: '1'
+            },
+            {
+                label: 'Instruct',
+                data: [12],
+                backgroundColor: '#f17416',
+                borderWidth: 1,
+                stack: '2'
+
+            },
+            {
+                label: 'Correct',
+                data: [5],
+                backgroundColor: 'lightgrey',
+                borderWidth: 1,
+                stack: '3'
+            }],
+            labels: ['label']
+        }
+
+        let content = null;
+        content = (
             <div>
-                { stackedBar }
+                <Bar
+                    data={data}
+                    options={options}
+                />
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Feedback</TableCell>
+                            <TableCell>Date Given</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
+                        {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
+                            return (
+                                <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
+                            )
+                        })}
+                    </TableBody>
+                </Table>
+            </div>
+        )
+        return (
+            <div>
+                {content}
             </div>
         )
     }
 }
 
-export default connect()(IndividualEmployeeSummaryView);
+export default connect(mapStateToProps)(IndividualEmployeeSummaryView);

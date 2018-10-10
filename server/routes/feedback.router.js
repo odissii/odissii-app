@@ -24,7 +24,14 @@ router.get('/supervisors/all', (req, res) => {
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/employee', (req, res) => {
-    
+    console.log('in GET /employee');
+    const empFeedbackQuery = `SELECT "date_created", "quality", "details"
+                                FROM "feedback" WHERE "employee_id" = 1;`;
+    pool.query(empFeedbackQuery)
+        .then(result => res.send(result.rows))
+        .catch(error => {
+            console.log('error in GET /employee', error);
+        });
 });
 // gets the most recent feedback record submitted where the req.user.id matches the manager ID
 // used to display the confirmation record 
