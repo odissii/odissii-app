@@ -56,6 +56,7 @@ const employees = [
 
 const mapStateToProps = state => ({
   user: state.user,
+  newPostedFeedback: state.feedback.newPostedFeedback
 });
 
 const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNeeded'];
@@ -85,6 +86,8 @@ class FeedbackFormView extends React.Component {
     }
     if (!user.isLoading && user.userName && user.role !== 'supervisor') {
       history.push('/home');
+    } else if (this.props.newPostedFeedback) {
+      history.push('/feedback/confirmation');
     }
   }
 

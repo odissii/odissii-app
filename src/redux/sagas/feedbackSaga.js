@@ -40,6 +40,10 @@ function* addFeedback(action){
     const postResponse = yield call(axios.post, '/api/feedback/', action.payload);
     const postedFeedback = postResponse.data;
     console.log('just posted feedback:', postedFeedback);
+    yield put({
+      type: FEEDBACK_ACTIONS.FEEDBACK_POST_SUCCESS,
+      payload: postedFeedback
+    });
     //    yield put({type: FEEDBACK_ACTIONS.FETCH_ALL_FEEDBACK_BY_CURRENT_SUPERVISOR}); 
   } catch(error){
     console.log('Cannot add new feedback', error);
