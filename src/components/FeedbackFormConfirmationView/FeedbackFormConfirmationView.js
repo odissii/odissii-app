@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
-import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 import { USER_ROLES, employees } from '../../constants';
 
 const mapStateToProps = state => ({
