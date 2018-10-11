@@ -61,6 +61,11 @@ CREATE TABLE feedback (
   "details" VARCHAR NOT NULL,
   "date_edited" TIMESTAMPTZ
 );
+--defines each type of quality, assigned to feedback records 
+ CREATE TABLE quality_types (
+ 	"id" serial primary key, 
+ 	"name" varchar(50)
+ );
 --a table for all of the images associated with feedback 
 CREATE TABLE feedback_images (
 	"id" SERIAL PRIMARY KEY, 
