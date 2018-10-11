@@ -1,13 +1,22 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import EmployeeFilter from '../EmployeeFilter/EmployeeFilter';
+import EmployeeAppBar from '../EmployeeAppBar/EmployeeAppBar';
+import EmployeeList from '../EmployeeList/EmployeeList';
 
+const mapStateToProps = state => ({
+  user: state.user,
+})
 class ManagerEmployees extends React.Component {
-  render(){
+  render() {
     return (
       <div>
-        These are the employees for a manager.
+        <EmployeeAppBar />
+        <EmployeeFilter />
+        <EmployeeList />
       </div>
     )
   }
 }
 
-export default ManagerEmployees;
+export default connect(mapStateToProps)(ManagerEmployees);
