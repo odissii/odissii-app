@@ -9,7 +9,7 @@ import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
 const mapStateToProps = state => ({
     user: state.user,
     people: state.people.staff.allEmployees,
-    employees: state.people.staff.managerEmployees,
+    employees: state.people.staff.supervisorEmployees,
 })
 
 const space = ' ';
@@ -24,18 +24,18 @@ class EmployeeList extends React.Component {
         if (this.props.user.role === USER_ROLES.MANAGER) {
             this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
         } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
-
-            // axios({
-            //     method: 'GET',
-            //     url: '/api/staff/employees/' + id
-            // }).then((response) => {
-            //     const employees = response.data;
-            //     const action = { type: PEOPLE_ACTIONS.SET_MANAGER_EMPLOYEES, payload: employees };
-            //     this.props.dispatch(action);
-            // }).catch((error) => {
-            //     console.log('Supervisor Employee List get error', error);
-            //     alert('Unable to GET supervisor employees');
-            // })
+            const id = this.props.user.id
+            axios({
+                method: 'GET',
+                url: '/api/staff/employees/' + id
+            }).then((response) => {
+                const employees = response.data;
+                const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
+                this.props.dispatch(action);
+            }).catch((error) => {
+                console.log('Supervisor Employee List get error', error);
+                alert('Unable to GET supervisor employees');
+            })
         }
     }
 
