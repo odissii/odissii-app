@@ -10,6 +10,14 @@ const mapStateToProps = state => ({
 })
 
 class EmployeeAppBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            search: '',
+        }
+    }
+    
+
     render() {
         let content = null;
         if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
@@ -23,7 +31,8 @@ class EmployeeAppBar extends React.Component {
                                 <Search />
                             </div>
                             <InputBase
-                                placeholder="Search..." />
+                                placeholder="Search..." 
+                                onChange={this.handleChange}/>
                         </Toolbar>
                     </AppBar>
                 </div>
