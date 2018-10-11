@@ -11,10 +11,8 @@ export default function* rootSaga() {
     userSaga(),
     loginSaga(),
     employeeSaga(),
-
     supervisorSaga(),
     feedbackSaga(),
-
     // watchIncrementAsync()
   ]);
 }
