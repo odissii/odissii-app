@@ -34,7 +34,8 @@ import { USER_ROLES, employees } from '../../constants';
 
 const mapStateToProps = state => ({
   user: state.user,
-  newPostedFeedback: state.feedback.newPostedFeedback
+  newPostedFeedback: state.feedback.newPostedFeedback,
+  newPostedFollowup: state.followup.newPostedFollowup,
 });
 
 const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNeeded'];
@@ -58,14 +59,22 @@ class FeedbackFormView extends React.Component {
   }
   
   componentDidUpdate() {
-    const {user, history} = this.props;
+    const {user, newPostedFeedback, newPostedFollowup, history} = this.props;
+
     if (!user.isLoading && user.userName === null) {
       history.push('/home');
     }
+    
     if (!user.isLoading && user.userName && user.role !== USER_ROLES.SUPERVISOR) {
-      history.push('/home');
-    } else if (this.props.newPostedFeedback) {
-      history.push('/feedback/confirmation');
+      history.push('/dashboard');
+    } else if (newPostedFeedback) {
+      if (this.state.followUpNeeded) {
+        if (newPostedFollowup) {
+          history.push('/feedback/confirmation');
+        }
+      } else {
+        history.push('/feedback/confirmation');
+      }
     }
   }
 
