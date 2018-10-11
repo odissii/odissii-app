@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AppBar, Toolbar, IconButton, Typography, SearchIcon, InputBase } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography, InputBase } from '@material-ui/core';
 import { USER_ROLES } from '../../../constants';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Search from '@material-ui/icons/Search';
@@ -10,13 +10,9 @@ const mapStateToProps = state => ({
 })
 
 class EmployeeAppBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            search: '',
-        }
-    }
-    
+    handleChange = (event) => {
+        this.props.dispatch({ type: 'ADD_SEARCH', payload: event.target.value });
+    } 
 
     render() {
         let content = null;
@@ -48,7 +44,8 @@ class EmployeeAppBar extends React.Component {
                                 <Search />
                             </div>
                             <InputBase
-                                placeholder="Search..." />
+                                placeholder="Search..." 
+                                onChange={this.handleChange}/>
                         </Toolbar>
                     </AppBar>
                 </div>
