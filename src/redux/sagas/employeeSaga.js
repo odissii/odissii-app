@@ -1,3 +1,4 @@
+
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { PEOPLE_ACTIONS } from '../actions/peopleActions';
 import axios from 'axios'; 
@@ -5,16 +6,24 @@ import axios from 'axios';
 // will be called to fetch all employees that a supervisor supervises
 // Not using this saga currently
 function* fetchEmployees(id){
+
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { PEOPLE_ACTIONS } from '../actions/peopleActions';
+import axios from 'axios'; 
+
+// fetch all employees belonging to a supervisor
+function* fetchEmployees(){
+
     try {
         const employeeResponse = yield call(axios.get, '/api/staff/employees');
-        const responseAction = {type: PEOPLE_ACTIONS.SET_MANAGER_EMPLOYEES, payload: employeeResponse.data};
+        const responseAction = {type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employeeResponse.data};
         yield put(responseAction);
     } catch(error){
         console.log('Cannot get employees', error); 
     }
 }
 
-//will be called to fetch all employees in the database
+// fetch all employees in the database
 function* fetchAllEmployees(){
     try {
         const allEmployeeResponse = yield call(axios.get, '/api/staff/allEmployees');
@@ -25,7 +34,7 @@ function* fetchAllEmployees(){
     }
 }
 
-//will be called to add a new employee & then it'll fetch all the employees
+// will be called to add a new employee & then it'll fetch all the employees
 function* addEmployee(action){
     try {
         yield call(axios.post, '/api/staff/employee', action.payload);
