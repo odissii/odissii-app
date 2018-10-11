@@ -20,6 +20,7 @@ import Nav from '../Nav/Nav';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
+import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 
 // CREATE TABLE employee (
 //   id SERIAL PRIMARY KEY,
@@ -68,7 +69,7 @@ class FeedbackFormView extends React.Component {
       taskRelated: false,
       cultureRelated: false,
       followUpNeeded: false,
-      followUpDate: undefined,
+      followUpDate: '',
       details: '',
     };
   }
@@ -123,6 +124,16 @@ class FeedbackFormView extends React.Component {
       payload: data
     });
 
+    if (followUpNeeded) {
+      this.props.dispatch({
+        type: FOLLOW_UP_ACTIONS.ADD_FOLLOWUP,
+        payload: {
+          employeeId,
+          followUpDate
+        }
+      });
+    }
+
     console.log('form submitted:', data);
   };
 
@@ -133,99 +144,103 @@ class FeedbackFormView extends React.Component {
   render() {
     const {employeeId, quality, taskRelated, cultureRelated, details, followUpNeeded, followUpDate} = this.state;
     return (
-      <div>
-        <Nav />
-        <div>
-          This is the feedback form.
-        </div>
-        <form onSubmit={this.handleFormSubmit}>
-          <FormControl required>
-            <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
-            <NativeSelect
-              value={employeeId}
-              onChange={this.handleInputChange('employeeId')}
-              input={<Input name="employee" id="employeeId" />}
-            >
-              <option value="" disabled>Select an employee...</option>
-              {employees.map(employee => (
-                <option key={employee.id} value={employee.id}>
-                  {`${employee.first_name} ${employee.last_name}`}
-                </option>
-              ))}
-            </NativeSelect>
-          </FormControl>
-          <FormControl required>
-            <FormLabel>Feedback Quality</FormLabel>
-            <RadioGroup
-              aria-label="feedback-type"
-              name="quality"
-              value={quality}
-              onChange={this.handleInputChange('quality')}
-            >
-              <FormControlLabel value="praise" label="Praise" control={<Radio />}/>
-              <FormControlLabel value="instruct" label="Instruct" control={<Radio />}/>
-              <FormControlLabel value="correct" label="Correct" control={<Radio />}/>
-            </RadioGroup>
-          </FormControl>
-          <FormControl>
-            <FormLabel>This feedback is:</FormLabel>
-            <FormGroup>
-              <FormControlLabel 
-                control={
-                  <Switch 
-                    checked={taskRelated}
-                    onChange={this.handleInputChange('taskRelated')}
-                  />
-                }
-                label="Task-Related"
-              />
-              <FormControlLabel 
-                control={
-                  <Switch 
-                    checked={cultureRelated}
-                    onChange={this.handleInputChange('cultureRelated')}
-                  />
-                }
-                label="Culture-Related"
-              />
-            </FormGroup>
-          </FormControl>
-          <FormControl>
-            <FormControlLabel 
-              label="Follow-Up Needed?"
-              control={
-                <Checkbox 
-                  checked={followUpNeeded}
-                  onChange={this.handleInputChange('followUpNeeded')}
-                />
-              }
-            />
-          </FormControl>
-            {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
-          {followUpNeeded
-          ? <FormControl>
-              <TextField 
-                type="date"
-                label="Follow-Up Date"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </FormControl> 
-          : null}
-          <TextField required
-            label="Feedback Details"
-            placeholder="Type or dictate feedback details"
-            value={details}
-            onChange={this.handleInputChange('details')}
-            multiline
-          />
+      <Grid container>
+        <Grid item xs={12}>
+          <Nav />
           <div>
-            <Button onClick={this.backToPreviousPage}>Cancel</Button>
-            <Button type="submit" color="primary" variant="contained">Submit</Button>
+            This is the feedback form.
           </div>
-        </form>
-      </div>
+          <form style={{width: '75%', maxWidth: '500px'}} onSubmit={this.handleFormSubmit}>
+            <FormControl required>
+              <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
+              <NativeSelect
+                value={employeeId}
+                onChange={this.handleInputChange('employeeId')}
+                input={<Input name="employee" id="employeeId" />}
+              >
+                <option value="" disabled>Select an employee...</option>
+                {employees.map(employee => (
+                  <option key={employee.id} value={employee.id}>
+                    {`${employee.first_name} ${employee.last_name}`}
+                  </option>
+                ))}
+              </NativeSelect>
+            </FormControl>
+            <FormControl required>
+              <FormLabel>Feedback Quality</FormLabel>
+              <RadioGroup
+                aria-label="feedback-type"
+                name="quality"
+                value={quality}
+                onChange={this.handleInputChange('quality')}
+              >
+                <FormControlLabel value="praise" label="Praise" control={<Radio />}/>
+                <FormControlLabel value="instruct" label="Instruct" control={<Radio />}/>
+                <FormControlLabel value="correct" label="Correct" control={<Radio />}/>
+              </RadioGroup>
+            </FormControl>
+            <FormControl>
+              <FormLabel>This feedback is:</FormLabel>
+              <FormGroup>
+                <FormControlLabel 
+                  control={
+                    <Switch 
+                      checked={taskRelated}
+                      onChange={this.handleInputChange('taskRelated')}
+                    />
+                  }
+                  label="Task-Related"
+                />
+                <FormControlLabel 
+                  control={
+                    <Switch 
+                      checked={cultureRelated}
+                      onChange={this.handleInputChange('cultureRelated')}
+                    />
+                  }
+                  label="Culture-Related"
+                />
+              </FormGroup>
+            </FormControl>
+            <FormControl>
+              <FormControlLabel 
+                label="Follow-Up Needed?"
+                control={
+                  <Checkbox 
+                    checked={followUpNeeded}
+                    onChange={this.handleInputChange('followUpNeeded')}
+                  />
+                }
+              />
+            </FormControl>
+              {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
+            {followUpNeeded
+            ? <FormControl>
+                <TextField 
+                  type="date"
+                  label="Follow-Up Date"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  value={followUpDate}
+                  onChange={this.handleInputChange('followUpDate')}
+                />
+              </FormControl> 
+            : null}
+            <TextField required
+              label="Feedback Details"
+              placeholder="Type or dictate feedback details"
+              value={details}
+              onChange={this.handleInputChange('details')}
+              multiline
+            />
+            <div>
+              <Button onClick={this.backToPreviousPage}>Cancel</Button>
+              <Button type="submit" color="primary" variant="contained">Submit</Button>
+            </div>
+          </form>
+        </Grid>
+      </Grid>
       
     );
   }

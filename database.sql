@@ -51,16 +51,15 @@ CREATE TABLE employee (
 -- an optional path for an image related to the feedback, an optional follow up date,
 -- and the date of the most recent edit to this feedback, if any
 CREATE TABLE feedback (
-  id SERIAL PRIMARY KEY,
-  manager_id INT NOT NULL REFERENCES "person",
-  employee_id INT NOT NULL REFERENCES "person",
-  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-  quality_id VARCHAR (50) NOT NULL,
-  task_related BOOLEAN DEFAULT false,
-  culture_releated BOOLEAN DEFAULT false,
-  details VARCHAR NOT NULL,
-  date_edited TIMESTAMP
-
+  "id" SERIAL PRIMARY KEY,
+  "supervisor_id" INT NOT NULL REFERENCES "person",
+  "employee_id" INT NOT NULL REFERENCES "person",
+  "date_created" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_DATE,
+  "quality" VARCHAR (50) NOT NULL,
+  "task_related" BOOLEAN DEFAULT false,
+  "culture_related" BOOLEAN DEFAULT false,
+  "details" VARCHAR NOT NULL,
+  "date_edited" TIMESTAMPTZ
 );
 --defines each type of quality, assigned to feedback records 
  CREATE TABLE quality_types (
@@ -77,5 +76,6 @@ CREATE TABLE feedback_images (
 CREATE TABLE follow_up (
   "id" SERIAL PRIMARY KEY,
   "employee_id" INT NOT NULL REFERENCES "employee",
-  "follow_up_date" TIMESTAMP
-  );
+  "follow_up_date" TIMESTAMPTZ,
+  "completed" BOOLEAN DEFAULT false
+);

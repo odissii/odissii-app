@@ -5,6 +5,7 @@ import employeeSaga from './employeeSaga';
 
 import supervisorSaga from './supervisorSaga';
 import feedbackSaga from './feedbackSaga';
+import followupSaga from './followupSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -13,6 +14,7 @@ export default function* rootSaga() {
     employeeSaga(),
     supervisorSaga(),
     feedbackSaga(),
+    followupSaga(),
     // watchIncrementAsync()
   ]);
 }
