@@ -18,7 +18,6 @@ class IndividualManagerGraph extends Component {
     render(){
         return(
             <div>
-                {JSON.stringify(this.props.feedback)}
                 <Doughnut data={this.state.supervisorSummary}/>
             </div>
         );

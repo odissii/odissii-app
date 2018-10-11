@@ -9,7 +9,7 @@ const router = express.Router();
 // should join with person and get first_name, last_name, username, person.id, role_id
 router.get('/supervisors', (req, res) => {
     if(req.isAuthenticated){
-        const query = `SELECT "supervisor_id", "first_name", "last_name" FROM "supervisor_manager" JOIN "person" ON "supervisor_id" = "person"."id" WHERE "manager_id" = $1;`;
+        const query = `SELECT "supervisor_id", "first_name", "last_name" FROM "supervisor_manager" JOIN "person" ON "supervisor_id" = "person"."id" WHERE "manager_id" = $1 ORDER BY "last_name";`;
         pool.query(query, [req.user.id]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {

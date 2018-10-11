@@ -55,12 +55,17 @@ CREATE TABLE feedback (
   manager_id INT NOT NULL REFERENCES "person",
   employee_id INT NOT NULL REFERENCES "person",
   date_created TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-  quality VARCHAR (50) NOT NULL,
+  quality_id VARCHAR (50) NOT NULL,
   task_related BOOLEAN DEFAULT false,
   culture_releated BOOLEAN DEFAULT false,
   details VARCHAR NOT NULL,
   date_edited TIMESTAMP
 );
+--defines each type of quality, assigned to feedback records 
+ CREATE TABLE quality_types (
+ 	"id" serial primary key, 
+ 	"name" varchar(50)
+ );
 --a table for all of the images associated with feedback 
 CREATE TABLE feedback_images (
 	id SERIAL PRIMARY KEY, 

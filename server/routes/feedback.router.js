@@ -35,21 +35,23 @@ router.get('/supervisors/all', (req, res) => {
 router.get('/supervisors/count', (req, res) => {
     if (req.isAuthenticated){
         const supervisor = req.query.id; 
-        const query = `SELECT "first_name", "last_name", COUNT ("quality"."id") as correct,
-        (SELECT COUNT ("feedback"."quality") 
-        FROM "feedback" 
-        WHERE "feedback"."quality" = 3 AND "supervisor_id" = $1) as praise,
-        (SELECT COUNT ("feedback"."quality")
-        FROM "feedback" 
-        WHERE "feedback"."quality" = 1 AND "supervisor_id" = $1) as instruct
-    FROM "feedback" 
-    JOIN "quality" 
-    ON "quality"."id" = "feedback"."quality"
-    JOIN "person" 
-    ON "person"."id" = "feedback"."supervisor_id"
-    WHERE "quality"."id" = 2
-    AND "supervisor_id" = $1
-    GROUP BY "feedback"."quality", "quality"."id", "first_name", "last_name";`;
+        const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid",
+                                (SELECT COUNT ("feedback"."quality_id")
+                                FROM "feedback"
+                                WHERE "feedback"."quality_id" = 2 AND "feedback"."supervisor_id" = $1) as correct,
+                                (SELECT COUNT ("feedback"."quality_id") 
+                                FROM "feedback" 
+                                WHERE "feedback"."quality_id" = 3 AND "feedback"."supervisor_id" = $1) as praise,
+                                (SELECT COUNT ("feedback"."quality_id")
+                                FROM "feedback" 
+                                WHERE "feedback"."quality_id" = 1 AND "feedback"."supervisor_id" = $1) as instruct
+                        FROM "feedback" 
+                        JOIN "quality_types" 
+                        ON "quality_types"."id" = "feedback"."quality_id"
+                        JOIN "person" 
+                        ON "person"."id" = "feedback"."supervisor_id"
+                        WHERE "feedback"."supervisor_id" = $1
+                        GROUP BY "feedback"."quality_id", "feedback"."supervisor_id", "quality_types"."id", "person"."first_name", "person"."last_name";`;
         pool.query(query, [supervisor]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {

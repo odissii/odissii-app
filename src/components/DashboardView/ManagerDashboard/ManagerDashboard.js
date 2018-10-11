@@ -61,17 +61,17 @@ class ManagerDashboard extends React.Component {
   render(){
     return (
       <div>
-        {JSON.stringify(this.state.feedbackData)}
           <Typography variant="display1">Manager's Dashboard</Typography>
-              <ManagerOverviewGraph />
+              <ManagerOverviewGraph /> 
           <Typography variant="headline">Manager List</Typography>
       <Grid container spacing={0}>
-          <Grid item xs={7}>
+          <Grid item xs={10}>
           {this.state.supervisors.map((supervisor, i)=>{
             return (
               <div>
                 <Typography variant="subheading" key={i}>{supervisor.first_name} {supervisor.last_name}</Typography> 
-                      <Grid item xs={5}>
+                <a href="#summary">Summary</a><br/>
+                  <a href="#employees">Employees</a>
                       {this.state.feedbackData.map((array, i) => {
                         return(
                           <span key={i}>{array.map((feedback, i)=> {
@@ -83,9 +83,6 @@ class ManagerDashboard extends React.Component {
                             </span>
                         );
                       })}
-                      </Grid>
-                  <a href="#summary">Summary</a><br/>
-                  <a href="#employees">Employees</a>
               </div>
             );
           })} 
