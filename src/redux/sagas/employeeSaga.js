@@ -3,6 +3,7 @@ import { PEOPLE_ACTIONS } from '../actions/peopleActions';
 import axios from 'axios'; 
 
 // will be called to fetch all employees that a supervisor supervises
+// Not using this saga currently
 function* fetchEmployees(id){
     try {
         const employeeResponse = yield call(axios.get, '/api/staff/employees');

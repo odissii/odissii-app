@@ -24,7 +24,18 @@ class EmployeeList extends React.Component {
         if (this.props.user.role === USER_ROLES.MANAGER) {
             this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
         } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
-            this.props.dispatch({ type: PEOPLE_ACTIONS.SET_MANAGER_EMPLOYEES });
+
+            // axios({
+            //     method: 'GET',
+            //     url: '/api/staff/employees/' + id
+            // }).then((response) => {
+            //     const employees = response.data;
+            //     const action = { type: PEOPLE_ACTIONS.SET_MANAGER_EMPLOYEES, payload: employees };
+            //     this.props.dispatch(action);
+            // }).catch((error) => {
+            //     console.log('Supervisor Employee List get error', error);
+            //     alert('Unable to GET supervisor employees');
+            // })
         }
     }
 
