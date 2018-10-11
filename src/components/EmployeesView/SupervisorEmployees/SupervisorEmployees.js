@@ -1,10 +1,15 @@
 import React from 'react';
+import EmployeeFilter from '../EmployeeFilter/EmployeeFilter';
+import EmployeeAppBar from '../EmployeeAppBar/EmployeeAppBar';
+import EmployeeList from '../EmployeeList/EmployeeList';
 
 class SupervisorEmployees extends React.Component {
-  render(){
+  render() {
     return (
       <div>
-        These are all of the employees visible to a supervisor.
+        <EmployeeAppBar />
+        <EmployeeFilter />
+        <EmployeeList />
       </div>
     );
   }
