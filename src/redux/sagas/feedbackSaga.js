@@ -7,7 +7,7 @@ function* fetchCurrentEmployeeFeedback(){
     try {
         const feedbackResponse = yield call(axios.get, '/api/feedback/employee');
         console.log('in fetchCurrentEmployeeFeedback');
-        const responseAction = {type: 'SET_CURRENT_EMPLOYEE_FEEDBACK', payload: feedbackResponse.data};
+        const responseAction = {type: FEEDBACK_ACTIONS.SET_CURRENT_EMPLOYEE_FEEDBACK, payload: feedbackResponse.data};
         yield put(responseAction);
     } catch(error){
         console.log('Cannot get employee feedback', error);

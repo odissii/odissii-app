@@ -31,7 +31,7 @@ router.get('/employee', (req, res) => {
                                 ON "feedback"."quality_id" = "quality_types"."id"
                                 WHERE "employee_id" = 1
                                 LIMIT 10`;
-    pool.query(empFeedbackQuery, [req.user.id])
+    pool.query(empFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {
             console.log('error in GET /employee', error);

@@ -28,7 +28,7 @@ class IndividualEmployeeSummaryView extends Component {
     } //end of constructor
 
     componentDidMount() {
-        this.getFeedbackCount();
+        // this.getFeedbackCount();
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
     }

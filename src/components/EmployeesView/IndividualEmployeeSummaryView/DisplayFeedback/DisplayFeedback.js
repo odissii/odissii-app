@@ -47,7 +47,7 @@ class DisplayFeedback extends Component {
 
         return (
             <TableRow>
-                <TableCell><Avatar className={iconQuality}>{(this.props.feedback.quality).charAt(0)}</Avatar></TableCell>
+                <TableCell><Avatar className={iconQuality}>{(this.props.feedback.name).charAt(0)}</Avatar></TableCell>
                 <TableCell>{this.props.feedback.details}</TableCell>
                 <TableCell>{moment(this.props.feedback.date_created).format("MMM Do YYYY")}</TableCell>
             </TableRow>
