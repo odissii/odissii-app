@@ -15,7 +15,8 @@ class ManagerDashboard extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-        supervisors: []
+        supervisors: [],
+        feedbackData: []
       }
   }
   componentDidMount(){
@@ -27,33 +28,67 @@ class ManagerDashboard extends React.Component {
       method: 'GET',
       url: '/api/staff/supervisors'
     }).then((response) => {
+      console.log(response.data); 
       this.setState({
         supervisors: response.data
+      });
+      this.getSupervisorFeedbackReports(response.data); 
+    }).catch((error) => {
+      console.log('Error getting supervisors', error); 
+    })
+  }
+  getFeedbackCounts = (id) => {
+    axios({
+      method: 'GET',
+      url: `/api/feedback/supervisors/count?id=${id}`
+    }).then((response) => {
+      console.log(...response.data); 
+      this.setState({
+        feedbackData: [...this.state.feedbackData, response.data]
       });
     }).catch((error) => {
       console.log('Error getting supervisors', error); 
     })
   }
+  getSupervisorFeedbackReports = (array) => {
+    console.log(array);
+    for (let i = 0; i < array.length; i++){
+      let id = array[i].supervisor_id; 
+      this.getFeedbackCounts(id); 
+    }
+  }
+ 
   render(){
     return (
       <div>
+        {JSON.stringify(this.state.feedbackData)}
           <Typography variant="display1">Manager's Dashboard</Typography>
-              <ManagerOverviewGraph/>
+              <ManagerOverviewGraph />
           <Typography variant="headline">Manager List</Typography>
-      {/* this will be mapped from an array that contains all supervisors that this person oversees */}
-      {/* will need either to get all of the feedback data here on the join, OR do another mapping inside here to get that data */}
       <Grid container spacing={0}>
           <Grid item xs={7}>
           {this.state.supervisors.map((supervisor, i)=>{
             return (
-              <Typography variant="subheading" key={i}>{supervisor.first_name} {supervisor.last_name}</Typography>
+              <div>
+                <Typography variant="subheading" key={i}>{supervisor.first_name} {supervisor.last_name}</Typography> 
+                      <Grid item xs={5}>
+                      {this.state.feedbackData.map((array, i) => {
+                        return(
+                          <span key={i}>{array.map((feedback, i)=> {
+                            if (feedback.last_name === supervisor.last_name && feedback.first_name === supervisor.first_name)
+                              return(
+                                <IndividualManagerGraph feedback={feedback} key={i}/> 
+                              );
+                            })}
+                            </span>
+                        );
+                      })}
+                      </Grid>
+                  <a href="#summary">Summary</a><br/>
+                  <a href="#employees">Employees</a>
+              </div>
             );
-          })}
-            <a href="#summary">Summary</a><br/>
-            <a href="#employees">Employees</a>
-            </Grid>
-          <Grid item xs={5}>
-            <IndividualManagerGraph />
+          })} 
           </Grid>
       </Grid>
     </div>
