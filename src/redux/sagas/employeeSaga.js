@@ -2,8 +2,8 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { PEOPLE_ACTIONS } from '../actions/peopleActions';
 import axios from 'axios'; 
 
-// will be called to fetch all employees that a manager supervisors
-function* fetchEmployees(){
+// will be called to fetch all employees that a supervisor supervises
+function* fetchEmployees(id){
     try {
         const employeeResponse = yield call(axios.get, '/api/staff/employees');
         const responseAction = {type: PEOPLE_ACTIONS.SET_MANAGER_EMPLOYEES, payload: employeeResponse.data};
