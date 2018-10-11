@@ -8,7 +8,9 @@ import { USER_ROLES, employees } from '../../constants';
 
 const mapStateToProps = state => ({
   user: state.user,
+  confirmationDisplayed: state.feedback.confirmationDisplayed,
   newPostedFeedback: state.feedback.newPostedFeedback,
+  newPostedFollowup: state.followup.newPostedFollowup,
 });
 
 class FeedbackFormConfirmationView extends React.Component {
@@ -28,28 +30,41 @@ class FeedbackFormConfirmationView extends React.Component {
   }
 
   handleClick = () => {
-    this.props.dispatch({
-      type: FEEDBACK_ACTIONS.FEEDBACK_CONFIRMATION_ACKWNOLEDGED
-    });
     this.props.history.push('/dashboard');
   };
 
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: FEEDBACK_ACTIONS.FEEDBACK_CONFIRMATION_ACKWNOLEDGED
+    });
+  }
+
   render() {
-    const feedback = this.props.newPostedFeedback;
-    const employee = employees.find(employee => employee.id === feedback.employee_id);
-    
-    return (
-      <div>
-        confirmation view
+    if (this.props.confirmationDisplayed) {
+      
+      const feedback = this.props.newPostedFeedback;
+      const followup = this.props.newPostedFollowup;
+      const employee = employees.find(employee => employee.id === feedback.employee_id);
+      
+      return (
         <div>
-          Employee: {JSON.stringify(employee)}
+          confirmation view
+          <div>
+            Employee: {JSON.stringify(employee)}
+          </div>
+          <div>
+            Feedback: {JSON.stringify(feedback)}
+          </div>
+          <div>
+            Followup: {JSON.stringify(followup)}
+          </div>
+          <button onClick={this.handleClick}>Okay</button>
         </div>
-        <div>
-          Feedback: {JSON.stringify(feedback)}
-        </div>
-        <button onClick={this.handleClick}>Okay</button>
-      </div>
-    );
+      );
+    } else {
+      this.props.history.push('/dashboard');
+      return null;
+    }
   }
 }
 

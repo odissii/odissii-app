@@ -33,7 +33,18 @@ const newPostedFeedback = (state = null, action) => {
     }
 };
 
+const confirmationDisplayed = (state = false, action) => {
+    if (action.type === FEEDBACK_ACTIONS.DISPLAY_FEEDBACK_CONFIRMATION) {
+        return true;
+    } else if (action.type === FEEDBACK_ACTIONS.FEEDBACK_CONFIRMATION_ACKWNOLEDGED) {
+        return false;
+    } else {
+        return state;
+    }
+};
+
 export default combineReducers({
    feedback,
-   newPostedFeedback
+   newPostedFeedback,
+   confirmationDisplayed,
   });

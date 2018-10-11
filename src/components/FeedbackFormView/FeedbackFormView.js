@@ -59,7 +59,7 @@ class FeedbackFormView extends React.Component {
   }
   
   componentDidUpdate() {
-    const {user, newPostedFeedback, newPostedFollowup, history} = this.props;
+    const {user, newPostedFeedback, newPostedFollowup, dispatch, history} = this.props;
 
     if (!user.isLoading && user.userName === null) {
       history.push('/home');
@@ -70,9 +70,11 @@ class FeedbackFormView extends React.Component {
     } else if (newPostedFeedback) {
       if (this.state.followUpNeeded) {
         if (newPostedFollowup) {
+          dispatch({type: FEEDBACK_ACTIONS.DISPLAY_FEEDBACK_CONFIRMATION});
           history.push('/feedback/confirmation');
         }
       } else {
+        dispatch({type: FEEDBACK_ACTIONS.DISPLAY_FEEDBACK_CONFIRMATION});
         history.push('/feedback/confirmation');
       }
     }
