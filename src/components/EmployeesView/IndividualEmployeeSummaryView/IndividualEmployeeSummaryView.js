@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
 import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
 import { USER_ACTIONS } from '../../../redux/actions/userActions';
+import axios from 'axios';
 //chart
 import { Bar } from 'react-chartjs-2';
 //Material Table
@@ -22,12 +23,27 @@ class IndividualEmployeeSummaryView extends Component {
         super(props);
         this.state = {
             chartData: {},
+            qualityCount: [],
         };
     } //end of constructor
 
     componentDidMount() {
+        this.getFeedbackCount();
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
+    }
+
+    getFeedbackCount() {
+        axios.get(`/api/feedback/employeeFeedbackCount/1`)
+            .then((response) => {
+                this.setState({
+                    qualityCount: response.data
+                })
+                console.log('qualityCount:', this.state.qualityCount);
+            }).catch((error) => {
+                console.log('error in getFeedbackCount', error);
+                alert('Cannot get client feedback counts!')
+            });
     }
 
     render() {
@@ -45,7 +61,7 @@ class IndividualEmployeeSummaryView extends Component {
         let data = {
             datasets: [{
                 label: 'Praise',
-                data: [20],
+                data: this.state.qualityCount.count,
                 backgroundColor: '#0f77e6',
                 borderWidth: 1,
                 stack: '1'

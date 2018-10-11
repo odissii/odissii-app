@@ -25,13 +25,29 @@ router.get('/supervisors/all', (req, res) => {
 // should set a limit of responses
 router.get('/employee', (req, res) => {
     console.log('in GET /employee');
-    const empFeedbackQuery = `SELECT "date_created", "quality", "details"
-                                FROM "feedback" WHERE "employee_id" = 1
-                                LIMIT 10;`;
-    pool.query(empFeedbackQuery)
+    const empFeedbackQuery = `SELECT "date_created", "quality_types"."name", "details"
+                                FROM "feedback" 
+                                JOIN "quality_types"
+                                ON "feedback"."quality_id" = "quality_types"."id"
+                                WHERE "employee_id" = 1
+                                LIMIT 10`;
+    pool.query(empFeedbackQuery, [req.user.id])
         .then(result => res.send(result.rows))
         .catch(error => {
             console.log('error in GET /employee', error);
+        });
+});
+//will get all feedback count for specific employee
+router.get('/employeeFeedbackCount/1', (req, res) => {
+    console.log('in GET /employeeFeedbackCount');
+    const empFeedbackCntQuery = `SELECT "quality", 
+                                COUNT ("quality") FROM "feedback" 
+                                WHERE "employee_id" = 1 
+                                GROUP BY "quality";`;
+    pool.query(empFeedbackCntQuery)
+        .then(result => res.send(result.rows))
+        .catch(error => {
+            console.log('error in GET/ employeeFeedbackCount', error);
         });
 });
 // gets the most recent feedback record submitted where the req.user.id matches the manager ID
