@@ -8,15 +8,50 @@ const router = express.Router();
 // get all supervisors associated with a manager (req.user.id)
 // should join with person and get first_name, last_name, username, person.id, role_id
 router.get('/supervisors', (req, res) => {
-    
+    if(req.isAuthenticated){
+        const query = `SELECT "supervisor_id", "first_name", "last_name" FROM "supervisor_manager" JOIN "person" ON "supervisor_id" = "person"."id" WHERE "manager_id" = $1 ORDER BY "last_name";`;
+        pool.query(query, [req.user.id]).then((results) => {
+            res.send(results.rows);
+        }).catch((error) => {
+            console.log('Error getting supervisors', error); 
+            res.sendStatus(500);
+        })
+    } else {
+        res.sendStatus(403); 
+    }
+
 });
 // get all employees associated with a supervisor
 router.get('/employees', (req, res) => {
-    
+    if(req.isAuthenticated()) {
+        const query = `SELECT * FROM employee LEFT JOIN supervisor_employee 
+                        ON "employee"."id" = "supervisor_employee"."employee_id" 
+                        WHERE "supervisor_employee"."supervisor_id" = ($1);`;
+        pool.query(query, [req.params.id])
+        .then((response) => {
+            res.send(response.rows);
+        }).catch((error) => {
+            console.log('GET supervisors employees failed', error);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(403);
+    }
 });
 //this is getting all employees that exist
 router.get('/allEmployees', (req, res) => {
-
+    if(req.isAuthenticated()) {
+        const query = `SELECT * FROM "employee";`;
+        pool.query(query)
+        .then((response) => {
+            res.send(response.rows);
+        }).catch((error) => {
+            console.log('all employee GET failed', error);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(403);
+    }
 });
 /**
  * POST routes 

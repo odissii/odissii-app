@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { FEEDBACK_ACTIONS } from '../actions/feedbackActions';
 import axios from 'axios';
 
@@ -6,7 +6,8 @@ import axios from 'axios';
 function* fetchCurrentEmployeeFeedback(){
     try {
         const feedbackResponse = yield call(axios.get, '/api/feedback/employee');
-        const responseAction = {type: FEEDBACK_ACTIONS.SET_CURRENT_EMPLOYEE_FEEDBACK, payload: feedbackResponse.data};
+        console.log('in fetchCurrentEmployeeFeedback');
+        const responseAction = {type: 'SET_CURRENT_EMPLOYEE_FEEDBACK', payload: feedbackResponse.data};
         yield put(responseAction);
     } catch(error){
         console.log('Cannot get employee feedback', error);
@@ -34,6 +35,7 @@ function* fetchAllFeedbackByManagerSupervisors(){
 }
 // adds a new feedback record
 function* addFeedback(action){
+    console.log('addFeedback saga called:', action);
     try{
        yield call(axios.post, '/api/feedback/', action.payload);
        yield put({type: FEEDBACK_ACTIONS.FETCH_ALL_FEEDBACK_BY_CURRENT_SUPERVISOR}); 

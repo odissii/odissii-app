@@ -1,9 +1,19 @@
+
+import { put, call, takeLatest } from 'redux-saga/effects';
+import { PEOPLE_ACTIONS } from '../actions/peopleActions';
+import axios from 'axios'; 
+
+// will be called to fetch all employees that a supervisor supervises
+// Not using this saga currently
+function* fetchEmployees(id){
+
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { PEOPLE_ACTIONS } from '../actions/peopleActions';
 import axios from 'axios'; 
 
 // fetch all employees belonging to a supervisor
 function* fetchEmployees(){
+
     try {
         const employeeResponse = yield call(axios.get, '/api/staff/employees');
         const responseAction = {type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employeeResponse.data};

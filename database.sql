@@ -23,17 +23,17 @@ CREATE TABLE person (
     "role_id" INT NOT NULL REFERENCES "role"
 );
 
--- junction table to link a "supervisor" person to a "manager" person
-CREATE TABLE supervisor_manager (
-  "id" SERIAL PRIMARY KEY,
-  "supervisor_id" INT NOT NULL REFERENCES "person",
-  "manager_id" INT NOT NULL REFERENCES "person"
-);
-
--- junction table to link a "manager" person to an employee
-CREATE TABLE manager_employee (
+-- junction table to link a "manager" person to a "supervisor" person
+CREATE TABLE manager_supervisor (
   "id" SERIAL PRIMARY KEY,
   "manager_id" INT NOT NULL REFERENCES "person",
+  "supervisor_id" INT NOT NULL REFERENCES "person"
+);
+
+-- junction table to link a "supervisor" person to an employee
+CREATE TABLE supervisor_employee (
+  "id" SERIAL PRIMARY KEY,
+  "supervisor_id" INT NOT NULL REFERENCES "person",
   "employee_id" INT NOT NULL REFERENCES "employee"
 );
 
@@ -51,16 +51,22 @@ CREATE TABLE employee (
 -- an optional path for an image related to the feedback, an optional follow up date,
 -- and the date of the most recent edit to this feedback, if any
 CREATE TABLE feedback (
-  "id" SERIAL PRIMARY KEY,
-  "manager_id" INT NOT NULL REFERENCES "person",
-  "employee_id" INT NOT NULL REFERENCES "person",
-  "date_created" TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-  "quality" VARCHAR (50) NOT NULL,
-  "task_related" BOOLEAN DEFAULT false,
-  "culture_releated" BOOLEAN DEFAULT false,
-  "details" VARCHAR NOT NULL,
-  "date_edited" TIMESTAMP
+  id SERIAL PRIMARY KEY,
+  manager_id INT NOT NULL REFERENCES "person",
+  employee_id INT NOT NULL REFERENCES "person",
+  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+  quality_id VARCHAR (50) NOT NULL,
+  task_related BOOLEAN DEFAULT false,
+  culture_releated BOOLEAN DEFAULT false,
+  details VARCHAR NOT NULL,
+  date_edited TIMESTAMP
+
 );
+--defines each type of quality, assigned to feedback records 
+ CREATE TABLE quality_types (
+ 	"id" serial primary key, 
+ 	"name" varchar(50)
+ );
 --a table for all of the images associated with feedback 
 CREATE TABLE feedback_images (
 	"id" SERIAL PRIMARY KEY, 
