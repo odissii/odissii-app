@@ -54,12 +54,12 @@ CREATE TABLE feedback (
   "id" SERIAL PRIMARY KEY,
   "supervisor_id" INT NOT NULL REFERENCES "person",
   "employee_id" INT NOT NULL REFERENCES "person",
-  "date_created" TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+  "date_created" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_DATE,
   "quality" VARCHAR (50) NOT NULL,
   "task_related" BOOLEAN DEFAULT false,
   "culture_related" BOOLEAN DEFAULT false,
   "details" VARCHAR NOT NULL,
-  "date_edited" TIMESTAMP
+  "date_edited" TIMESTAMPTZ
 );
 --a table for all of the images associated with feedback 
 CREATE TABLE feedback_images (
