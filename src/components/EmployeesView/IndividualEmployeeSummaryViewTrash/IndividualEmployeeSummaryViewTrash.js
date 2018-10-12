@@ -33,12 +33,7 @@ class IndividualEmployeeSummaryView extends Component {
     //     };
     // } //end of constructor
 
-    
-
-    
-
     render() {
-
         let content = null;
         content = (
             <div className="outer">
@@ -80,11 +75,12 @@ class IndividualEmployeeSummaryView extends Component {
                 </Grid>
             </div>
         )
+
         return (
             <div>
                 {content}
             </div>
-        )
+        ) //end of return
     }
 }
 

@@ -30,6 +30,7 @@ class IndividualEmployeeSummaryView extends Component {
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
     }
 
+    //This will get all of the feedback
     getFeedbackCount() {
         axios.get(`/api/feedback/employeeFeedbackCount/1`)
             .then((response) => {
@@ -41,43 +42,42 @@ class IndividualEmployeeSummaryView extends Component {
                 console.log('error in getFeedbackCount', error);
                 alert('Cannot get client feedback counts!')
             });
-    }
+    } //end of getFeedbackCount()
 
     render() {
-        let tableContent = null;
-        tableContent = (
-            <Grid container spacing={0}>
-                <Grid item xs={12}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Category</TableCell>
-                                <TableCell>Feedback</TableCell>
-                                <TableCell>Date Given</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
-                            {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
-                                return (
-                                    <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
-                                )
-                            })}
-                        </TableBody>
-                    </Table>
-                </Grid>
-            </Grid>
-        )
 
         return (
             <div>
                 <h1>
+                    {/* This arrow_back icon button will take the user back to the /employees view */}
                     <Button component={Link} to={"/employees"}>
                         <Icon>arrow_back</Icon>
                     </Button>
-                    {/* {this.state.qualityCount[0] ? this.state.qualityCount[0].first_name : null} */}
+                    {/* If the selected employee name is not yet render, display null, otherwise display the first name */}
+                    {this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}
                 </h1>
-                { tableContent }
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Category</TableCell>
+                                    <TableCell>Feedback</TableCell>
+                                    <TableCell>Date Given</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
+                                {/* This will map over the array and pass it as "feedback" to the DisplayFeedback Component */}
+                                {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
+                                    return (
+                                        <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
