@@ -19,7 +19,7 @@ import EmployeeFormView from './components/EmployeeFormView/EmployeeFormView';
 import SettingsView from './components/SettingsView/SettingsView';
 import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
-
+import EditPerson from './components/EditPerson/EditPerson'; 
 
 
 import './styles/main.css';
@@ -74,6 +74,10 @@ const App = () => (
           path="/info"
           component={InfoPage}
         />
+        <Route 
+        path="/edit/:personId" 
+        component={EditPerson}/>
+       
         <Route render={() => <h1>404</h1>} />
       </Switch>
     </Router>
