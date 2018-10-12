@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import DisplayGraph from './DisplayGraph/DisplayGraph';
 import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
 import './IndividualEmployeeSummary.css';
 import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
@@ -16,61 +15,30 @@ import TableRow from '@material-ui/core/TableRow';
 //Buttons
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-//Swipeable Tab Views
-import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import { Typography, Grid } from '@material-ui/core';
+import {  Grid } from '@material-ui/core';
+import DisplayGraphs from './DisplayGraphs/DisplayGraphs';
 
 const mapStateToProps = state => ({
     user: state.user,
     feedback: state.feedback.feedback,
 });
 
-function TabContainer({ children, dir }) {
-    return (
-        <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
-            {children}
-        </Typography>
-    );
-}
-
-TabContainer.propTypes = {
-    children: PropTypes.node.isRequired,
-    dir: PropTypes.string.isRequired,
-};
-
 const styles = theme => ({
-    root: {
-        backgroundColor: theme.palette.background.paper,
-        width: 500,
-    },
     stickyButton: {
-        width: '100%',
         bottom: '1rem',
     },
 });
 
 class IndividualEmployeeSummaryView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            chartData: {},
-            qualityCount: [],
-            value: 0,
-        };
-    } //end of constructor
-
-    handleChange = (event, value) => {
-        this.setState({ value });
-    };
-
-    handleChangeIndex = index => {
-        this.setState({ value: index });
-    };
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         qualityCount: [],
+    //         value: 0,
+    //     };
+    // } //end of constructor
 
     componentDidMount() {
         this.getFeedbackCount();
@@ -110,72 +78,29 @@ class IndividualEmployeeSummaryView extends Component {
                         </Button>
                         {this.state.qualityCount[0] ? this.state.qualityCount[0].first_name : null}
                     </h1>
-                    <Grid container spacing={0}>
-                        <Grid item xs={12}>
-                            <AppBar position="static" color="default">
-                                <Tabs
-                                    value={this.state.value}
-                                    onChange={this.handleChange}
-                                    indicatorColor="primary"
-                                    textColor="primary"
-                                    fullWidth>
-                                    <Tab label="Weekly" />
-                                    <Tab label="Monthly" />
-                                    <Tab label="Yearly" />
-                                </Tabs>
-                            </AppBar>
-                            <SwipeableViews
-                                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                                index={this.state.value}
-                                onChangeIndex={this.handleChangeIndex}
-                            >
-                                <TabContainer dir={theme.direction}>
-                                    {JSON.stringify(this.state.qualityCount)}
-                                    {this.state.qualityCount.map((qualityAtIndex, index) => {
-                                        return (
-                                            <DisplayGraph key={index} quality={qualityAtIndex} />
-                                        )
-                                    })}
-                                </TabContainer>
-                                <TabContainer dir={theme.direction}>
-                                    {/* {JSON.stringify(this.state.qualityCount)} */}
-                                    {this.state.qualityCount.map((qualityAtIndex, index) => {
-                                        return (
-                                            <DisplayGraph key={index} quality={qualityAtIndex} />
-                                        )
-                                    })}
-                                </TabContainer>
-                                <TabContainer dir={theme.direction}>
-                                    {/* {JSON.stringify(this.state.qualityCount)} */}
-                                    {this.state.qualityCount.map((qualityAtIndex, index) => {
-                                        return (
-                                            <DisplayGraph key={index} quality={qualityAtIndex} />
-                                        )
-                                    })}
-                                </TabContainer>
-                            </SwipeableViews>
-                            
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Category</TableCell>
-                                        <TableCell>Feedback</TableCell>
-                                        <TableCell>Date Given</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
-                                    {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
-                                        return (
-                                            <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
-                                        )
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </Grid>
-                    </Grid>
+                    <DisplayGraphs />
                 </div>
-                
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Category</TableCell>
+                                    <TableCell>Feedback</TableCell>
+                                    <TableCell>Date Given</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
+                                {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
+                                    return (
+                                        <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    </Grid>
+                </Grid>
             </div>
         )
         return (

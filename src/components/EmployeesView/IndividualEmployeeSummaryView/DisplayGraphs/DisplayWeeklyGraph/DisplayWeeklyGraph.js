@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 //Chart
 import { Bar } from 'react-chartjs-2';
 
-class DisplayGraph extends Component {
+class DisplayWeeklyGraph extends Component {
     render() {
         const options = {
             scales: {
@@ -13,19 +13,19 @@ class DisplayGraph extends Component {
                 yAxes: [{
                     stacked: true
                 }]
-            }
+            },
         }
 
         let data = {
             datasets: [{
                 label: 'Praise',
-                data: [this.props.quality.praise],
+                data: [1, 2, 3, 3, 4],
                 backgroundColor: '#0f77e6',
                 borderWidth: 1,
             },
             {
                 label: 'Instruct',
-                data: [this.props.quality.instruct],
+                data: [1, 2, 3, 4, 5],
                 backgroundColor: '#f17416',
                 borderWidth: 1,
                 stack: '2'
@@ -33,7 +33,7 @@ class DisplayGraph extends Component {
             },
             {
                 label: 'Correct',
-                data: [this.props.quality.correct],
+                data: [1],
                 backgroundColor: 'lightgrey',
                 borderWidth: 1,
                 stack: '3'
@@ -49,4 +49,4 @@ class DisplayGraph extends Component {
     }
 }
 
-export default connect()(DisplayGraph);
+export default connect()(DisplayWeeklyGraph);
