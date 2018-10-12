@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
@@ -29,11 +29,11 @@ class EmployeesView extends React.Component {
 
     if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
       userEmployees = (
-        <SupervisorEmployees history={this.props.history}/>
+        <SupervisorEmployees />
       )
     } else if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
       userEmployees = (
-        <ManagerEmployees history={this.props.history}/>
+        <ManagerEmployees />
       )
     }
     return (
@@ -48,4 +48,4 @@ class EmployeesView extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(EmployeesView);
+export default withRouter(connect(mapStateToProps)(EmployeesView));
