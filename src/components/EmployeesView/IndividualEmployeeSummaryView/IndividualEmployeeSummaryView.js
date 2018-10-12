@@ -48,6 +48,10 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         width: 500,
     },
+    stickyButton: {
+        width: '100%',
+        bottom: '1rem',
+    },
 });
 
 class IndividualEmployeeSummaryView extends Component {
@@ -92,80 +96,93 @@ class IndividualEmployeeSummaryView extends Component {
 
         let content = null;
         content = (
-            <div>
-                <h1>
-                    <Button variant="contained" component={Link} to={"/employees"}>
-                        <Icon>arrow_back</Icon>
+            <div className="outer">
+            {/* <style>
+                .app-fab--absolute {
+                    position: fixed;
+                    bottom
+                }
+            </style> */}
+                <div className="btnContainer">
+                    <Button variant="fab" color="primary" aria-label="Edit" style={styles.stickyButton}
+                        component={Link} to={"/feedback/new"}>
+                        <Icon>edit_icon</Icon>
                     </Button>
-                    Employee Name
-                </h1>
-                <Grid container spacing={0}>
-                    <Grid item xs={10}>
-                        <AppBar position="static" color="default">
-                            <Tabs
-                                value={this.state.value}
-                                onChange={this.handleChange}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                fullWidth>
-                                <Tab label="Weekly" />
-                                <Tab label="Monthly" />
-                                <Tab label="Yearly" />
-                            </Tabs>
-                        </AppBar>
-                        <SwipeableViews
-                            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                            index={this.state.value}
-                            onChangeIndex={this.handleChangeIndex}
-                        >
-                            <TabContainer dir={theme.direction}>
-                                {JSON.stringify(this.state.qualityCount)}
-                                {this.state.qualityCount.map((qualityAtIndex, index) => {
-                                    return (
-                                        <DisplayGraph key={index} quality={qualityAtIndex} />
-                                    )
-                                })}
-                            </TabContainer>
-                            <TabContainer dir={theme.direction}>
-                                {/* {JSON.stringify(this.state.qualityCount)} */}
-                                {this.state.qualityCount.map((qualityAtIndex, index) => {
-                                    return (
-                                        <DisplayGraph key={index} quality={qualityAtIndex} />
-                                    )
-                                })}
-                            </TabContainer>
-                            <TabContainer dir={theme.direction}>
-                                {/* {JSON.stringify(this.state.qualityCount)} */}
-                                {this.state.qualityCount.map((qualityAtIndex, index) => {
-                                    return (
-                                        <DisplayGraph key={index} quality={qualityAtIndex} />
-                                    )
-                                })}
-                            </TabContainer>
-                        </SwipeableViews>
-                        <Button variant="fab" color="primary" aria-label="Edit" className="btn"
-                            component={Link} to={"/feedback/new"}>
-                            <Icon>edit_icon</Icon>
+                </div>
+                
+                <div className="container">
+                    <h1>
+                        <Button component={Link} to={"/employees"}>
+                            <Icon>arrow_back</Icon>
                         </Button>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Category</TableCell>
-                                    <TableCell>Feedback</TableCell>
-                                    <TableCell>Date Given</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
-                                {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
-                                    return (
-                                        <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
+                        Employee Name
+                    </h1>
+                    <Grid container spacing={0}>
+                        <Grid item xs={10}>
+                            <AppBar position="static" color="default">
+                                <Tabs
+                                    value={this.state.value}
+                                    onChange={this.handleChange}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    fullWidth>
+                                    <Tab label="Weekly" />
+                                    <Tab label="Monthly" />
+                                    <Tab label="Yearly" />
+                                </Tabs>
+                            </AppBar>
+                            <SwipeableViews
+                                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                index={this.state.value}
+                                onChangeIndex={this.handleChangeIndex}
+                            >
+                                <TabContainer dir={theme.direction}>
+                                    {JSON.stringify(this.state.qualityCount)}
+                                    {this.state.qualityCount.map((qualityAtIndex, index) => {
+                                        return (
+                                            <DisplayGraph key={index} quality={qualityAtIndex} />
+                                        )
+                                    })}
+                                </TabContainer>
+                                <TabContainer dir={theme.direction}>
+                                    {/* {JSON.stringify(this.state.qualityCount)} */}
+                                    {this.state.qualityCount.map((qualityAtIndex, index) => {
+                                        return (
+                                            <DisplayGraph key={index} quality={qualityAtIndex} />
+                                        )
+                                    })}
+                                </TabContainer>
+                                <TabContainer dir={theme.direction}>
+                                    {/* {JSON.stringify(this.state.qualityCount)} */}
+                                    {this.state.qualityCount.map((qualityAtIndex, index) => {
+                                        return (
+                                            <DisplayGraph key={index} quality={qualityAtIndex} />
+                                        )
+                                    })}
+                                </TabContainer>
+                            </SwipeableViews>
+                            
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Category</TableCell>
+                                        <TableCell>Feedback</TableCell>
+                                        <TableCell>Date Given</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
+                                    {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
+                                        return (
+                                            <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </div>
+                
             </div>
         )
         return (

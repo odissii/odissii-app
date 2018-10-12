@@ -6,3 +6,23 @@
     position: fixed;
     float: right;
 }
+
+.outer {
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    overflow-y: auto;
+    margin-right: 16px;
+    border: solid 1px red;
+    padding: 4px;
+}
+
+.btnContainer{
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+}
