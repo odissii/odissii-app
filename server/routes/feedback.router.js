@@ -17,9 +17,26 @@ router.get('/', (req, res) => {
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/supervisors/all', (req, res) => {
-
     if (req.isAuthenticated){
-        const query = `SELECT "feedback"."id", "feedback"."supervisor_id", "employee_id", "date_created", "quality", "task_related", "culture_related", "details", "date_edited", "supervisor_manager"."manager_id" FROM "feedback" JOIN "supervisor_manager" ON "supervisor_manager"."supervisor_id" = "feedback"."supervisor_id" WHERE "manager_id" = $1;`;
+        const query = `SELECT DISTINCT "feedback"."supervisor_id", "first_name", "last_name",
+                        (SELECT COUNT ("feedback"."quality_id")
+                            FROM "feedback"
+                            WHERE "feedback"."quality_id" = 2) as correct,
+                        (SELECT COUNT ("feedback"."quality_id") 
+                            FROM "feedback" 
+                            WHERE "feedback"."quality_id" = 3) as praise,
+                        (SELECT COUNT ("feedback"."quality_id")
+                            FROM "feedback" 
+                            WHERE "feedback"."quality_id" = 1) as instruct
+                        FROM "feedback" 
+                        FULL OUTER JOIN "quality_types" 
+                        ON "quality_types"."id" = "feedback"."quality_id"
+                        JOIN "supervisor_manager" 
+                        ON "supervisor_manager"."supervisor_id" = "feedback"."supervisor_id"
+                        JOIN "person"
+                        ON "person"."id" = "feedback"."supervisor_id"
+                        WHERE "supervisor_manager"."manager_id" = $1
+                        GROUP BY "feedback"."quality_id", "quality_types"."id", "feedback"."supervisor_id", "first_name", "last_name";`;
         pool.query(query, [req.user.id]).then((results) => {
             res.send(results.rows); 
         }).catch((error) => {
@@ -129,7 +146,7 @@ router.post('/', (req, res) => {
       "task_related", 
       "culture_related", 
       "details"
-    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7);`;
+    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7) RETURNING *;`;
 
     pool.query(queryText, [
       data.supervisorId, 
@@ -141,7 +158,8 @@ router.post('/', (req, res) => {
       data.details
     ]).then(response => {
       console.log(`/api/feedback POST success:`, response);
-      res.sendStatus(201);
+      const newFeedbackRow = response.rows[0];
+      res.send(newFeedbackRow);
     }).catch(error => {
       console.log(`/api/feedback POST error:`, error);
       res.sendStatus(500);

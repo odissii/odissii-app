@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
     user: state.user,
     people: state.people.staff.allEmployees,
     employees: state.people.staff.supervisorEmployees,
+    search: state.search,
 })
 
 const space = ' ';
@@ -38,13 +39,19 @@ class EmployeeList extends React.Component {
             })
         }
     }
+    
 
     render() {
         let content = null;
         if (this.props.user.role === USER_ROLES.MANAGER) {
+            let filteredEmployees = this.props.people.filter(
+                (employee) => {
+                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
+                }
+            )
             content = (
                 <List>
-                    {this.props.people.map((employee) => {
+                    {filteredEmployees.map((employee) => {
                         return <ListItem key={employee.id} value={employee}>
                             <ListItemAvatar>
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
@@ -60,9 +67,14 @@ class EmployeeList extends React.Component {
                 </List>
             );
         } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
+            let filteredEmployees = this.props.employees.filter(
+                (employee) => {
+                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
+                }
+            )
             content = (
                 <List>
-                    {this.props.employees.map((employee) => {
+                    {filteredEmployees.map((employee) => {
                         return <ListItem key={employee.id} value={employee}>
                             <ListItemAvatar>
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
