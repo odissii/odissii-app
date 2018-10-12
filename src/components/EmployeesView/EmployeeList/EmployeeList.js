@@ -9,7 +9,8 @@ import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
 const mapStateToProps = state => ({
     user: state.user,
     people: state.people.staff.allEmployees,
-    employees: state.people.staff.managerEmployees,
+    employees: state.people.staff.supervisorEmployees,
+    search: state.search,
 })
 
 const space = ' ';
@@ -24,27 +25,33 @@ class EmployeeList extends React.Component {
         if (this.props.user.role === USER_ROLES.MANAGER) {
             this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
         } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
-
-            // axios({
-            //     method: 'GET',
-            //     url: '/api/staff/employees/' + id
-            // }).then((response) => {
-            //     const employees = response.data;
-            //     const action = { type: PEOPLE_ACTIONS.SET_MANAGER_EMPLOYEES, payload: employees };
-            //     this.props.dispatch(action);
-            // }).catch((error) => {
-            //     console.log('Supervisor Employee List get error', error);
-            //     alert('Unable to GET supervisor employees');
-            // })
+            const id = this.props.user.id
+            axios({
+                method: 'GET',
+                url: '/api/staff/employees/' + id
+            }).then((response) => {
+                const employees = response.data;
+                const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
+                this.props.dispatch(action);
+            }).catch((error) => {
+                console.log('Supervisor Employee List get error', error);
+                alert('Unable to GET supervisor employees');
+            })
         }
     }
+    
 
     render() {
         let content = null;
         if (this.props.user.role === USER_ROLES.MANAGER) {
+            let filteredEmployees = this.props.people.filter(
+                (employee) => {
+                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
+                }
+            )
             content = (
                 <List>
-                    {this.props.people.map((employee) => {
+                    {filteredEmployees.map((employee) => {
                         return <ListItem key={employee.id} value={employee}>
                             <ListItemAvatar>
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
@@ -60,9 +67,14 @@ class EmployeeList extends React.Component {
                 </List>
             );
         } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
+            let filteredEmployees = this.props.employees.filter(
+                (employee) => {
+                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
+                }
+            )
             content = (
                 <List>
-                    {this.props.employees.map((employee) => {
+                    {filteredEmployees.map((employee) => {
                         return <ListItem key={employee.id} value={employee}>
                             <ListItemAvatar>
                                 <Avatar alt={employee.first_name} src={employee.image_path} />

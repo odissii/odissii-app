@@ -22,7 +22,7 @@ router.get('/supervisors', (req, res) => {
 
 });
 // get all employees associated with a supervisor
-router.get('/employees', (req, res) => {
+router.get('/employees/:id', (req, res) => {
     if(req.isAuthenticated()) {
         const query = `SELECT * FROM employee LEFT JOIN supervisor_employee 
                         ON "employee"."id" = "supervisor_employee"."employee_id" 

@@ -14,6 +14,7 @@ import DashboardView from './components/DashboardView/DashboardView';
 import EmployeesView from './components/EmployeesView/EmployeesView';
 import IndividualEmployeeSummaryView from './components/EmployeesView/IndividualEmployeeSummaryView/IndividualEmployeeSummaryView';
 import FeedbackFormView from './components/FeedbackFormView/FeedbackFormView';
+import FeedbackFormConfirmationView from './components/FeedbackFormConfirmationView/FeedbackFormConfirmationView';
 import EmployeeFormView from './components/EmployeeFormView/EmployeeFormView';
 import SettingsView from './components/SettingsView/SettingsView';
 import UserPage from './components/UserPage/UserPage';
@@ -52,6 +53,10 @@ const App = () => (
         <Route 
           path="/feedback/new"
           component={FeedbackFormView}
+        />
+        <Route 
+          path="/feedback/confirmation"
+          component={FeedbackFormConfirmationView}
         />
         <Route 
           path="/employee/new"

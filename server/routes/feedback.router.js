@@ -10,7 +10,24 @@ const router = express.Router();
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/', (req, res) => {
-    
+    if (req.isAuthenticated() && req.user.role === 'supervisor') {
+        const supervisorId = req.user.id;
+        const queryText = `
+            SELECT * FROM "feedback" 
+            WHERE "supervisor_id" = $1 
+            AND "date_created" >= (CURRENT_DATE - INTERVAL '12 months');
+        `;
+        pool.query(queryText, [supervisorId])
+        .then(response => {
+            console.log(`/api/feedback GET success:`, response);
+            res.send(response.rows);
+        }).catch(error => {
+            console.log(`/api/feedback GET error:`, error);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(401);
+    }
 });
 // gets all feedback created by all supervisors associated with a specific manager, who is referenced by req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images
@@ -18,24 +35,12 @@ router.get('/', (req, res) => {
 // should set a limit of responses
 router.get('/supervisors/all', (req, res) => {
 
-    if (req.isAuthenticated){
-        const query = `SELECT "feedback"."id", "feedback"."supervisor_id", "employee_id", "date_created", "quality", "task_related", "culture_related", "details", "date_edited", "supervisor_manager"."manager_id" FROM "feedback" JOIN "supervisor_manager" ON "supervisor_manager"."supervisor_id" = "feedback"."supervisor_id" WHERE "manager_id" = $1;`;
-        pool.query(query, [req.user.id]).then((results) => {
-            res.send(results.rows); 
-        }).catch((error) => {
-            console.log('Error getting supervisor feedback', error);
-            res.sendStatus(500);
-        })
-    } else {
-        res.sendStatus(403);
-    }
-
 });
 // counts all praise, instruct, and correct feedback that a supervisor has given 
 // req.query will contain the supervisor id 
 // results are limited to 30. this can be a variable passed through the query if desired. 
 router.get('/supervisors/count', (req, res) => {
-    if (req.isAuthenticated){
+    if (req.isAuthenticated()){
         const supervisor = req.query.id; 
         const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid",
                                 (SELECT COUNT ("feedback"."quality_id")
@@ -118,7 +123,7 @@ router.post('/', (req, res) => {
       "task_related", 
       "culture_related", 
       "details"
-    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7);`;
+    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7) RETURNING *;`;
 
     pool.query(queryText, [
       data.supervisorId, 
@@ -130,7 +135,8 @@ router.post('/', (req, res) => {
       data.details
     ]).then(response => {
       console.log(`/api/feedback POST success:`, response);
-      res.sendStatus(201);
+      const newFeedbackRow = response.rows[0];
+      res.send(newFeedbackRow);
     }).catch(error => {
       console.log(`/api/feedback POST error:`, error);
       res.sendStatus(500);

@@ -3,16 +3,16 @@ import { PEOPLE_ACTIONS } from '../actions/peopleActions';
 import axios from 'axios'; 
 
 // fetch all employees belonging to a supervisor
-function* fetchEmployees(){
+// function* fetchEmployees(){
 
-    try {
-        const employeeResponse = yield call(axios.get, '/api/staff/employees');
-        const responseAction = {type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employeeResponse.data};
-        yield put(responseAction);
-    } catch(error){
-        console.log('Cannot get employees', error); 
-    }
-}
+//     try {
+//         const employeeResponse = yield call(axios.get, '/api/staff/employees');
+//         const responseAction = {type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employeeResponse.data};
+//         yield put(responseAction);
+//     } catch(error){
+//         console.log('Cannot get employees', error); 
+//     }
+// }
 
 // fetch all employees in the database
 function* fetchAllEmployees(){
@@ -56,7 +56,7 @@ function* updateEmployee(action){
 }
 
 function* employeeSaga(){
-    yield takeLatest(PEOPLE_ACTIONS.FETCH_EMPLOYEES, fetchEmployees);
+    // yield takeLatest(PEOPLE_ACTIONS.FETCH_EMPLOYEES, fetchEmployees);
     yield takeLatest(PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES, fetchAllEmployees);
     yield takeLatest(PEOPLE_ACTIONS.ADD_EMPLOYEE, addEmployee);
     yield takeLatest(PEOPLE_ACTIONS.DELETE_EMPLOYEE, deleteEmployee);

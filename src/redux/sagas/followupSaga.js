@@ -32,8 +32,12 @@ function* addFollowup(action) {
   try {
     console.log('addFollowup saga:', action);
     const data = action.payload;
-    yield call(axios.post, '/api/followup', data);
-    // anything to refresh after this call? what?
+    const postResponse = yield call(axios.post, '/api/followup', data);
+    const postedFollowup = postResponse.data;
+    yield put({
+      type: FOLLOW_UP_ACTIONS.FOLLOWUP_POST_SUCCESS,
+      payload: postedFollowup
+    });
   } catch(error) {
     console.log('addFollowup error:', error);
   }

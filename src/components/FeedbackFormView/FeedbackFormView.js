@@ -21,6 +21,7 @@ import Nav from '../Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
 import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
+import { USER_ROLES, employees } from '../../constants';
 
 // CREATE TABLE employee (
 //   id SERIAL PRIMARY KEY,
@@ -29,33 +30,12 @@ import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 //   last_name VARCHAR (255) NOT NULL,
 //   image_path VARCHAR (255)
 // );
-// dummy data for employees
-const employees = [
-  {
-    id: 1,
-    employeeId: '123ABC',
-    first_name: 'Ricky',
-    last_name: 'Bobby',
-    image_path: 'some/path'
-  },
-  {
-    id: 2,
-    employeeId: '3F85R',
-    first_name: 'John',
-    last_name: 'Johnson',
-    image_path: 'some/path'
-  },
-  {
-    id: 3,
-    employeeId: '87FY44',
-    first_name: 'Becky',
-    last_name: 'Beckyson',
-    image_path: 'some/path'
-  }
-];
+
 
 const mapStateToProps = state => ({
   user: state.user,
+  newPostedFeedback: state.feedback.newPostedFeedback,
+  newPostedFollowup: state.followup.newPostedFollowup,
 });
 
 const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNeeded'];
@@ -79,12 +59,24 @@ class FeedbackFormView extends React.Component {
   }
   
   componentDidUpdate() {
-    const {user, history} = this.props;
+    const {user, newPostedFeedback, newPostedFollowup, dispatch, history} = this.props;
+
     if (!user.isLoading && user.userName === null) {
       history.push('/home');
     }
-    if (!user.isLoading && user.userName && user.role !== 'supervisor') {
-      history.push('/home');
+    
+    if (!user.isLoading && user.userName && user.role !== USER_ROLES.SUPERVISOR) {
+      history.push('/dashboard');
+    } else if (newPostedFeedback) {
+      if (this.state.followUpNeeded) {
+        if (newPostedFollowup) {
+          dispatch({type: FEEDBACK_ACTIONS.DISPLAY_FEEDBACK_CONFIRMATION});
+          history.push('/feedback/confirmation');
+        }
+      } else {
+        dispatch({type: FEEDBACK_ACTIONS.DISPLAY_FEEDBACK_CONFIRMATION});
+        history.push('/feedback/confirmation');
+      }
     }
   }
 
