@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Bar} from 'react-chartjs-2';
+
 const barOptions = {
     scales: {
          xAxes: [{
@@ -9,30 +10,32 @@ const barOptions = {
              stacked: true
          }]
      }, 
-  }
-  const managerOverview = {
-    labels: ['Erin', 'Keith', 'Ben', 'Maria', 'Mike'],
-    datasets: [
-      {
-        label: 'Correct',
-        backgroundColor: 'lightgray',
-        data: [1, 5, 2, 1, 3]
-      },
-      {
-        label: 'Instruct',
-        backgroundColor: '#f17416',
-        data: [2, 3, 1, 4, 1]
-      },
-      {
-        label: 'Praise',
-        backgroundColor: '#0f77e6',
-        data: [4, 1, 4, 5, 2]
-    },
-  ]}
+  };
+
 class ManagerOverviewGraph extends Component {
     render(){
+    let  managerOverview = {
+        labels: ['a','b', 'c', 'd', 'e'],
+        datasets: [
+          {
+            label: 'Correct',
+            backgroundColor: 'lightgray',
+            data: this.props.correct
+          },
+          {
+            label: 'Instruct',
+            backgroundColor: '#f17416',
+            data: this.props.instruct
+          },
+          {
+            label: 'Praise',
+            backgroundColor: '#0f77e6',
+            data: this.props.praise
+        }
+      ]}
         return(
             <div>
+                {JSON.stringify(this.props.praise)}
                 <Bar data={managerOverview} options={barOptions}/>
             </div>
         );
