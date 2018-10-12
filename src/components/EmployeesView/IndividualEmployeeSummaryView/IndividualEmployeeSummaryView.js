@@ -7,6 +7,8 @@ import { USER_ACTIONS } from '../../../redux/actions/userActions';
 import axios from 'axios';
 //Components
 import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
+//Styling
+import './IndividualEmployeeSummaryView.css';
 //Buttons
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
@@ -21,6 +23,8 @@ const mapStateToProps = state => ({
     user: state.user,
     feedback: state.feedback.feedback,
 });
+
+
 
 class IndividualEmployeeSummaryView extends Component {
 
@@ -48,34 +52,39 @@ class IndividualEmployeeSummaryView extends Component {
 
         return (
             <div>
-                <h1>
-                    {/* This arrow_back icon button will take the user back to the /employees view */}
-                    <Button component={Link} to={"/employees"}>
-                        <Icon>arrow_back</Icon>
-                    </Button>
-                    {/* If the selected employee name is not yet render, display null, otherwise display the first name */}
-                    {this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}
-                </h1>
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Category</TableCell>
-                                    <TableCell>Feedback</TableCell>
-                                    <TableCell>Date Given</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
-                                {/* This will map over the array and pass it as "feedback" to the DisplayFeedback Component */}
-                                {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
-                                    return (
-                                        <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
+                        <div className="header">
+                            <h1>
+                                {/* This arrow_back icon button will take the user back to the /employees view */}
+                                <Button component={Link} to={"/employees"}>
+                                    <Icon>arrow_back</Icon>
+                                </Button>
+                                {/* If the selected employee name is not yet render, display null, otherwise display the first name */}
+                                {this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}
+                            </h1>
+                        </div>
+                        <br />
+                        <div>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Category</TableCell>
+                                        <TableCell>Feedback</TableCell>
+                                        <TableCell>Date Given</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
+                                    {/* This will map over the array and pass it as "feedback" to the DisplayFeedback Component */}
+                                    {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
+                                        return (
+                                            <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </div>
                     </Grid>
                 </Grid>
             </div>
