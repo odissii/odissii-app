@@ -97,28 +97,21 @@ class IndividualEmployeeSummaryView extends Component {
         let content = null;
         content = (
             <div className="outer">
-            {/* <style>
-                .app-fab--absolute {
-                    position: fixed;
-                    bottom
-                }
-            </style> */}
                 <div className="btnContainer">
                     <Button variant="fab" color="primary" aria-label="Edit" style={styles.stickyButton}
                         component={Link} to={"/feedback/new"}>
                         <Icon>edit_icon</Icon>
                     </Button>
                 </div>
-                
                 <div className="container">
                     <h1>
                         <Button component={Link} to={"/employees"}>
                             <Icon>arrow_back</Icon>
                         </Button>
-                        Employee Name
+                        {this.state.qualityCount[0] ? this.state.qualityCount[0].first_name : null}
                     </h1>
                     <Grid container spacing={0}>
-                        <Grid item xs={10}>
+                        <Grid item xs={12}>
                             <AppBar position="static" color="default">
                                 <Tabs
                                     value={this.state.value}

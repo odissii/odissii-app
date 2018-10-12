@@ -10,14 +10,14 @@ const router = express.Router();
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/', (req, res) => {
-    
+
 });
 // gets all feedback created by all supervisors associated with a specific manager, who is referenced by req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/supervisors/all', (req, res) => {
-    if (req.isAuthenticated){
+    if (req.isAuthenticated) {
         const query = `SELECT DISTINCT "feedback"."supervisor_id", "first_name", "last_name",
                         (SELECT COUNT ("feedback"."quality_id")
                             FROM "feedback"
@@ -38,7 +38,7 @@ router.get('/supervisors/all', (req, res) => {
                         WHERE "supervisor_manager"."manager_id" = $1
                         GROUP BY "feedback"."quality_id", "quality_types"."id", "feedback"."supervisor_id", "first_name", "last_name";`;
         pool.query(query, [req.user.id]).then((results) => {
-            res.send(results.rows); 
+            res.send(results.rows);
         }).catch((error) => {
             console.log('Error getting supervisor feedback', error);
             res.sendStatus(500);
@@ -52,8 +52,8 @@ router.get('/supervisors/all', (req, res) => {
 // req.query will contain the supervisor id 
 // results are limited to 30. this can be a variable passed through the query if desired. 
 router.get('/supervisors/count', (req, res) => {
-    if (req.isAuthenticated){
-        const supervisor = req.query.id; 
+    if (req.isAuthenticated) {
+        const supervisor = req.query.id;
         const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid",
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback"
@@ -75,7 +75,7 @@ router.get('/supervisors/count', (req, res) => {
             res.send(results.rows);
         }).catch((error) => {
             console.log('Error getting quality count data', error);
-            res.sendStatus(500); 
+            res.sendStatus(500);
         })
     } else {
         res.sendStatus(403);
@@ -87,13 +87,15 @@ router.get('/supervisors/count', (req, res) => {
 // should set a limit of responses
 router.get('/employee', (req, res) => {
     console.log('in GET /employee');
-    const empFeedbackQuery = `SELECT "date_created", "quality_types"."name", "details"
+    const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."name", "details"
                                 FROM "feedback" 
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
-                                WHERE "employee_id" = 1
+                                JOIN "employee"
+                                ON "feedback"."employee_id" = "employee"."id"
+                                WHERE "employee_id" = 1 
                                 ORDER BY "date_created" DESC
-                                LIMIT 10`;
+                                LIMIT 10;`;
     pool.query(empFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {
@@ -127,18 +129,18 @@ router.get('/employeeFeedbackCount/1', (req, res) => {
 // gets the most recent feedback record submitted where the req.user.id matches the manager ID
 // used to display the confirmation record 
 router.get('/confirmation', (req, res) => {
-    
+
 });
 /**
  * POST routes 
  */
 // posts a new feedback record
 router.post('/', (req, res) => {
-  if (req.isAuthenticated() && req.user.role === 'supervisor') {
-    const data = req.body;
+    if (req.isAuthenticated() && req.user.role === 'supervisor') {
+        const data = req.body;
 
-    const queryText = 
-    `INSERT INTO "feedback" (
+        const queryText =
+            `INSERT INTO "feedback" (
       "supervisor_id", 
       "employee_id", 
       "date_created", 
@@ -148,25 +150,25 @@ router.post('/', (req, res) => {
       "details"
     ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7) RETURNING *;`;
 
-    pool.query(queryText, [
-      data.supervisorId, 
-      data.employeeId,
-      data.dateCreated,
-      data.quality,
-      data.taskRelated,
-      data.cultureRelated,
-      data.details
-    ]).then(response => {
-      console.log(`/api/feedback POST success:`, response);
-      const newFeedbackRow = response.rows[0];
-      res.send(newFeedbackRow);
-    }).catch(error => {
-      console.log(`/api/feedback POST error:`, error);
-      res.sendStatus(500);
-    });
-  } else {
-    res.sendStatus(401);
-  }
+        pool.query(queryText, [
+            data.supervisorId,
+            data.employeeId,
+            data.dateCreated,
+            data.quality,
+            data.taskRelated,
+            data.cultureRelated,
+            data.details
+        ]).then(response => {
+            console.log(`/api/feedback POST success:`, response);
+            const newFeedbackRow = response.rows[0];
+            res.send(newFeedbackRow);
+        }).catch(error => {
+            console.log(`/api/feedback POST error:`, error);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(401);
+    }
 });
 // adds images associated with a feedback record, using the ID of the feedback record
 // this must occur after the feedback post   
