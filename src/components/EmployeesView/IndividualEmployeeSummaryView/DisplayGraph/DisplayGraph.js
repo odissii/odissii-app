@@ -38,7 +38,7 @@ class DisplayGraph extends Component {
                 borderWidth: 1,
                 stack: '3'
             }],
-            labels: ['label']
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         }
         return (
             <Bar
