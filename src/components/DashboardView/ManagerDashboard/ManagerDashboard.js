@@ -18,6 +18,7 @@ class ManagerDashboard extends React.Component {
       super(props);
       this.state = {
         supervisors: [],
+        sortedSupervisors: [],
         feedbackData: [],
         totalFeedback: [], 
         praise: [],
@@ -28,7 +29,6 @@ class ManagerDashboard extends React.Component {
   componentWillMount(){
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
     this.getSupervisors(); 
-    this.getTotalSupervisorFeedback(); 
   }
   getSupervisors = () => {
     axios({
@@ -40,19 +40,7 @@ class ManagerDashboard extends React.Component {
         supervisors: response.data
       });
       this.getSupervisorFeedbackReports(response.data); 
-    }).catch((error) => {
-      console.log('Error getting supervisors', error); 
-    })
-  }
-  getTotalSupervisorFeedback = () => {
-    axios({
-      method: 'GET',
-      url: '/api/feedback/supervisors/all'
-    }).then((response) => {
-      this.setState({
-        totalFeedback: response.data
-      });
-      this.sortData();
+      this.sortSupervisors();
     }).catch((error) => {
       console.log('Error getting supervisors', error); 
     })
@@ -63,8 +51,10 @@ class ManagerDashboard extends React.Component {
       url: `/api/feedback/supervisors/count?id=${id}`
     }).then((response) => {
       this.setState({
-        feedbackData: [...this.state.feedbackData, response.data]
+        feedbackData: [...this.state.feedbackData, response.data], 
+        totalFeedback: response.data
       });
+      this.sortData(); 
     }).catch((error) => {
       console.log('Error getting supervisors', error); 
     })
@@ -75,30 +65,30 @@ class ManagerDashboard extends React.Component {
       this.getFeedbackCounts(id); 
     }
   }
+  sortSupervisors = () => {
+    for(let i = 0; i < this.state.supervisors.length; i++){
+      console.log(this.state.supervisors[i]);
+      this.setState({
+        sortedSupervisors: [...this.state.sortedSupervisors, this.state.supervisors[i].first_name + ' ' + this.state.supervisors[i].last_name,]
+      })
+    }
+  }
   sortData = () => {
     for(let i = 0; i < this.state.totalFeedback.length; i++){
-        if(this.state.totalFeedback[i].praise){
           this.setState({
-            praise: [...this.state.praise, parseInt(this.state.totalFeedback[i].praise)]
+            praise: [...this.state.praise, parseInt(this.state.totalFeedback[i].praise)],
+            correct: [...this.state.correct, parseInt(this.state.totalFeedback[i].correct)],
+            instruct: [...this.state.instruct, parseInt(this.state.totalFeedback[i].instruct)],
           })   
         }
-        if(this.state.totalFeedback[i].correct){
-          this.setState({
-            correct: [...this.state.correct, parseInt(this.state.totalFeedback[i].correct)]
-          })
-        }
-        if(this.state.totalFeedback[i].instruct){
-          this.setState({
-            instruct: [...this.state.instruct, parseInt(this.state.totalFeedback[i].instruct)]
-          })
-        }
+      
     }
-}
   render(){
     return (
       <div>
           <h1>Manager's Dashboard</h1>
-              <ManagerOverviewGraph praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
+          {JSON.stringify(this.state.sortedSupervisors)}
+              <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
           <h2>Manager List</h2>
       <Grid container spacing={0}>
           <Grid item xs={10}>
