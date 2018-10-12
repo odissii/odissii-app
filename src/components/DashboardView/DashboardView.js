@@ -39,7 +39,6 @@ class DashboardView extends React.Component {
       <div>
         <Nav />
         <div>
-          This is the dashboard. 
           {userDashboard}
         </div>
       </div>

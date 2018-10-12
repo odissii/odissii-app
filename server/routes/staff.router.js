@@ -21,6 +21,20 @@ router.get('/supervisors', (req, res) => {
     }
 
 });
+router.get('/supervisor/profile', (req, res) => {
+    if(req.isAuthenticated){
+        const supervisor = req.query.id;
+        const query = `SELECT "id", "username", "first_name", "last_name", "employeeId", "email_address" FROM "person" WHERE "id" = $1;`;
+        pool.query(query, [supervisor]).then((results) => {
+            res.send(results.rows);
+        }).catch((error) => {
+            console.log('Error getting supervisor profile', error);
+            res.sendStatus(500); 
+        })
+    } else {
+        res.sendStatus(403); 
+    }
+})
 // get all employees associated with a supervisor
 router.get('/employees/:id', (req, res) => {
     if(req.isAuthenticated()) {

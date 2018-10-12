@@ -19,7 +19,7 @@ import EmployeeFormView from './components/EmployeeFormView/EmployeeFormView';
 import SettingsView from './components/SettingsView/SettingsView';
 import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
-import EditPerson from './components/EditPerson/EditPerson'; 
+import EditSupervisor from './components/EditPerson/EditSupervisor'; 
 
 
 import './styles/main.css';
@@ -76,7 +76,7 @@ const App = () => (
         />
         <Route 
         path="/edit/:personId" 
-        component={EditPerson}/>
+        component={EditSupervisor}/>
        
         <Route render={() => <h1>404</h1>} />
       </Switch>
