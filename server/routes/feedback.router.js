@@ -135,7 +135,7 @@ router.post('/', (req, res) => {
       "task_related", 
       "culture_related", 
       "details"
-    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7);`;
+    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7) RETURNING *;`;
 
     pool.query(queryText, [
       data.supervisorId, 
@@ -147,7 +147,8 @@ router.post('/', (req, res) => {
       data.details
     ]).then(response => {
       console.log(`/api/feedback POST success:`, response);
-      res.sendStatus(201);
+      const newFeedbackRow = response.rows[0];
+      res.send(newFeedbackRow);
     }).catch(error => {
       console.log(`/api/feedback POST error:`, error);
       res.sendStatus(500);

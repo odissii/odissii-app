@@ -25,23 +25,29 @@ function* fetchAllFeedbackByCurrentSupervisor(){
 }
 // fetches all feedback created by all supervisors which a manager monitors
 function* fetchAllFeedbackByManagerSupervisors(){
-    try{
-        const feedbackResponse = yield call(axios.get, '/api/feedback/supervisors/all');
-        const responseAction = {type: FEEDBACK_ACTIONS.SET_ALL_FEEDBACK_BY_MANAGER_SUPERVISORS, payload: feedbackResponse.data};
-        yield put(responseAction);
-    } catch(error){
-        console.log('Cannot get all feedback for all managers', error);
-    }
+  try{
+      const feedbackResponse = yield call(axios.get, '/api/feedback/supervisors/all');
+      const responseAction = {type: FEEDBACK_ACTIONS.SET_ALL_FEEDBACK_BY_MANAGER_SUPERVISORS, payload: feedbackResponse.data};
+      yield put(responseAction);
+  } catch(error){
+      console.log('Cannot get all feedback for all managers', error);
+  }
 }
 // adds a new feedback record
 function* addFeedback(action){
-    console.log('addFeedback saga called:', action);
-    try{
-       yield call(axios.post, '/api/feedback/', action.payload);
-       yield put({type: FEEDBACK_ACTIONS.FETCH_ALL_FEEDBACK_BY_CURRENT_SUPERVISOR}); 
-    } catch(error){
-        console.log('Cannot add new feedback', error);
-    }
+  console.log('addFeedback saga called:', action);
+  try{
+    const postResponse = yield call(axios.post, '/api/feedback/', action.payload);
+    const postedFeedback = postResponse.data;
+    console.log('just posted feedback:', postedFeedback);
+    yield put({
+      type: FEEDBACK_ACTIONS.FEEDBACK_POST_SUCCESS,
+      payload: postedFeedback
+    });
+    //    yield put({type: FEEDBACK_ACTIONS.FETCH_ALL_FEEDBACK_BY_CURRENT_SUPERVISOR}); 
+  } catch(error){
+    console.log('Cannot add new feedback', error);
+  }
 }
 // updates feedback record
 function* updateFeedback(action){
