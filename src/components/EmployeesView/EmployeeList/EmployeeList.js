@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
     people: state.people.staff.allEmployees,
     employees: state.people.staff.supervisorEmployees,
     search: state.search,
+    filter: state.filter,
 })
 
 const space = ' ';
@@ -22,6 +23,16 @@ class EmployeeList extends React.Component {
     }
 
     getEmployees = () => {
+      if (this.props.filter === '' || this.props.filter === 'name') {
+          this.getEmpoloyeesByName();
+      } else if (this.props.filter === 'date') {
+          this.getEmployeesByFeedbackDate();
+      } else if (this.props.filter === 'feedback') {
+          this.getEmployeesByFeedbackQuantity();
+      }
+    }
+    
+    getEmpoloyeesByName = () => {
         if (this.props.user.role === USER_ROLES.MANAGER) {
             this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
         } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
@@ -39,7 +50,22 @@ class EmployeeList extends React.Component {
             })
         }
     }
-    
+
+    getEmployeesByFeedbackDate = () => {
+        if (this.props.user.role === USER_ROLES.MANAGER) {
+
+        } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
+
+        }
+    }
+
+    getEmployeesByFeedbackQuantity = () => {
+        if (this.props.user.role === USER_ROLES.MANAGER) {
+
+        } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
+
+        }
+    }
 
     render() {
         let content = null;
