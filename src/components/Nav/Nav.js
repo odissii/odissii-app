@@ -43,7 +43,7 @@ class Nav extends Component {
     let content = null;
     const { value } = this.state;
     // if supervisor logged in, will render appropriate nav bar
-    if (this.props.user && this.props.user.role === 'supervisor') {
+    if (this.props.user && this.props.user.role === 'manager') {
       content = (
         <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
@@ -55,7 +55,7 @@ class Nav extends Component {
         </div>
       )
       // if manager logged in, will render appropriate nav bar
-    } else if (this.props.user && this.props.user.role === 'manager') {
+    } else if (this.props.user && this.props.user.role === 'supervisor') {
       content = (
         <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>

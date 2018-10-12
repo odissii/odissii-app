@@ -29,11 +29,11 @@ class EmployeesView extends React.Component {
 
     if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
       userEmployees = (
-        <SupervisorEmployees />
+        <SupervisorEmployees history={this.props.history}/>
       )
     } else if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
       userEmployees = (
-        <ManagerEmployees />
+        <ManagerEmployees history={this.props.history}/>
       )
     }
     return (

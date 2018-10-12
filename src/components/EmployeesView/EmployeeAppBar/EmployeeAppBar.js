@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { AppBar, Toolbar, IconButton, Typography, InputBase } from '@material-ui/core';
 import { USER_ROLES } from '../../../constants';
 import ArrowBack from '@material-ui/icons/ArrowBack';
@@ -14,6 +15,10 @@ class EmployeeAppBar extends React.Component {
         this.props.dispatch({ type: 'ADD_SEARCH', payload: event.target.value });
     } 
 
+    handleClick = (event) => {
+        console.log('in handleClick');
+        this.props.history.push('/dashboard');
+    }
     render() {
         let content = null;
         if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
@@ -21,7 +26,7 @@ class EmployeeAppBar extends React.Component {
                 <div>
                     <AppBar>
                         <Toolbar>
-                            <IconButton><ArrowBack /></IconButton>
+                            <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
                             <Typography>Employees</Typography>
                             <div>
                                 <Search />
@@ -38,7 +43,7 @@ class EmployeeAppBar extends React.Component {
                 <div>
                     <AppBar>
                         <Toolbar>
-                            <IconButton><ArrowBack /></IconButton>
+                            <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
                             <Typography>All Employees</Typography>
                             <div>
                                 <Search />
@@ -59,4 +64,4 @@ class EmployeeAppBar extends React.Component {
     }
 }
 
-export default connect(mapStateToProps)(EmployeeAppBar);
+export default withRouter(connect(mapStateToProps)(EmployeeAppBar));
