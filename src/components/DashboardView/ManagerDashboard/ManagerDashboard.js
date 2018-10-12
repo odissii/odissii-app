@@ -87,7 +87,6 @@ class ManagerDashboard extends React.Component {
     return (
       <div>
           <h1>Manager's Dashboard</h1>
-          {JSON.stringify(this.state.sortedSupervisors)}
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
           <h2>Manager List</h2>
       <Grid container spacing={0}>
@@ -99,8 +98,9 @@ class ManagerDashboard extends React.Component {
                               return(
                                 <div key={feedback.sid}>
                                 <h3>{feedback.first_name} {feedback.last_name}</h3> 
-                                <a href="#summary">Summary</a><br/>
-                                  <a href="#employees">Employees</a>
+                                  <a href="#summary">Summary</a><br/>
+                                  <a href="#employees">Employees</a><br/>
+                                  <a href="#edit">Edit</a>
                                 <IndividualManagerGraph feedback={feedback} key={i}/> 
                                 </div>
                               );

@@ -35,7 +35,6 @@ class ManagerOverviewGraph extends Component {
       ]}
         return(
             <div>
-                {JSON.stringify(this.props.supervisors)}
                 <Bar data={managerOverview} options={barOptions}/>
             </div>
         );
