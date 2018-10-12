@@ -75,6 +75,7 @@ router.get('/employee', (req, res) => {
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
                                 WHERE "employee_id" = 1
+                                ORDER BY "date_created" DESC
                                 LIMIT 10`;
     pool.query(empFeedbackQuery)
         .then(result => res.send(result.rows))
@@ -85,10 +86,20 @@ router.get('/employee', (req, res) => {
 //will get all feedback count for specific employee
 router.get('/employeeFeedbackCount/1', (req, res) => {
     console.log('in GET /employeeFeedbackCount');
-    const empFeedbackCntQuery = `SELECT "quality", 
-                                COUNT ("quality") FROM "feedback" 
-                                WHERE "employee_id" = 1 
-                                GROUP BY "quality";`;
+    const empFeedbackCntQuery = `SELECT DISTINCT "employee"."first_name",
+	                            (SELECT COUNT ("feedback"."quality_id")
+	                            FROM "feedback" WHERE "feedback"."quality_id" = 1 AND "feedback"."employee_id" = 1) as Praise,
+	                            (SELECT COUNT ("feedback"."quality_id")
+	                            FROM "feedback" WHERE "feedback"."quality_id" = 2 AND "feedback"."employee_id" = 1) as Instruct,
+	                            (SELECT COUNT ("feedback"."quality_id")
+	                            FROM "feedback" WHERE "feedback"."quality_id" = 3 AND "feedback"."employee_id" = 1) as Correct
+                                FROM "employee"
+                                JOIN "feedback"
+                                ON "feedback"."employee_id" = "employee"."id"
+                                JOIN "quality_types"
+                                ON "feedback"."quality_id" = "quality_types"."id"
+                                WHERE "employee"."id" = 1
+                                GROUP BY "employee"."id", "employee"."first_name", "quality_types"."name";`;
     pool.query(empFeedbackCntQuery)
         .then(result => res.send(result.rows))
         .catch(error => {

@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import DisplayGraph from './DisplayGraph/DisplayGraph';
 import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
+import './IndividualEmployeeSummary.css';
 import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
 import { USER_ACTIONS } from '../../../redux/actions/userActions';
 import axios from 'axios';
-//chart
-import { Bar } from 'react-chartjs-2';
 //Material Table
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 
 const mapStateToProps = state => ({
     user: state.user,
@@ -28,7 +31,7 @@ class IndividualEmployeeSummaryView extends Component {
     } //end of constructor
 
     componentDidMount() {
-        // this.getFeedbackCount();
+        this.getFeedbackCount();
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
     }
@@ -46,51 +49,28 @@ class IndividualEmployeeSummaryView extends Component {
             });
     }
 
+    moveToNextView() {
+        console.log('in moveToNextView');
+        //will get push to the next view
+        // this.props.history.push('/');
+    }
+
     render() {
-        const options = {
-            scales: {
-                xAxes: [{
-                    stacked: true
-                }],
-                yAxes: [{
-                    stacked: true
-                }]
-            }
-        }
-
-        let data = {
-            datasets: [{
-                label: 'Praise',
-                data: this.state.qualityCount.count,
-                backgroundColor: '#0f77e6',
-                borderWidth: 1,
-                stack: '1'
-            },
-            {
-                label: 'Instruct',
-                data: [12],
-                backgroundColor: '#f17416',
-                borderWidth: 1,
-                stack: '2'
-
-            },
-            {
-                label: 'Correct',
-                data: [5],
-                backgroundColor: 'lightgrey',
-                borderWidth: 1,
-                stack: '3'
-            }],
-            labels: ['label']
-        }
 
         let content = null;
         content = (
             <div>
-                <Bar
-                    data={data}
-                    options={options}
-                />
+                
+                {/* {JSON.stringify(this.state.qualityCount)} */}
+                {this.state.qualityCount.map((qualityAtIndex, index) => {
+                    return (
+                        <DisplayGraph key={index} quality={qualityAtIndex} />
+                    )
+                })}
+                <Button variant="fab" color="primary" aria-label="Edit" className="btn"
+                    onClick={this.moveToNextView}>
+                    <Icon>edit_icon</Icon>
+                </Button>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -108,6 +88,7 @@ class IndividualEmployeeSummaryView extends Component {
                         })}
                     </TableBody>
                 </Table>
+                
             </div>
         )
         return (
