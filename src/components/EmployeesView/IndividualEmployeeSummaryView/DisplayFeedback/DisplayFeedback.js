@@ -5,6 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
+import Icon from '@material-ui/core/Icon';
 
 const moment = require('moment');
 
@@ -34,22 +35,24 @@ const styles = {
 };
 
 class DisplayFeedback extends Component {
-    render() {
-        let iconQuality = 'Praise';
-        if (this.props.feedback.quality === 'Correct') {     
-            iconQuality = 'correct';
-            console.log('correct', iconQuality);
+    
 
-        } else if (this.props.feedback.quality === 'Instruct') {
-            iconQuality = 'instruct';
-            console.log('instruct', iconQuality);
+    render() {
+
+        let content = null;
+        if (this.props.feedback.name === 'Praise') {
+            content = <TableCell><Avatar style={styles.praiseAvatar}><Icon>done</Icon></Avatar></TableCell>
+        } else if (this.props.feedback.name === 'Correct') {
+            content = <TableCell><Avatar style={styles.correctAvatar}><Icon>clear</Icon></Avatar></TableCell>
+        } else if (this.props.feedback.name === 'Instruct') {
+            content = <TableCell><Avatar style={styles.instructAvatar}><Icon>remove</Icon></Avatar></TableCell>
         }
 
         return (
             <TableRow>
-                <TableCell><Avatar className={iconQuality}>{(this.props.feedback.name).charAt(0)}</Avatar></TableCell>
+                { content }
                 <TableCell>{this.props.feedback.details}</TableCell>
-                <TableCell>{moment(this.props.feedback.date_created).format("MMM Do YYYY")}</TableCell>
+                <TableCell>{moment(this.props.feedback.date_created).format("MM/DD/YY")}</TableCell>
             </TableRow>
         )
     }

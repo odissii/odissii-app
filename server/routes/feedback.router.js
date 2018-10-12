@@ -110,8 +110,7 @@ router.get('/employee', (req, res) => {
                                 JOIN "employee"
                                 ON "feedback"."employee_id" = "employee"."id"
                                 WHERE "employee_id" = 1 
-                                ORDER BY "date_created" DESC
-                                LIMIT 10;`;
+                                ORDER BY "date_created" DESC`;
     pool.query(empFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {

@@ -52,6 +52,8 @@ class DisplayGraph extends Component {
     };
 
     render() {
+        const { classes, theme } = this.props;
+
         return(
             <Grid container spacing={0}>
                 <Grid item xs={12}>
@@ -72,7 +74,7 @@ class DisplayGraph extends Component {
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}
                     >
-                        <TabContainer>
+                        <TabContainer dir={theme.direction}>
                             {/* {JSON.stringify(this.state.qualityCount)} */}
                             {/* {this.state.qualityCount.map((qualityAtIndex, index) => {
                                         return (
@@ -81,10 +83,10 @@ class DisplayGraph extends Component {
                                     })} */}
                             <DisplayGraph />
                         </TabContainer>
-                        <TabContainer>
+                        <TabContainer dir={theme.direction}>
                             {/* This will contain the monthly view */}
                         </TabContainer>
-                        <TabContainer>
+                        <TabContainer dir={theme.direction}>
                             {/* This will contain the yearly view */}
                         </TabContainer>
                     </SwipeableViews>
