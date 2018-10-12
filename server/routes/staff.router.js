@@ -44,7 +44,10 @@ router.get('/employees/:id', (req, res) => {
 //this is getting all employees that exist
 router.get('/allEmployees', (req, res) => {
     if(req.isAuthenticated()) {
-        const query = `SELECT * FROM "employee";`;
+        const query = `SELECT "employee"."id", "employee"."employeeId", "employee"."first_name", "employee"."last_name", "employee"."image_path", COUNT("follow_up"."id")  as incomplete 
+        FROM "follow_up" 
+        RIGHT JOIN "employee" ON "employee"."id" = "follow_up"."employee_id" AND "follow_up"."completed" = false  
+        GROUP BY "employee"."id" ;`;
         pool.query(query)
         .then((response) => {
             res.send(response.rows);
