@@ -15,7 +15,7 @@ const barOptions = {
 class ManagerOverviewGraph extends Component {
     render(){
     let  managerOverview = {
-        labels: ['a','b', 'c', 'd', 'e'],
+        labels: this.props.supervisors,
         datasets: [
           {
             label: 'Correct',
@@ -35,7 +35,6 @@ class ManagerOverviewGraph extends Component {
       ]}
         return(
             <div>
-                {JSON.stringify(this.props.praise)}
                 <Bar data={managerOverview} options={barOptions}/>
             </div>
         );
