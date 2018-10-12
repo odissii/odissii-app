@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AppBar, Toolbar, IconButton, Typography, SearchIcon, InputBase } from '@material-ui/core';
+import { withRouter } from 'react-router';
+import { AppBar, Toolbar, IconButton, Typography, InputBase } from '@material-ui/core';
 import { USER_ROLES } from '../../../constants';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Search from '@material-ui/icons/Search';
@@ -10,6 +11,14 @@ const mapStateToProps = state => ({
 })
 
 class EmployeeAppBar extends React.Component {
+    handleChange = (event) => {
+        this.props.dispatch({ type: 'ADD_SEARCH', payload: event.target.value });
+    } 
+
+    handleClick = (event) => {
+        console.log('in handleClick');
+        this.props.history.push('/dashboard');
+    }
     render() {
         let content = null;
         if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
@@ -17,13 +26,14 @@ class EmployeeAppBar extends React.Component {
                 <div>
                     <AppBar>
                         <Toolbar>
-                            <IconButton><ArrowBack /></IconButton>
+                            <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
                             <Typography>Employees</Typography>
                             <div>
                                 <Search />
                             </div>
                             <InputBase
-                                placeholder="Search..." />
+                                placeholder="Search..." 
+                                onChange={this.handleChange}/>
                         </Toolbar>
                     </AppBar>
                 </div>
@@ -33,13 +43,14 @@ class EmployeeAppBar extends React.Component {
                 <div>
                     <AppBar>
                         <Toolbar>
-                            <IconButton><ArrowBack /></IconButton>
+                            <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
                             <Typography>All Employees</Typography>
                             <div>
                                 <Search />
                             </div>
                             <InputBase
-                                placeholder="Search..." />
+                                placeholder="Search..." 
+                                onChange={this.handleChange}/>
                         </Toolbar>
                     </AppBar>
                 </div>
@@ -53,4 +64,4 @@ class EmployeeAppBar extends React.Component {
     }
 }
 
-export default connect(mapStateToProps)(EmployeeAppBar);
+export default withRouter(connect(mapStateToProps)(EmployeeAppBar));

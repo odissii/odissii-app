@@ -39,11 +39,10 @@ class Nav extends Component {
     this.setState({ value });
   };
 
-  
-
   render() {
     let content = null;
     const { value } = this.state;
+
     // if manager logged in, will render appropriate nav bar
     if (this.props.user && this.props.user.role === USER_ROLES.MANAGER) {
       content = (

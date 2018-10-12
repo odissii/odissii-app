@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import EmployeeFilter from '../EmployeeFilter/EmployeeFilter';
 import EmployeeAppBar from '../EmployeeAppBar/EmployeeAppBar';
 import EmployeeList from '../EmployeeList/EmployeeList';
@@ -19,4 +20,4 @@ class ManagerEmployees extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(ManagerEmployees);
+export default withRouter(connect(mapStateToProps)(ManagerEmployees));

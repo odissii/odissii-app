@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
@@ -48,4 +48,4 @@ class EmployeesView extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(EmployeesView);
+export default withRouter(connect(mapStateToProps)(EmployeesView));
