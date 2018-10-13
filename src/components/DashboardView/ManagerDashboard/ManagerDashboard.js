@@ -1,10 +1,12 @@
 import React from 'react';
-import { Grid } from '@material-ui/core'; 
+import { Grid, IconButton } from '@material-ui/core'; 
+import { Edit } from '@material-ui/icons';
 import IndividualManagerGraph from './Graphs/IndividualManagerGraph';
 import ManagerOverviewGraph from './Graphs/ManagerOverviewGraph'; 
 import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../../redux/actions/userActions';
 import axios from 'axios';
+import './ManagerDashboard.css';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -30,6 +32,9 @@ class ManagerDashboard extends React.Component {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
     this.getSupervisors(); 
   }
+  editPerson = (id) => {
+    this.props.history.push(`/edit/supervisor/${id}`);
+  }
   getSupervisors = () => {
     axios({
       method: 'GET',
@@ -46,9 +51,13 @@ class ManagerDashboard extends React.Component {
     })
   }
   getFeedbackCounts = (id) => {
+    let year = new Date().getFullYear();
+    console.log(year)
+    let start = '01-01-' + year
+    let end = '12-31-' + year
     axios({
       method: 'GET',
-      url: `/api/feedback/supervisors/count?id=${id}`
+      url: `/api/feedback/supervisors/count?id=${id}&start=${start}&end=${end}`
     }).then((response) => {
       this.setState({
         feedbackData: [...this.state.feedbackData, response.data], 
@@ -86,31 +95,38 @@ class ManagerDashboard extends React.Component {
   render(){
     return (
       <div>
+        <Grid container xs={12} spacing={0}>
+        <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
+            <p className="center">Feedback given since January 1</p>
+            </Grid>
+            <Grid item xs={12}>
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
-          <h2>Manager List</h2>
-      <Grid container spacing={0}>
-          <Grid item xs={10}>
+            </Grid>
+          <Grid item xs={12}>
+              <h2 className="center">All Supervisors</h2>
+          </Grid>
                       {this.state.feedbackData.map((array, i) => {
                         return(
                         <div key={i}>
                           <span>{array.map((feedback)=> {
                               return(
-                                <div key={feedback.sid}>
-                                <h3>{feedback.first_name} {feedback.last_name}</h3> 
-                                  <a href="#summary">Summary</a><br/>
-                                  <a href="#employees">Employees</a><br/>
-                                  <a href="#edit">Edit</a>
-                                <IndividualManagerGraph feedback={feedback} key={i}/> 
+                               <Grid item xs={12} lg={8} key={feedback.sid}>
+                                <div className="card">
+                                      <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
+                                      <a href="#summary">Summary</a><br/>
+                                      <a href="#employees">Employees</a><br/>
+                                       <p>Feedback given since January 1</p>
+                                        <IndividualManagerGraph feedback={feedback} key={i}/> 
                                 </div>
+                              </Grid>
                               );
                             })}
                           </span>
                         </div>
                       );
                   })} 
-              </Grid>
-          </Grid>
+         </Grid>
         </div>
     );
   }

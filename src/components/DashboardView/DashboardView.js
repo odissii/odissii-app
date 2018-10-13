@@ -30,9 +30,9 @@ class DashboardView extends React.Component {
     
     let userDashboard;
     if (user.role === USER_ROLES.SUPERVISOR) {
-      userDashboard = <SupervisorDashboard />
+      userDashboard = <SupervisorDashboard history={this.props.history}/>
     } else if (user.role === USER_ROLES.MANAGER) {
-      userDashboard = <ManagerDashboard />
+      userDashboard = <ManagerDashboard history={this.props.history}/>
     }
 
     return (
