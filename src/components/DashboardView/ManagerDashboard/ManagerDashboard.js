@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, IconButton } from '@material-ui/core'; 
+import { Grid, IconButton, Button } from '@material-ui/core'; 
 import { Edit } from '@material-ui/icons';
 import IndividualManagerGraph from './Graphs/IndividualManagerGraph';
 import ManagerOverviewGraph from './Graphs/ManagerOverviewGraph'; 
@@ -114,8 +114,8 @@ class ManagerDashboard extends React.Component {
                                <Grid item xs={12} lg={8} key={feedback.sid}>
                                 <div className="card">
                                       <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
-                                      <a href="#summary">Summary</a><br/>
-                                      <a href="#employees">Employees</a><br/>
+                                      <Button color ="primary" onClick={()=>this.props.history.push('/')}>Summary</Button>
+                                      <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
                                        <p>Feedback given since January 1</p>
                                         <IndividualManagerGraph feedback={feedback} key={i}/> 
                                 </div>
