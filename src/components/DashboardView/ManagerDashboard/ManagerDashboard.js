@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../../redux/actions/userActions';
 import axios from 'axios';
 import './ManagerDashboard.css';
+import {CSVLink} from 'react-csv';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -99,6 +100,12 @@ class ManagerDashboard extends React.Component {
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
             <p className="center">Feedback given since January 1</p>
+            <CSVLink data={this.state.feedbackData[0]}
+                filename={"supervisor-feedback.csv"}
+                className="btn btn-primary"
+                target="_blank">
+                Download Reports
+            </CSVLink>
             </Grid>
             <Grid item xs={12}>
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
