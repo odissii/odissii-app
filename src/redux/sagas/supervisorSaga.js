@@ -37,7 +37,7 @@ function* updateSupervisor(action){
 //will be called to delete a supervisor & then it'll fetch all the supervisors
 function* deleteSupervisor(action){
     try {
-        yield call(axios.delete, '/api/staff/supervisor', action.payload);
+        yield call(axios.delete, `/api/staff/supervisor?id=${action.payload}`);
         yield put({type: PEOPLE_ACTIONS.FETCH_SUPERVISORS});
     } catch(error){
         console.log('Cannot delete supervisor', error);

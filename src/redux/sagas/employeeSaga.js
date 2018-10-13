@@ -38,7 +38,7 @@ function* addEmployee(action){
 //will be called to delete an employee & then it'll fetch all the employees
 function* deleteEmployee(action){
     try {
-        yield call(axios.delete, `/api/staff/employee?id=${action.payload.id}`);
+        yield call(axios.delete, `/api/staff/employee?id=${action.payload}`);
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
     } catch(error){
         console.log('Cannot delete employee', error);

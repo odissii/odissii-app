@@ -40,7 +40,7 @@ router.get('/supervisor/profile', (req, res) => {
 router.get('/employee/profile', (req, res) => {
     if(req.isAuthenticated){
         const employee = req.query.id;
-        const query = `SELECT "id", "first_name", "last_name", "employee"."employeeId", "image_path" FROM "employee" WHERE "id" = $1;`;
+        const query = `SELECT "id", "first_name", "last_name", "employee"."employeeId", "image_path", "inactive", "supervisor_id" FROM "employee" WHERE "id" = $1;`;
         pool.query(query, [employee]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
@@ -104,8 +104,8 @@ router.post('/supervisor', (req, res) => {
 router.put('/employee', (req, res) => {
     if (req.isAuthenticated){
         const detailsToEdit = req.body; 
-        const query = `UPDATE "employee" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "image_path" = $4 WHERE "id" = $5;`;
-        pool.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employee_ID, detailsToEdit.image_path, detailsToEdit.id]).then((results)=>{
+        const query = `UPDATE "employee" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "image_path" = $4, "inactive" = $5, "supervisor_id" = $6 WHERE "id" = $7;`;
+        pool.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employee_ID, detailsToEdit.image_path, detailsToEdit.inactive, detailsToEdit.supervisor_id, detailsToEdit.id]).then((results)=>{
             res.sendStatus(200);
         }).catch((error) => {
             console.log('Error updating employee', error);
@@ -119,8 +119,8 @@ router.put('/employee', (req, res) => {
 router.put('/supervisor', (req, res) => {
     if (req.isAuthenticated){
         const detailsToEdit = req.body; 
-        const query = `UPDATE "person" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "email_address" = $4, "username" = $5 WHERE "id" = $6;`;
-        pool.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employee_ID, detailsToEdit.email_address, detailsToEdit.username, detailsToEdit.id]).then((results)=>{
+        const query = `UPDATE "person" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "email_address" = $4, "username" = $5, "inactive" = $6 WHERE "id" = $7;`;
+        pool.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employee_ID, detailsToEdit.email_address, detailsToEdit.username, detailsToEdit.inactive, detailsToEdit.id]).then((results)=>{
             res.sendStatus(200);
         }).catch((error) => {
             console.log('Error updating supervisor', error);
@@ -137,21 +137,14 @@ router.put('/supervisor', (req, res) => {
 //deletes employee from junction table and then deletes an employee's record 
 router.delete('/employee', (req, res) => {
     if (req.isAuthenticated){
-    //     const employeeToEdit = req.query.id; 
-    //     console.log(employeeToEdit); 
-    //     (async () => {
-    //         const client = await pool.connect();
-    //         try {
-    //             await client.query('BEGIN');
-    //     const query = `SELECT "feedback"."id" as "feedback_id", "feedback_images"."id" as "feedback_images_id" FROM "feedback" FULL OUTER JOIN "feedback_images" ON "feedback"."id" = "feedback_images"."feedback_id" WHERE "employee_id" = $1`; 
-    //     const result = client.query(query, [employeeToEdit]);
-    //     const feedbackToDelete = result.rows[0];
-    //     query = ``
-    //         res.sendStatus(200);
-    //     }).catch((error) => {
-    //         console.log('Error deleting employee', error);
-    //         res.sendStatus(500);
-    //     })
+        const supervisorToDelete = req.query.id; 
+    const query = `DELETE FROM "supervisor_employee" WHERE "employee_id" = $1;`;
+    pool.query(query, [supervisorToDelete]).then((response) => {
+    res.sendStatus(200);
+ }).catch((error) => {
+    console.log('CATCH', error); 
+    res.sendStatus(500); 
+})
     } else {
         res.sendStatus(403); 
     }
@@ -160,26 +153,10 @@ router.delete('/employee', (req, res) => {
 router.delete('/supervisor', (req, res) => {
     if (req.isAuthenticated){
         const supervisorToDelete = req.query.id; 
-        console.log('req.body', req.body);
-    (async () => {
-        const client = await pool.connect();
-        try {
-            await client.query('BEGIN');
     const query = `DELETE FROM "supervisor_manager" WHERE "supervisor_id" = $1;`;
-    const values = [supervisorToDelete]; 
-    const result = await client.query(query, values); 
-    query = `DELETE FROM "person" WHERE "id" = $1;`;
-    const deleting = await client.query(query, values);      
-    await client.query('COMMIT'); 
+    pool.query(query, [supervisorToDelete]).then((response) => {
     res.sendStatus(200);
-    } catch(error){
-        console.log('ROLLBACK', error);
-        await client.query('ROLLBACK');
-        throw error;
-    } finally {
-        client.release();
-    }
-})().catch((error) => {
+ }).catch((error) => {
     console.log('CATCH', error); 
     res.sendStatus(500); 
 })

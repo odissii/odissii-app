@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios'; 
-import {FormControl, FormLabel, Input, Button} from '@material-ui/core';
-import swal from 'sweetalert'; 
+import {FormControl, FormLabel, Input, Button, Checkbox, NativeSelect} from '@material-ui/core';
 import './editperson.css';
 import {connect} from 'react-redux';
 
@@ -10,70 +9,81 @@ class EditEmployee extends Component {
         super(props);
         //these will be generated through the component did mount thing 
         this.state = {
-            first_name: '',
-            last_name: '',
-            employee_ID: '',
-            image_path: '',
-            id: ''
+            employee: {},
+            supervisors: []
         }
     }
-    componentDidMount =() => {
+    componentDidMount = () => {
         const { match: { params } } = this.props;
         axios.get(`/api/staff/employee/profile?id=${params.personId}`)
           .then((response)=> {
             this.setState({ 
-                first_name: response.data[0].first_name,
-                last_name: response.data[0].last_name,
-                employee_ID: response.data[0].employeeId,
-                image_path: response.data[0].image_path,
-                id: response.data[0].id
+                employee: response.data[0]
             });
+            this.getSupervisors();
             //then go through and set each value of the response to state 
           }).catch((error)=> {
               console.log('Error getting employee', error); 
           });
-      }; 
-      handleChangefor = (property, event) => {
-          this.setState({
-            [property]: event.target.value
-          })
-      }
-      editPerson = () => {
-        console.log('editing person');
-        this.props.dispatch({type: 'UPDATE_EMPLOYEE', payload: this.state});
-      }
-      deletePerson = () => {
-        console.log('deleting person');
-        swal({
-            title: `Are you sure you want to delete ${this.state.first_name} ${this.state.last_name}?`,
-            text: "This action cannot be undone.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-          })
-          .then((willDelete) => {
-            if (willDelete) {
-                this.props.dispatch({type: 'DELETE_EMPLOYEE', payload: this.state});
-            }
-          });   
+    }
+    //if an employee is removed, they will be marked inactive in the database. 
+    // only active employees should render in employee lists. 
+    editPerson = () => {
+            console.log('editing person');
+            this.props.dispatch({type: 'UPDATE_EMPLOYEE', payload: this.state});
+          }
+    getSupervisors = () => {
+            axios.get('/api/staff/supervisors/').then((response) => {
+                this.setState({
+                    supervisors: response.data
+                });
+          }).catch((error)=> {
+              console.log('Error getting supervisors', error); 
+          });
         }
+    handleChangefor = (property, event) => {
+            this.setState({
+                employee:{
+                    [property]: event.target.value
+                }
+       
+            })
+        }
+    handleCheck = () => {
+          this.setState({
+              inactive: true
+          })
+      }
     render(){
         return(
             <div className="edit-person-form">
             <h1>Edit Employee</h1>
                 <FormControl>
                     <FormLabel>First Name</FormLabel>
-                    <Input type="text" value={this.state.first_name} onChange={(event)=>this.handleChangefor('first_name', event)}/>
+                    <Input type="text" value={this.state.employee.first_name} onChange={(event)=>this.handleChangefor('first_name', event)}/>
                     <FormLabel>Last Name</FormLabel>
-                    <Input type="text" value={this.state.last_name} onChange={(event)=>this.handleChangefor('last_name', event)}/>
+                    <Input type="text" value={this.state.employee.last_name} onChange={(event)=>this.handleChangefor('last_name', event)}/>
                     <FormLabel>Employee ID</FormLabel>
-                    <Input type="text" value={this.state.employee_ID} onChange={(event)=>this.handleChangefor('employee_ID', event)}/>
+                    <Input type="text" value={this.state.employee.employeeId} onChange={(event)=>this.handleChangefor('employee_ID', event)}/>
                     <FormLabel>Image</FormLabel>
-                    <Input type="text" value={this.state.image_path} onChange={(event)=>this.handleChangefor('image_path', event)}/>
-                    {/* <FormLabel>Supervisor ID</FormLabel>
-                    <Input type="text" value={this.state.supervisor_id} onChange={(event)=>this.handleChangefor('supervisor_id', event)}/> */}
-                    <Button onClick={this.editPerson} variant="contained">Save</Button>
-                    {/* <Button onClick={this.deletePerson}>Delete {this.state.first_name} {this.state.last_name}</Button> */}
+                    <Input type="text" value={this.state.employee.image_path} onChange={(event)=>this.handleChangefor('image_path', event)}/>
+                    <FormLabel>Reassign Supervisor</FormLabel>
+                    <NativeSelect
+                        value={this.state.supervisor_id}
+                        onChange={(event)=>this.handleChangeFor('supervisor_id', event)}>
+                      {this.state.supervisors.map((supervisor, i) => {
+                          return (
+                              <option key={i} value={supervisor.supervisor_id}>{supervisor.first_name} {supervisor.last_name}</option>
+                          );
+                      })}
+                    </NativeSelect>
+                    <FormLabel>Remove?
+                    <Checkbox
+                    checked={this.state.employee.inactive}
+                    onChange={this.handleCheck}
+                    value={this.state.employee.inactive}/></FormLabel>
+                    <Button onClick={this.editPerson} variant="contained" color="primary">Save</Button>
+                    <Button onClick={()=>this.props.history.push('/dashboard')}>Cancel</Button>
                 </FormControl>
             </div>
         );
