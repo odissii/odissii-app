@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Typography, List, ListItem, Avatar, ListItemAvatar, ListItemSecondaryAction, ListItemText, IconButton } from '@material-ui/core';
+import { Grid, List, ListItem, Avatar, ListItemAvatar, ListItemSecondaryAction, ListItemText, IconButton } from '@material-ui/core';
 import axios from 'axios';
 import { USER_ROLES } from '../../../constants';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
