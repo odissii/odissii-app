@@ -4,7 +4,9 @@ import { Grid, Typography, List, ListItem, Avatar, ListItemAvatar, ListItemSecon
 import axios from 'axios';
 import { USER_ROLES } from '../../../constants';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
+import Edit from '@material-ui/icons/Edit';
 
+const moment = require('moment');
 
 const mapStateToProps = state => ({
     user: state.user,
@@ -23,15 +25,15 @@ class EmployeeList extends React.Component {
     }
 
     getEmployees = () => {
-      if (this.props.filter === '' || this.props.filter === 'name') {
-          this.getEmpoloyeesByName();
-      } else if (this.props.filter === 'date') {
-          this.getEmployeesByFeedbackDate();
-      } else if (this.props.filter === 'feedback') {
-          this.getEmployeesByFeedbackQuantity();
-      }
+        if (this.props.filter === '' || this.props.filter === 'name') {
+            this.getEmpoloyeesByName();
+        } else if (this.props.filter === 'date') {
+            this.getEmployeesByFeedbackDate();
+        } else if (this.props.filter === 'feedback') {
+            this.getEmployeesByFeedbackQuantity();
+        }
     }
-    
+
     getEmpoloyeesByName = () => {
         if (this.props.user.role === USER_ROLES.MANAGER) {
             this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
@@ -83,9 +85,10 @@ class EmployeeList extends React.Component {
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
                             </ListItemAvatar>
                             <ListItemText primary={employee.first_name + space + employee.last_name} />
+                            <ListItemText primary={moment(filteredEmployees.recent).format("MM/DD/YYYY")} />
                             <ListItemSecondaryAction>
                                 <IconButton>
-
+                                    <Edit />
                                 </IconButton>
                             </ListItemSecondaryAction>
                         </ListItem>
@@ -106,11 +109,7 @@ class EmployeeList extends React.Component {
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
                             </ListItemAvatar>
                             <ListItemText primary={employee.first_name + space + employee.last_name} />
-                            <ListItemSecondaryAction>
-                                <IconButton>
-
-                                </IconButton>
-                            </ListItemSecondaryAction>
+                            <ListItemText primary={moment(filteredEmployees.recent).format("MM/DD/YYYY")} />
                         </ListItem>
                     })}
                 </List>
