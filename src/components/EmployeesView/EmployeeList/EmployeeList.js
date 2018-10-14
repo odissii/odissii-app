@@ -85,7 +85,7 @@ class EmployeeList extends React.Component {
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
                             </ListItemAvatar>
                             <ListItemText primary={employee.first_name + space + employee.last_name} />
-                            <ListItemText primary={moment(filteredEmployees.recent).format("MM/DD/YYYY")} />
+                            <ListItemText primary={moment(employee.recent).format("MM/DD/YYYY")} />
                             <ListItemSecondaryAction>
                                 <IconButton>
                                     <Edit />
