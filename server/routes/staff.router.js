@@ -8,53 +8,53 @@ const router = express.Router();
 // get all supervisors associated with a superisor (req.user.id)
 // should join with person and get first_name, last_name, username, person.id, role_id
 router.get('/supervisors', (req, res) => {
-    if(req.isAuthenticated){
+    if (req.isAuthenticated) {
         const query = `SELECT "supervisor_id", "first_name", "last_name" FROM "supervisor_manager" JOIN "person" ON "supervisor_id" = "person"."id" WHERE "manager_id" = $1 ORDER BY "last_name";`;
         pool.query(query, [req.user.id]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
-            console.log('Error getting supervisors', error); 
+            console.log('Error getting supervisors', error);
             res.sendStatus(500);
         })
     } else {
-        res.sendStatus(403); 
+        res.sendStatus(403);
     }
 
 });
 // get all employees associated with a supervisor
 router.get('/employees/:id', (req, res) => {
-    if(req.isAuthenticated()) {
-        const query = `SELECT "employee"."id", "employee"."employeeId", "employee"."first_name", "employee"."last_name", "employee"."image_path", "supervisor_employee"."supervisor_id", COUNT("follow_up"."id")  as incomplete 
-        FROM "follow_up" 
-        RIGHT JOIN "employee" ON "employee"."id" = "follow_up"."employee_id" AND "follow_up"."completed" = false
+    if (req.isAuthenticated()) {
+        const query = `SELECT DISTINCT ON ("employee"."id") "employee"."id", "employee"."employeeId", "employee"."first_name", "employee"."last_name", "employee"."image_path", "supervisor_employee"."supervisor_id", "feedback"."date_created"  as recent FROM "feedback" 
+        JOIN "employee" ON "employee"."id" = "feedback"."employee_id" 
+        JOIN "follow_up" ON "employee"."id" = "follow_up"."employee_id"
         JOIN "supervisor_employee" ON "supervisor_employee"."employee_id" = "employee"."id"
-        WHERE "supervisor_employee"."supervisor_id" = ($1)
-        GROUP BY "employee"."id", "supervisor_employee"."supervisor_id";`;
+        WHERE "supervisor_employee"."supervisor_id" = ($1) 
+        ORDER BY  "employee"."id"ASC, recent DESC;`;
         pool.query(query, [req.params.id])
-        .then((response) => {
-            res.send(response.rows);
-        }).catch((error) => {
-            console.log('GET supervisors employees failed', error);
-            res.sendStatus(500);
-        });
+            .then((response) => {
+                res.send(response.rows);
+            }).catch((error) => {
+                console.log('GET supervisors employees failed', error);
+                res.sendStatus(500);
+            });
     } else {
         res.sendStatus(403);
     }
 });
 //this is getting all employees that exist
 router.get('/allEmployees', (req, res) => {
-    if(req.isAuthenticated()) {
-        const query = `SELECT "employee"."id", "employee"."employeeId", "employee"."first_name", "employee"."last_name", "employee"."image_path", COUNT("follow_up"."id")  as incomplete 
-        FROM "follow_up" 
-        RIGHT JOIN "employee" ON "employee"."id" = "follow_up"."employee_id" AND "follow_up"."completed" = false  
-        GROUP BY "employee"."id" ;`;
+    if (req.isAuthenticated()) {
+        const query = `SELECT DISTINCT ON ("employee"."id") "employee"."id", "employee"."employeeId", "employee"."first_name", "employee"."last_name", "employee"."image_path", "feedback"."date_created"  as recent FROM "feedback" 
+        JOIN "employee" ON "employee"."id" = "feedback"."employee_id" 
+        JOIN "follow_up" ON "employee"."id" = "follow_up"."employee_id"
+        ORDER BY  "employee"."id"ASC, recent DESC;`;
         pool.query(query)
-        .then((response) => {
-            res.send(response.rows);
-        }).catch((error) => {
-            console.log('all employee GET failed', error);
-            res.sendStatus(500);
-        });
+            .then((response) => {
+                res.send(response.rows);
+            }).catch((error) => {
+                console.log('all employee GET failed', error);
+                res.sendStatus(500);
+            });
     } else {
         res.sendStatus(403);
     }
