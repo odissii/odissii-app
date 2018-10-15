@@ -25,7 +25,7 @@ class ManagerDashboard extends React.Component {
         sortedSupervisors: [],
         feedbackData: [],
         totalFeedback: [], 
-        reports: [],
+        reports: {},
         praise: [],
         correct: [],
         instruct: []
@@ -76,8 +76,9 @@ class ManagerDashboard extends React.Component {
       method: 'GET',
       url: `/api/feedback/supervisors/reports?id=${id}`
     }).then((response) => {
+      console.log(response.data);
       this.setState({
-          reports: [...this.state.reports, response.data]
+          reports: {...this.state.reports, [id]: response.data}
         });
       }).catch((error) => {
       console.log('Error getting feedback details', error); 
@@ -111,7 +112,6 @@ class ManagerDashboard extends React.Component {
   render(){
     return (
       <div className="padding-bottom">
-      {JSON.stringify(this.state.reports)}
         <Grid container spacing={0}>
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
@@ -127,6 +127,7 @@ class ManagerDashboard extends React.Component {
                         return(
                         <div key={i}>
                          {array.map((feedback, j)=> {
+                              console.log('report:', this.state.reports[feedback.sid]);
                               return(
                               <Grid item xs={12} lg={8} key={j}>
                                 <div className="card">
@@ -135,21 +136,10 @@ class ManagerDashboard extends React.Component {
                                       <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
                                        <p>Feedback given past 12 months</p>
                                         <IndividualManagerGraph feedback={feedback}/> 
-                                      {this.state.reports.map((report, k) => {
-                                         return (
-                                           <span key={k}>{report.map((supervisorReport, l) => {
-                                            if(supervisorReport.supervisor_id === feedback.sid)
-                                              return (
-                                                <CSVLink key={l} data={report}
-                                                  filename={`${supervisorReport.supervisor}-feedback.csv`}
-                                                  target="_blank">
-                                                  Download CSV
-                                            </CSVLink>
-                                              );
-                                          })}
-                                    </span>
-                                  );
-                                })}
+                                        {this.state.reports[feedback.sid] && <CSVLink data={this.state.reports[feedback.sid]}
+                                          filename={`${feedback.last_name}-feedback.csv`}
+                                          target="_blank"
+                                        >Download CSV</CSVLink>}
                               </div>
                         </Grid>
                       );
