@@ -19,8 +19,8 @@ import EmployeeFormView from './components/EmployeeFormView/EmployeeFormView';
 import SettingsView from './components/SettingsView/SettingsView';
 import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
-
-
+import EditSupervisor from './components/EditPerson/EditSupervisor'; 
+import EditEmployee from './components/EditPerson/EditEmployee'; 
 
 import './styles/main.css';
 
@@ -74,7 +74,13 @@ const App = () => (
           path="/info"
           component={InfoPage}
         />
-        <Route render={() => <h1>404</h1>} />
+        <Route 
+        path="/edit/supervisor/:personId" 
+        component={EditSupervisor}/>
+       <Route 
+        path="/edit/employee/:personId" 
+        component={EditEmployee}/>
+      <Route render={() => <h1>404</h1>} />
       </Switch>
     </Router>
   </GridContainer>

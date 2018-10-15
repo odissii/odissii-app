@@ -42,6 +42,8 @@ router.get('/supervisors/all', (req, res) => {
 router.get('/supervisors/count', (req, res) => {
     if (req.isAuthenticated()){
         const supervisor = req.query.id; 
+        const startDate = req.query.start;
+        const endDate = req.query.end;
         const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid",
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback"
@@ -57,9 +59,9 @@ router.get('/supervisors/count', (req, res) => {
                         ON "quality_types"."id" = "feedback"."quality_id"
                         JOIN "person" 
                         ON "person"."id" = "feedback"."supervisor_id"
-                        WHERE "feedback"."supervisor_id" = $1
+                        WHERE "feedback"."supervisor_id" = $1 AND "date_created" > $2 AND "date_created" < $3
                         GROUP BY "feedback"."quality_id", "feedback"."supervisor_id", "quality_types"."id", "person"."first_name", "person"."last_name";`;
-        pool.query(query, [supervisor]).then((results) => {
+        pool.query(query, [supervisor, startDate, endDate]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
             console.log('Error getting quality count data', error);

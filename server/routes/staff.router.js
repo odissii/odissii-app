@@ -21,6 +21,36 @@ router.get('/supervisors', (req, res) => {
     }
 
 });
+//gets a specific supervisor's profile to edit their details or delete them 
+router.get('/supervisor/profile', (req, res) => {
+    if(req.isAuthenticated){
+        const supervisor = req.query.id;
+        const query = `SELECT "id", "username", "first_name", "last_name", "employeeId", "email_address" FROM "person" WHERE "id" = $1;`;
+        pool.query(query, [supervisor]).then((results) => {
+            res.send(results.rows);
+        }).catch((error) => {
+            console.log('Error getting supervisor profile', error);
+            res.sendStatus(500); 
+        })
+    } else {
+        res.sendStatus(403); 
+    }
+})
+//gets a specific employee's profile to edit their details or delete them
+router.get('/employee/profile', (req, res) => {
+    if(req.isAuthenticated){
+        const employee = req.query.id;
+        const query = `SELECT "id", "first_name", "last_name", "employee"."employeeId", "image_path", "inactive", "supervisor_id" FROM "employee" WHERE "id" = $1;`;
+        pool.query(query, [employee]).then((results) => {
+            res.send(results.rows);
+        }).catch((error) => {
+            console.log('Error getting employee profile', error);
+            res.sendStatus(500); 
+        })
+    } else {
+        res.sendStatus(403); 
+    }
+})
 // get all employees associated with a supervisor
 router.get('/employees/:id', (req, res) => {
     if(req.isAuthenticated()) {
@@ -72,22 +102,67 @@ router.post('/supervisor', (req, res) => {
  */
 // edits an employee's record 
 router.put('/employee', (req, res) => {
-
+    if (req.isAuthenticated){
+        const detailsToEdit = req.body; 
+        const query = `UPDATE "employee" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "image_path" = $4, "inactive" = $5, "supervisor_id" = $6 WHERE "id" = $7;`;
+        pool.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employee_ID, detailsToEdit.image_path, detailsToEdit.inactive, detailsToEdit.supervisor_id, detailsToEdit.id]).then((results)=>{
+            res.sendStatus(200);
+        }).catch((error) => {
+            console.log('Error updating employee', error);
+            res.sendStatus(500);
+        })
+    } else { 
+        res.sendStatus(403);
+    }
 });
 // edits a supervisor's record in person table 
 router.put('/supervisor', (req, res) => {
-
+    if (req.isAuthenticated){
+        const detailsToEdit = req.body; 
+        const query = `UPDATE "person" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "email_address" = $4, "username" = $5, "inactive" = $6 WHERE "id" = $7;`;
+        pool.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employee_ID, detailsToEdit.email_address, detailsToEdit.username, detailsToEdit.inactive, detailsToEdit.id]).then((results)=>{
+            res.sendStatus(200);
+        }).catch((error) => {
+            console.log('Error updating supervisor', error);
+            res.sendStatus(500);
+        })
+    } else { 
+        res.sendStatus(403);
+    }
 });
+
 /**
  * DELETE routes
  */
 //deletes employee from junction table and then deletes an employee's record 
 router.delete('/employee', (req, res) => {
-
+    if (req.isAuthenticated){
+        const supervisorToDelete = req.query.id; 
+    const query = `DELETE FROM "supervisor_employee" WHERE "employee_id" = $1;`;
+    pool.query(query, [supervisorToDelete]).then((response) => {
+    res.sendStatus(200);
+ }).catch((error) => {
+    console.log('CATCH', error); 
+    res.sendStatus(500); 
+})
+    } else {
+        res.sendStatus(403); 
+    }
 });
 // deletes a supervisor/employee relationship then deletes a supervisor record
 router.delete('/supervisor', (req, res) => {
-
+    if (req.isAuthenticated){
+        const supervisorToDelete = req.query.id; 
+    const query = `DELETE FROM "supervisor_manager" WHERE "supervisor_id" = $1;`;
+    pool.query(query, [supervisorToDelete]).then((response) => {
+    res.sendStatus(200);
+ }).catch((error) => {
+    console.log('CATCH', error); 
+    res.sendStatus(500); 
+})
+    } else {
+        res.sendStatus(403); 
+    }
 });
 
 module.exports = router;
