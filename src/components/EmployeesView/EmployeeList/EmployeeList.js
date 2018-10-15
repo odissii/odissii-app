@@ -1,16 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Typography, List, ListItem, Avatar, ListItemAvatar, ListItemSecondaryAction, ListItemText, IconButton } from '@material-ui/core';
+import { Grid, List, ListItem, Avatar, ListItemAvatar, ListItemSecondaryAction, ListItemText, IconButton } from '@material-ui/core';
 import axios from 'axios';
 import { USER_ROLES } from '../../../constants';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
+import Edit from '@material-ui/icons/Edit';
 
+const moment = require('moment');
 
 const mapStateToProps = state => ({
     user: state.user,
     people: state.people.staff.allEmployees,
     employees: state.people.staff.supervisorEmployees,
     search: state.search,
+    filter: state.filter,
 })
 
 const space = ' ';
@@ -22,6 +25,16 @@ class EmployeeList extends React.Component {
     }
 
     getEmployees = () => {
+        if (this.props.filter === '' || this.props.filter === 'name') {
+            this.getEmpoloyeesByName();
+        } else if (this.props.filter === 'date') {
+            this.getEmployeesByFeedbackDate();
+        } else if (this.props.filter === 'feedback') {
+            this.getEmployeesByFeedbackQuantity();
+        }
+    }
+
+    getEmpoloyeesByName = () => {
         if (this.props.user.role === USER_ROLES.MANAGER) {
             this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
         } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
@@ -39,7 +52,22 @@ class EmployeeList extends React.Component {
             })
         }
     }
-    
+
+    getEmployeesByFeedbackDate = () => {
+        if (this.props.user.role === USER_ROLES.MANAGER) {
+
+        } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
+
+        }
+    }
+
+    getEmployeesByFeedbackQuantity = () => {
+        if (this.props.user.role === USER_ROLES.MANAGER) {
+
+        } else if (this.props.user.role === USER_ROLES.SUPERVISOR) {
+
+        }
+    }
 
     render() {
         let content = null;
@@ -57,9 +85,10 @@ class EmployeeList extends React.Component {
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
                             </ListItemAvatar>
                             <ListItemText primary={employee.first_name + space + employee.last_name} />
+                            <ListItemText primary={moment(employee.recent).format("MM/DD/YYYY")} />
                             <ListItemSecondaryAction>
                                 <IconButton>
-
+                                    <Edit />
                                 </IconButton>
                             </ListItemSecondaryAction>
                         </ListItem>
@@ -80,11 +109,7 @@ class EmployeeList extends React.Component {
                                 <Avatar alt={employee.first_name} src={employee.image_path} />
                             </ListItemAvatar>
                             <ListItemText primary={employee.first_name + space + employee.last_name} />
-                            <ListItemSecondaryAction>
-                                <IconButton>
-
-                                </IconButton>
-                            </ListItemSecondaryAction>
+                            <ListItemText primary={moment(filteredEmployees.recent).format("MM/DD/YYYY")} />
                         </ListItem>
                     })}
                 </List>

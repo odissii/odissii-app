@@ -49,7 +49,7 @@ class Nav extends Component {
         <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
             <BottomNavigationAction className="nav" icon={<ShowChart />} component={Link} to={"/dashboard"} />
-            <BottomNavigationAction className="nav" icon={<Group />} component={Link} to={"/employees"} />
+            <BottomNavigationAction className="nav" icon={<Group />} component={Link} to={"/allEmployees"} />
             <BottomNavigationAction className="nav" icon={<PersonAdd />} component={Link} to={"/employee/new"} />
             <BottomNavigationAction className="nav" icon={<Menu />} component={Link} to={"/settings"} />
           </BottomNavigation>

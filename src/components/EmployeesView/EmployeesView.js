@@ -31,10 +31,6 @@ class EmployeesView extends React.Component {
       userEmployees = (
         <SupervisorEmployees />
       )
-    } else if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
-      userEmployees = (
-        <ManagerEmployees />
-      )
     }
     return (
       <div>
