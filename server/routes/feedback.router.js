@@ -38,13 +38,13 @@ router.get('/supervisors/all', (req, res) => {
         const query = `SELECT DISTINCT "feedback"."supervisor_id", "first_name", "last_name",
                         (SELECT COUNT ("feedback"."quality_id")
                             FROM "feedback"
-                            WHERE "feedback"."quality_id" = 2) as correct,
+                            WHERE "feedback"."quality_id" = 2) as instruct,
                         (SELECT COUNT ("feedback"."quality_id") 
                             FROM "feedback" 
-                            WHERE "feedback"."quality_id" = 3) as praise,
+                            WHERE "feedback"."quality_id" = 3) as correct,
                         (SELECT COUNT ("feedback"."quality_id")
                             FROM "feedback" 
-                            WHERE "feedback"."quality_id" = 1) as instruct
+                            WHERE "feedback"."quality_id" = 1) as praise
                         FROM "feedback" 
                         FULL OUTER JOIN "quality_types" 
                         ON "quality_types"."id" = "feedback"."quality_id"
@@ -72,23 +72,25 @@ router.get('/supervisors/count', (req, res) => {
         const supervisor = req.query.id; 
         const startDate = req.query.start;
         const endDate = req.query.end;
-        const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid",
+        const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid", "feedback"."date_created", "feedback"."details", ( "employee"."first_name"  || ' ' || "employee"."last_name") as employee,
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback"
-                                WHERE "feedback"."quality_id" = 2 AND "feedback"."supervisor_id" = $1) as correct,
+                                WHERE "feedback"."quality_id" = 2 AND "feedback"."supervisor_id" = 396 ) as instruct,
                                 (SELECT COUNT ("feedback"."quality_id") 
                                 FROM "feedback" 
-                                WHERE "feedback"."quality_id" = 3 AND "feedback"."supervisor_id" = $1) as praise,
+                                WHERE "feedback"."quality_id" = 3 AND "feedback"."supervisor_id" = 396 ) as correct,
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback" 
-                                WHERE "feedback"."quality_id" = 1 AND "feedback"."supervisor_id" = $1) as instruct
+                                WHERE "feedback"."quality_id" = 1 AND "feedback"."supervisor_id" = 396 ) as praise
                         FROM "feedback" 
                         JOIN "quality_types" 
                         ON "quality_types"."id" = "feedback"."quality_id"
                         JOIN "person" 
                         ON "person"."id" = "feedback"."supervisor_id"
-                        WHERE "feedback"."supervisor_id" = $1 AND "date_created" > $2 AND "date_created" < $3
-                        GROUP BY "feedback"."quality_id", "feedback"."supervisor_id", "quality_types"."id", "person"."first_name", "person"."last_name";`;
+                        JOIN "employee" 
+                        ON "employee"."id" = "feedback"."employee_id"
+                        WHERE "feedback"."supervisor_id" = $1  AND "date_created" > $2 AND "date_created" < $3
+                        GROUP BY "feedback"."quality_id", "feedback"."supervisor_id", "quality_types"."id", "person"."first_name", "person"."last_name", "feedback"."date_created", "feedback"."details", "feedback"."employee_id", "employee"`;
         pool.query(query, [supervisor, startDate, endDate]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {

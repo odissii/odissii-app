@@ -25,6 +25,7 @@ class ManagerDashboard extends React.Component {
         sortedSupervisors: [],
         feedbackData: [],
         totalFeedback: [], 
+        reportData: [],
         praise: [],
         correct: [],
         instruct: []
@@ -53,22 +54,22 @@ class ManagerDashboard extends React.Component {
     })
   }
   getFeedbackCounts = (id) => {
-    let today = moment(new Date()).format('L');
-    let lastYear = (Date.getFullYear() - 1);    
-    console.log(today, lastYear);
+    let today = new Date();
+    let end = moment(today).format('L');
+    let start = moment(today).subtract(1, 'year').format('L');  
     axios({
       method: 'GET',
-      url: `/api/feedback/supervisors/count?id=${id}&start=${today}&end=${lastYear}`
+      url: `/api/feedback/supervisors/count?id=${id}&start=${start}&end=${end}`
     }).then((response) => {
       this.setState({
         feedbackData: [...this.state.feedbackData, response.data], 
         totalFeedback: response.data
       });
-      this.sortData(); 
-    }).catch((error) => {
-      console.log('Error getting supervisors', error); 
+        this.sortData(); 
+      }).catch((error) => {
+      console.log('Error getting feedback counts', error); 
     })
-   }
+  }
   getSupervisorFeedbackReports = (array) => {
     for (let i = 0; i < array.length; i++){
       let id = array[i].supervisor_id; 
@@ -96,15 +97,10 @@ class ManagerDashboard extends React.Component {
   render(){
     return (
       <div className="padding-bottom">
-        <Grid container xs={12} spacing={0}>
+        <Grid container spacing={0}>
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
-            <p className="center">Feedback given since January 1</p>
-            <CSVLink data={this.state.feedbackData[0]}
-                filename={"supervisor-feedback.csv"}
-                target="_blank">
-                Download Reports
-            </CSVLink>
+            <p className="center">Feedback given past 12 months</p>
             </Grid>
             <Grid item xs={12}>
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
@@ -115,15 +111,20 @@ class ManagerDashboard extends React.Component {
                       {this.state.feedbackData.map((array, i) => {
                         return(
                         <div key={i}>
-                          <span>{array.map((feedback)=> {
+                          <span>{array.map((feedback, j)=> {
                               return(
-                               <Grid item xs={12} lg={8} key={feedback.sid}>
+                               <Grid item xs={12} lg={8} key={j}>
                                 <div className="card">
                                       <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
-                                      <Button color ="primary" onClick={()=>this.props.history.push('/')}>Summary</Button>
+                                      <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
                                       <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
-                                       <p>Feedback given since January 1</p>
-                                        <IndividualManagerGraph feedback={feedback} key={i}/> 
+                                       <p>Feedback given past 12 months</p>
+                                        <IndividualManagerGraph feedback={feedback}/> 
+                                        <CSVLink data={array}
+                                          filename={`${feedback.last_name}-feedback.csv`}
+                                          target="_blank">
+                                          Download CSV
+                                      </CSVLink>
                                 </div>
                               </Grid>
                               );
