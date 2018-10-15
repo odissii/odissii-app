@@ -127,13 +127,12 @@ class ManagerDashboard extends React.Component {
                         return(
                         <div key={i}>
                          {array.map((feedback, j)=> {
-                              console.log('report:', this.state.reports[feedback.sid]);
                               return(
                               <Grid item xs={12} lg={8} key={j}>
                                 <div className="card">
                                       <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
                                       <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
-                                      <Button color ="primary" onClick={()=>this.props.history.push('/allEmployees')}>Employees</Button>
+                                      <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
                                        <p>Feedback given past 12 months</p>
                                         <IndividualManagerGraph feedback={feedback}/> 
                                         {this.state.reports[feedback.sid] && <CSVLink data={this.state.reports[feedback.sid]}
