@@ -45,12 +45,13 @@ router.post('/', (req, res) => {
     const data = req.body;
     const queryText = `INSERT INTO "follow_up"
     ("employee_id", "follow_up_date") VALUES
-    ($1, $2);`
+    ($1, $2) RETURNING *;`
 
     pool.query(queryText, [data.employeeId, data.followUpDate])
     .then(response => {
       console.log('/api/followup POST success:', response);
-      res.sendStatus(201);
+      const newFollowup = response.rows[0];
+      res.send(newFollowup);
     }).catch(error => {
       console.log('/api/followup POST error:', error);
       res.sendStatus(500);

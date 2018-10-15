@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import { USER_ROLES } from '../../constants';
+
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import Group from '@material-ui/icons/Group';
 import PersonAdd from '@material-ui/icons/PersonAdd';
@@ -37,13 +39,12 @@ class Nav extends Component {
     this.setState({ value });
   };
 
-  
-
   render() {
     let content = null;
     const { value } = this.state;
-    // if supervisor logged in, will render appropriate nav bar
-    if (this.props.user && this.props.user.role === 'manager') {
+
+    // if manager logged in, will render appropriate nav bar
+    if (this.props.user && this.props.user.role === USER_ROLES.MANAGER) {
       content = (
         <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
@@ -54,8 +55,8 @@ class Nav extends Component {
           </BottomNavigation>
         </div>
       )
-      // if manager logged in, will render appropriate nav bar
-    } else if (this.props.user && this.props.user.role === 'supervisor') {
+      // if supervisor logged in, will render appropriate nav bar
+    } else if (this.props.user && this.props.user.role === USER_ROLES.SUPERVISOR) {
       content = (
         <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
