@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import EmployeeFilter from './EmployeeFilter/EmployeeFilter';
 import EmployeeAppBar from './EmployeeAppBar/EmployeeAppBar';
-import EmployeeList from './EmployeeList/EmployeeList';
+import AllEmployeeList from './EmployeeList/AllEmployeeList';
 import Nav from '../../components/Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { USER_ROLES } from '../../constants';
@@ -17,6 +17,7 @@ class SupervisorEmployees extends React.Component {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
     }
 
+    // if user is no longer logged in this will send them to the login page
     componentDidUpdate() {
         if (!this.props.user.isLoading && this.props.user.userName === null) {
             this.props.history.push('/home');
@@ -26,12 +27,13 @@ class SupervisorEmployees extends React.Component {
     render() {
         let allEmployees;
 
+        // conditional rendering so that only users with a manager role can see this view
         if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
             allEmployees = (
                 <div>
                     <EmployeeAppBar />
                     <EmployeeFilter />
-                    <EmployeeList />
+                    <AllEmployeeList />
                 </div>
             )
         }

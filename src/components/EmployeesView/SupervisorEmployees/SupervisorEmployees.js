@@ -9,6 +9,7 @@ const mapStateToProps = state => ({
   user: state.user,
 })
 
+
 class SupervisorEmployees extends React.Component {
   render() {
     return (
