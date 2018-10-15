@@ -133,7 +133,7 @@ class ManagerDashboard extends React.Component {
                                 <div className="card">
                                       <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
                                       <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
-                                      <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
+                                      <Button color ="primary" onClick={()=>this.props.history.push('/allEmployees')}>Employees</Button>
                                        <p>Feedback given past 12 months</p>
                                         <IndividualManagerGraph feedback={feedback}/> 
                                         {this.state.reports[feedback.sid] && <CSVLink data={this.state.reports[feedback.sid]}
