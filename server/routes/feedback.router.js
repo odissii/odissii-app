@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
         `;
         pool.query(queryText, [supervisorId])
         .then(response => {
-            console.log(`/api/feedback GET success:`, response.rows);
+            console.log(`/api/feedback GET success`);
             res.send(response.rows);
         }).catch(error => {
             console.log(`/api/feedback GET error:`, error);
@@ -187,25 +187,25 @@ router.post('/', (req, res) => {
 
         const queryText =
             `INSERT INTO "feedback" (
-      "supervisor_id", 
-      "employee_id", 
-      "date_created", 
-      "quality", 
-      "task_related", 
-      "culture_related", 
-      "details"
-    ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7) RETURNING *;`;
+                "supervisor_id", 
+                "employee_id", 
+                "date_created", 
+                "quality_id", 
+                "task_related", 
+                "culture_related", 
+                "details"
+            ) VALUES ($1, $2, to_timestamp($3 / 1000.0), $4, $5, $6, $7) RETURNING *;`;
 
         pool.query(queryText, [
             data.supervisorId,
             data.employeeId,
             data.dateCreated,
-            data.quality,
+            data.quality_id,
             data.taskRelated,
             data.cultureRelated,
             data.details
         ]).then(response => {
-            console.log(`/api/feedback POST success:`, response);
+            console.log(`/api/feedback POST success`);
             const newFeedbackRow = response.rows[0];
             res.send(newFeedbackRow);
         }).catch(error => {
