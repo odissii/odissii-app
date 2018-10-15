@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
+import axios from 'axios';
 import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
 import { USER_ACTIONS } from '../../../redux/actions/userActions';
-import axios from 'axios';
 //Components
 import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
+import DisplayOverallGraph from './DisplayGraphs/DisplayOverallGraph/DisplayOverallGraph';
 //Styling
 import './IndividualEmployeeSummaryView.css';
+import { withStyles } from '@material-ui/core/styles';
 //Buttons
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
@@ -24,29 +26,40 @@ const mapStateToProps = state => ({
     feedback: state.feedback.feedback,
 });
 
-
+const styles = {
+    row: {
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: 'black',
+    },
+}; //end of styles
 
 class IndividualEmployeeSummaryView extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            totalQualityCount: [],
+        }
+    } //end of constructor
 
     componentDidMount() {
-        this.getFeedbackCount();
+        this.getTotalFeedbackCount();
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
-    }
+    } //end of componentDidMount
 
-    //This will get all of the feedback
-    getFeedbackCount() {
+    //This will get the total feedback of each category for the employee
+    getTotalFeedbackCount() {
         axios.get(`/api/feedback/employeeFeedbackCount/1`)
             .then((response) => {
                 this.setState({
-                    qualityCount: response.data
+                    totalQualityCount: response.data
                 })
-                console.log('qualityCount:', this.state.qualityCount);
             }).catch((error) => {
                 console.log('error in getFeedbackCount', error);
                 alert('Cannot get client feedback counts!')
             });
-    } //end of getFeedbackCount()
+    } //end of getTotalFeedbackCount()
 
     render() {
 
@@ -64,11 +77,19 @@ class IndividualEmployeeSummaryView extends Component {
                                 {this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}
                             </h1>
                         </div>
-                        <br />
+                        <h2>Overall Feedback:</h2>
+                        {/* {JSON.stringify(this.state.qualityCount)} */}
+                        {/* This will map over the over the total feedback */}
+                        {this.state.totalQualityCount.map((totalFeedback, index) => {
+                            return (
+                                <DisplayOverallGraph key={index} totalFeedback={totalFeedback} />
+                            )
+                        })}
+                        <h2>Feedback:</h2>
                         <div>
                             <Table>
                                 <TableHead>
-                                    <TableRow>
+                                    <TableRow styles={styles.row}>
                                         <TableCell>Category</TableCell>
                                         <TableCell>Feedback</TableCell>
                                         <TableCell>Date Given</TableCell>
@@ -92,4 +113,4 @@ class IndividualEmployeeSummaryView extends Component {
     }
 }
 
-export default connect(mapStateToProps)(IndividualEmployeeSummaryView);
+export default withStyles(styles)(connect(mapStateToProps)(IndividualEmployeeSummaryView));
