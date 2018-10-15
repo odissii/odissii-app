@@ -37,12 +37,7 @@ class IndividualEmployeeSummaryView extends Component {
         let content = null;
         content = (
             <div className="outer">
-                <div className="btnContainer">
-                    <Button variant="fab" color="primary" aria-label="Edit" style={styles.stickyButton}
-                        component={Link} to={"/feedback/new"}>
-                        <Icon>edit_icon</Icon>
-                    </Button>
-                </div>
+                
                 <div className="container">
                     <h1>
                         <Button component={Link} to={"/employees"}>
