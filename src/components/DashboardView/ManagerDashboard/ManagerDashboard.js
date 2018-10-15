@@ -25,7 +25,7 @@ class ManagerDashboard extends React.Component {
         sortedSupervisors: [],
         feedbackData: [],
         totalFeedback: [], 
-        reportData: [],
+        reports: [],
         praise: [],
         correct: [],
         instruct: []
@@ -66,14 +66,28 @@ class ManagerDashboard extends React.Component {
         totalFeedback: response.data
       });
         this.sortData(); 
+      
       }).catch((error) => {
       console.log('Error getting feedback counts', error); 
+    })
+  }
+  getFeedbackDetails = (id) => {
+    axios({
+      method: 'GET',
+      url: `/api/feedback/supervisors/reports?id=${id}`
+    }).then((response) => {
+      this.setState({
+          reports: [...this.state.reports, response.data]
+        });
+      }).catch((error) => {
+      console.log('Error getting feedback details', error); 
     })
   }
   getSupervisorFeedbackReports = (array) => {
     for (let i = 0; i < array.length; i++){
       let id = array[i].supervisor_id; 
       this.getFeedbackCounts(id); 
+      this.getFeedbackDetails(id);
     }
   }
   sortSupervisors = () => {
@@ -92,11 +106,12 @@ class ManagerDashboard extends React.Component {
             instruct: [...this.state.instruct, parseInt(this.state.totalFeedback[i].instruct)],
           })   
         }
-      
     }
+    
   render(){
     return (
       <div className="padding-bottom">
+      {JSON.stringify(this.state.reports)}
         <Grid container spacing={0}>
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
@@ -108,33 +123,42 @@ class ManagerDashboard extends React.Component {
           <Grid item xs={12}>
               <h2 className="center">All Supervisors</h2>
           </Grid>
-                      {this.state.feedbackData.map((array, i) => {
+                {this.state.feedbackData.map((array, i) => {
                         return(
                         <div key={i}>
-                          <span>{array.map((feedback, j)=> {
+                         {array.map((feedback, j)=> {
                               return(
-                               <Grid item xs={12} lg={8} key={j}>
+                              <Grid item xs={12} lg={8} key={j}>
                                 <div className="card">
                                       <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
                                       <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
                                       <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
                                        <p>Feedback given past 12 months</p>
                                         <IndividualManagerGraph feedback={feedback}/> 
-                                        <CSVLink data={array}
-                                          filename={`${feedback.last_name}-feedback.csv`}
-                                          target="_blank">
-                                          Download CSV
-                                      </CSVLink>
-                                </div>
-                              </Grid>
-                              );
-                            })}
-                          </span>
-                        </div>
+                                      {this.state.reports.map((report, k) => {
+                                         return (
+                                           <span key={k}>{report.map((supervisorReport, l) => {
+                                            if(supervisorReport.supervisor_id === feedback.sid)
+                                              return (
+                                                <CSVLink key={l} data={report}
+                                                  filename={`${supervisorReport.supervisor}-feedback.csv`}
+                                                  target="_blank">
+                                                  Download CSV
+                                            </CSVLink>
+                                              );
+                                          })}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                        </Grid>
                       );
                   })} 
-         </Grid>
-        </div>
+                  </div> 
+              );
+            })}
+    </Grid>
+    </div>
     );
   }
 }
