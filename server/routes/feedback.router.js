@@ -137,9 +137,38 @@ router.get('/employeeFeedbackCount/1', (req, res) => {
     pool.query(empFeedbackCntQuery)
         .then(result => res.send(result.rows))
         .catch(error => {
-            console.log('error in GET/ employeeFeedbackCount', error);
+            console.log('error in GET /employeeFeedbackCount', error);
         });
-
+});
+//will get all of the feedback for the past 3-4 weeks count for the specific employee
+router.get('/employeeWeeklyFeedbackCount/1', (req, res) => {
+    console.log('in GET /ememployeeWeeklyFeedbackCount');
+    const weeklyFeedbackQuery = ``;
+    pool.query(weeklyFeedbackQuery)
+        .then(result => res.send(result.rows))
+        .catch(error => {
+            console.log('error in GET /employeeWeeklyFeedbackCount', error); 
+        });
+});
+//will get all of the quarterly feedback count for the specific employee
+router.get('/employeeQuarterlyFeedbackCount/1', (req, res) => {
+    console.log('in GET /employeeQuarterlyFeedbackCount');
+    const quarterlyFeedbackQuery = ``;
+    pool.query(quarterlyFeedbackQuery)
+        .then(result => res.send(result.rows))
+        .catch(error => {
+            console.log('error in GET /employeeQuarterlyFeedbackCount', error);
+        });
+});
+//will get all of the annually feedback for the specific employee
+router.get('/employeeAnnuallyFeedbackCount/1', (req, res) => {
+    console.log('in GET /employeeAnnuallyFeedbackCount');
+    const annuallyFeedbackQuery = ``;
+    pool.query(annuallyFeedbackQuery)
+        .then(result => res.send(result.rows))
+        .catch(error => {
+            console.log('error in GET /employeeAnnuallyFeedbackCount', error);
+        });
 });
 // gets the most recent feedback record submitted where the req.user.id matches the manager ID
 // used to display the confirmation record 

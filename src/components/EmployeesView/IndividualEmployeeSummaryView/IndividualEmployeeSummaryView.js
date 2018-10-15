@@ -8,6 +8,7 @@ import { USER_ACTIONS } from '../../../redux/actions/userActions';
 //Components
 import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
 import DisplayOverallGraph from './DisplayGraphs/DisplayOverallGraph/DisplayOverallGraph';
+import DisplaySwipeableTabs from './DisplaySwipeableTabs/DisplaySwipeableTabs';
 //Styling
 import './IndividualEmployeeSummaryView.css';
 import { withStyles } from '@material-ui/core/styles';
@@ -56,8 +57,8 @@ class IndividualEmployeeSummaryView extends Component {
                     totalQualityCount: response.data
                 })
             }).catch((error) => {
-                console.log('error in getFeedbackCount', error);
-                alert('Cannot get client feedback counts!')
+                console.log('error in getTotalFeedbackCount', error);
+                alert('Cannot get total client feedback counts!')
             });
     } //end of getTotalFeedbackCount()
 
@@ -94,7 +95,7 @@ class IndividualEmployeeSummaryView extends Component {
                                 </Button>
                             </div>
                             <h2>Feedbacks:</h2>
-                            
+                            <DisplaySwipeableTabs />
                             <h2>Latest Feedbacks:</h2>
                             <div>
                                 <Table>
