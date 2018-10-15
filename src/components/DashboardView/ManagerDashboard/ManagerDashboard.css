@@ -1,0 +1,13 @@
+.card {
+    /* height: 35vh; */
+    /* width: 20vw;   */
+    padding: 5%;
+    margin: 1vw;
+    float: left; 
+    border: 1px solid gray;
+    text-align: center; 
+    background-color: white; 
+}
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
