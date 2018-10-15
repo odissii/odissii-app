@@ -80,7 +80,7 @@ class IndividualEmployeeSummaryView extends Component {
                                 </h1>
                             </div>
                             <h2>Overall Summary:</h2>
-                            {/* {JSON.stringify(this.state.qualityCount)} */}
+                            {/* {JSON.stringify(this.state.totalQualityCount)} */}
                             {/* This will map over the over the total feedback */}
                             {this.state.totalQualityCount.map((totalFeedback, index) => {
                                 return (

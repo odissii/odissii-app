@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //Chart
 import { Bar } from 'react-chartjs-2';
+//Date formatter
+const moment = require('moment');
 
 class DisplayWeeklyGraph extends Component {
     render() {
@@ -19,13 +21,14 @@ class DisplayWeeklyGraph extends Component {
         let data = {
             datasets: [{
                 label: 'Praise',
-                data: [1, 2, 3, 3, 4],
+                data: [this.props.praise],
                 backgroundColor: '#0f77e6',
                 borderWidth: 1,
+                stack: '1'
             },
             {
                 label: 'Instruct',
-                data: [1, 2, 3, 4, 5],
+                data: [this.props.instruct],
                 backgroundColor: '#f17416',
                 borderWidth: 1,
                 stack: '2'
@@ -33,12 +36,12 @@ class DisplayWeeklyGraph extends Component {
             },
             {
                 label: 'Correct',
-                data: [1],
+                data: [this.props.correct],
                 backgroundColor: 'lightgrey',
                 borderWidth: 1,
                 stack: '3'
             }],
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+            labels: []
         }
         return (
             <Bar

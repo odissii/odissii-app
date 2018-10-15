@@ -44,9 +44,9 @@ class DisplayFeedback extends Component {
         //This is how the avatar icon changes according to the category name of the feedback
         let content = null;
         if (this.props.feedback.name === 'Praise') {
-            content = <TableCell><Avatar style={styles.praiseAvatar}><Icon>done</Icon></Avatar></TableCell>
+            content = <TableCell><Avatar style={styles.praiseAvatar}><Icon>thumb_up</Icon></Avatar></TableCell>
         } else if (this.props.feedback.name === 'Correct') {
-            content = <TableCell><Avatar style={styles.correctAvatar}><Icon>clear</Icon></Avatar></TableCell>
+            content = <TableCell><Avatar style={styles.correctAvatar}><Icon>thumb_down</Icon></Avatar></TableCell>
         } else if (this.props.feedback.name === 'Instruct') {
             content = <TableCell><Avatar style={styles.instructAvatar}><Icon>remove</Icon></Avatar></TableCell>
         }; //end of if-else
