@@ -8,6 +8,7 @@ import { USER_ACTIONS } from '../../../redux/actions/userActions';
 import axios from 'axios';
 import './ManagerDashboard.css';
 import {CSVLink} from 'react-csv';
+import moment from 'moment';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -52,13 +53,12 @@ class ManagerDashboard extends React.Component {
     })
   }
   getFeedbackCounts = (id) => {
-    let year = new Date().getFullYear();
-    console.log(year)
-    let start = '01-01-' + year
-    let end = '12-31-' + year
+    let today = moment(new Date()).format('L');
+    let lastYear = (Date.getFullYear() - 1);    
+    console.log(today, lastYear);
     axios({
       method: 'GET',
-      url: `/api/feedback/supervisors/count?id=${id}&start=${start}&end=${end}`
+      url: `/api/feedback/supervisors/count?id=${id}&start=${today}&end=${lastYear}`
     }).then((response) => {
       this.setState({
         feedbackData: [...this.state.feedbackData, response.data], 
@@ -68,7 +68,7 @@ class ManagerDashboard extends React.Component {
     }).catch((error) => {
       console.log('Error getting supervisors', error); 
     })
-  }
+   }
   getSupervisorFeedbackReports = (array) => {
     for (let i = 0; i < array.length; i++){
       let id = array[i].supervisor_id; 
@@ -100,11 +100,11 @@ class ManagerDashboard extends React.Component {
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
             <p className="center">Feedback given since January 1</p>
-            {/* <CSVLink data={this.state.feedbackData[0]}
+            <CSVLink data={this.state.feedbackData[0]}
                 filename={"supervisor-feedback.csv"}
                 target="_blank">
                 Download Reports
-            </CSVLink> */}
+            </CSVLink>
             </Grid>
             <Grid item xs={12}>
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
