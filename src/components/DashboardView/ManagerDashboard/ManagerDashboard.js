@@ -95,17 +95,16 @@ class ManagerDashboard extends React.Component {
     }
   render(){
     return (
-      <div>
+      <div className="padding-bottom">
         <Grid container xs={12} spacing={0}>
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
             <p className="center">Feedback given since January 1</p>
-            <CSVLink data={this.state.feedbackData[0]}
+            {/* <CSVLink data={this.state.feedbackData[0]}
                 filename={"supervisor-feedback.csv"}
-                className="btn btn-primary"
                 target="_blank">
                 Download Reports
-            </CSVLink>
+            </CSVLink> */}
             </Grid>
             <Grid item xs={12}>
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
