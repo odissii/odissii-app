@@ -6,6 +6,7 @@ import feedback from './feedbackReducer';
 import search from './searchReducer';
 import filter from './filterReducer';
 import followup from './followupReducer';
+import quality_types from './qualityReducer';
 
 
 //Lets make a bigger object for our store, with the objects from our reducers.
@@ -17,7 +18,8 @@ const store = combineReducers({
   feedback,
   search,
   filter,
-  followup
+  followup,
+  quality_types,
 });
 
 export default store;

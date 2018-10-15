@@ -21,6 +21,7 @@ import Nav from '../Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
 import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
+import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
 import { USER_ROLES, employees } from '../../constants';
 
 // CREATE TABLE employee (
@@ -34,6 +35,7 @@ import { USER_ROLES, employees } from '../../constants';
 
 const mapStateToProps = state => ({
   user: state.user,
+  quality_types: state.quality_types,
   newPostedFeedback: state.feedback.newPostedFeedback,
   newPostedFollowup: state.followup.newPostedFollowup,
 });
@@ -56,6 +58,9 @@ class FeedbackFormView extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+    if (!this.props.quality_types.length) {
+      this.props.dispatch({ type:  QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
+    }
   }
   
   componentDidUpdate() {
