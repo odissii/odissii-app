@@ -5,6 +5,7 @@ import EmployeeFilter from './EmployeeFilter/EmployeeFilter';
 import EmployeeAppBar from './EmployeeAppBar/EmployeeAppBar';
 import AllEmployeeList from './EmployeeList/AllEmployeeList';
 import Nav from '../../components/Nav/Nav';
+import {Divider} from '@material-ui/core'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { USER_ROLES } from '../../constants';
 
@@ -33,6 +34,7 @@ class SupervisorEmployees extends React.Component {
                 <div>
                     <EmployeeAppBar />
                     <EmployeeFilter />
+                    <Divider />
                     <AllEmployeeList />
                 </div>
             )

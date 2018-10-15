@@ -16,6 +16,7 @@ const mapStateToProps = state => ({
 
 const space = ' ';
 
+
 class EmployeeList extends React.Component {
 
     componentDidMount() {
@@ -67,8 +68,8 @@ class EmployeeList extends React.Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Employee Name</TableCell>
-                            <TableCell>Last&nbsp;Feedback</TableCell>
+                            <TableCell style={{padding: '0'}}>Employee Name</TableCell>
+                            <TableCell style={{padding: '0'}}>Last&nbsp;Feedback</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

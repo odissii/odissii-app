@@ -11,7 +11,7 @@ const mapStateToProps = state => ({
 
 const styles = {
     formControl: {
-        // height: 30,
+        marginTop: 20,
         width: 200,
     }
 }
@@ -24,19 +24,17 @@ class EmployeeFilter extends React.Component {
 
     render() {
         return (
-            <form className="filter">
                     <FormControl variant="outlined" style={styles.formControl}>
-                    <InputLabel>Filter By:</InputLabel>
+                        <InputLabel>Filter By:</InputLabel>
                         <Select
                             value={this.props.filter}
                             onChange={this.handleChange}
-                            >
+                        >
                             <MenuItem value="date">Date of Last Feedback</MenuItem>
                             <MenuItem value="feedback">Least Feedback</MenuItem>
                             <MenuItem value="name">Name</MenuItem>
                         </Select>
                     </FormControl>
-                </form>
         )
     }
 }

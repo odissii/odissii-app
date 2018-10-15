@@ -15,6 +15,16 @@ const mapStateToProps = state => ({
     filter: state.filter,
 })
 
+const styles = {
+    table: {
+        marginTop: 5,
+    },
+    tableCell : {
+        padding: 0,
+        textAlign: 'center',
+    }
+}
+
 class AllEmployeeList extends React.Component {
 
     componentDidMount() {
@@ -52,24 +62,27 @@ class AllEmployeeList extends React.Component {
                 }
             )
             content = (
-                <Table>
+                <Table style={styles.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Employee Name</TableCell>
-                            <TableCell>Last&nbsp;Feedback</TableCell>
-                            <TableCell>Edit</TableCell>
+                            <TableCell style={styles.tableCell}>Employee Name</TableCell>
+                            <TableCell style={styles.tableCell}>Last&nbsp;Feedback</TableCell>
+                            <TableCell style={styles.tableCell}>Edit</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {filteredEmployees.map((employee) => {
                             return <TableRow key={employee.id} value={employee}>
-                                <TableCell><Avatar alt={employee.first_name} src={employee.image_path} />
-                                            {employee.first_name}&nbsp;{employee.last_name}</TableCell>
-                                <TableCell>
+                                <TableCell style={styles.tableCell}>
+                                        <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+                                            <Avatar style={{marginRight: '10px', marginLeft: '10px'}} alt={employee.first_name} src={employee.image_path} />
+                                            {employee.first_name}&nbsp;{employee.last_name}</div>
+                                </TableCell>
+                                <TableCell style={styles.tableCell}>
                                 {moment(employee.recent).format("MM/DD/YYYY")} 
                                 {/* figure out redering for if no date */}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell style={styles.tableCell}>
                                     <IconButton>
                                         <Edit />
                                     </IconButton>

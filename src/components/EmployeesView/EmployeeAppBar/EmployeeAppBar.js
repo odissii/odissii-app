@@ -23,8 +23,6 @@ class EmployeeAppBar extends React.Component {
         let content = null;
         if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
             content = (
-                <div>
-                    <AppBar>
                         <Toolbar>
                             <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
                             <Typography>Employees</Typography>
@@ -35,13 +33,9 @@ class EmployeeAppBar extends React.Component {
                                 placeholder="Search..." 
                                 onChange={this.handleChange}/>
                         </Toolbar>
-                    </AppBar>
-                </div>
             )
         } else if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
             content = (
-                <div>
-                    <AppBar>
                         <Toolbar>
                             <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
                             <Typography>All Employees</Typography>
@@ -52,14 +46,12 @@ class EmployeeAppBar extends React.Component {
                                 placeholder="Search..." 
                                 onChange={this.handleChange}/>
                         </Toolbar>
-                    </AppBar>
-                </div>
             )
         }
         return (
-            <div>
+            <AppBar position="sticky">
                 {content}
-            </div>
+            </AppBar>
         )
     }
 }
