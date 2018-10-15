@@ -15,7 +15,6 @@ class EditSupervisor extends Component {
             employee_ID: '',
             email_address: '',
             username: '',
-            inactive: false, 
             id: '' 
         }
     }
@@ -80,11 +79,6 @@ class EditSupervisor extends Component {
               [property]: event.target.value
             })
         }
-        handleCheck = () => {
-            this.setState({
-                inactive: true
-            })
-        }
     render(){
         return(
             <div className="edit-person-form">
@@ -101,11 +95,6 @@ class EditSupervisor extends Component {
                     <FormLabel>Username</FormLabel>
                     <Input type="text" value={this.state.username} onChange={(event)=>this.handleChangefor(event, 'username')}/>
                     <br/>
-                    <FormLabel>Remove?
-                    <Checkbox
-                    checked={this.state.remove}
-                    onChange={this.handleCheck}
-                    value={this.state.remove}/></FormLabel>
                     <Button variant="contained" color="primary" onClick={this.editPerson}>Save</Button>
                     <Button onClick={()=>this.props.history.push('/dashboard')}>Cancel</Button>
                 </FormControl>
