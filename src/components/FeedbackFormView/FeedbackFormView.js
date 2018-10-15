@@ -21,6 +21,7 @@ import Nav from '../Nav/Nav';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
 import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
+import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
 import { USER_ROLES, employees } from '../../constants';
 
 // CREATE TABLE employee (
@@ -34,6 +35,7 @@ import { USER_ROLES, employees } from '../../constants';
 
 const mapStateToProps = state => ({
   user: state.user,
+  quality_types: state.quality_types,
   newPostedFeedback: state.feedback.newPostedFeedback,
   newPostedFollowup: state.followup.newPostedFollowup,
 });
@@ -45,7 +47,7 @@ class FeedbackFormView extends React.Component {
     super(props);
     this.state = {
       employeeId: '',
-      quality: 'praise',
+      quality_id: null,
       taskRelated: false,
       cultureRelated: false,
       followUpNeeded: false,
@@ -56,6 +58,9 @@ class FeedbackFormView extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+    if (!this.props.quality_types.length) {
+      this.props.dispatch({ type:  QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
+    }
   }
   
   componentDidUpdate() {
@@ -98,14 +103,14 @@ class FeedbackFormView extends React.Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    const {employeeId, quality, taskRelated, cultureRelated, followUpNeeded, followUpDate, details} = this.state;
+    const {employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details} = this.state;
     const supervisorId = this.props.user.id;
 
     const data = {
       supervisorId,
       employeeId,
       dateCreated: Date.now(),
-      quality,
+      quality_id,
       taskRelated,
       cultureRelated,
       details,
@@ -134,7 +139,7 @@ class FeedbackFormView extends React.Component {
   };
 
   render() {
-    const {employeeId, quality, taskRelated, cultureRelated, details, followUpNeeded, followUpDate} = this.state;
+    const {employeeId, quality_id, taskRelated, cultureRelated, details, followUpNeeded, followUpDate} = this.state;
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -162,13 +167,16 @@ class FeedbackFormView extends React.Component {
               <FormLabel>Feedback Quality</FormLabel>
               <RadioGroup
                 aria-label="feedback-type"
-                name="quality"
-                value={quality}
-                onChange={this.handleInputChange('quality')}
+                name="quality_id"
+                value={quality_id}
+                onChange={this.handleInputChange('quality_id')}
               >
-                <FormControlLabel value="praise" label="Praise" control={<Radio />}/>
+                {this.props.quality_types.map(quality => (
+                  <FormControlLabel key={quality.id} value={quality.id.toString()} label={quality.name} control={<Radio />}/>
+                ))}
+                {/* <FormControlLabel value="praise" label="Praise" control={<Radio />}/>
                 <FormControlLabel value="instruct" label="Instruct" control={<Radio />}/>
-                <FormControlLabel value="correct" label="Correct" control={<Radio />}/>
+                <FormControlLabel value="correct" label="Correct" control={<Radio />}/> */}
               </RadioGroup>
             </FormControl>
             <FormControl>
