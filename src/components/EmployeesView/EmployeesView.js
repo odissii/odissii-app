@@ -5,7 +5,6 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 import Nav from '../../components/Nav/Nav';
 import SupervisorEmployees from './SupervisorEmployees/SupervisorEmployees';
-import ManagerEmployees from './ManagerEmployees/ManagerEmployees';
 import { USER_ROLES } from '../../constants';
 
 
@@ -14,10 +13,12 @@ const mapStateToProps = state => ({
 });
 
 class EmployeesView extends React.Component {
+
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
   }
 
+  // if user is not longer logged in this redirects them to the login page
   componentDidUpdate() {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push('/home');
@@ -27,16 +28,14 @@ class EmployeesView extends React.Component {
   render() {
     let userEmployees;
 
-    if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
+    if (this.props.user.userName) {
       userEmployees = (
         <SupervisorEmployees />
       )
     }
     return (
       <div>
-        <div>
-          {userEmployees}
-        </div>
+        {userEmployees}
         <Nav />
       </div>
 
@@ -44,4 +43,5 @@ class EmployeesView extends React.Component {
   }
 }
 
+//withRouter allows components not directly connected to the router to access history.push
 export default withRouter(connect(mapStateToProps)(EmployeesView));
