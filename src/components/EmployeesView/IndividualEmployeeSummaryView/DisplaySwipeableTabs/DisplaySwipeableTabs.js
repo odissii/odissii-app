@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+//Component Views
+import DisplayWeeklyGraph from '../DisplayGraphs/DisplayWeeklyGraph/DisplayWeeklyGraph';
+import DisplayQuarterlyGraph from '../DisplayGraphs/DisplayQuarterlyGraph/DisplayQuarterlyGraph';
+import DisplayAnnuallyGraph from '../DisplayGraphs/DisplayAnnuallyGraph/DisplayAnnuallyGraph';
 //Swipeable Tab Views
 import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
@@ -123,7 +127,7 @@ class DisplaySwipeableTabs extends Component {
                     >
                         <TabContainer dir={theme.direction}>
                             {/* This will contain the past 3 to 4 weeks bar chart view */}
-                            {/* {JSON.stringify(this.state.weeklyQualityCount)} */}
+                            {JSON.stringify(this.state.weeklyQualityCount)}
                             {/* {this.state.weeklyQualityCount.map((weekFeedback, index) => {
                                         return (
                                             <DisplayWeeklyGraph key={index} weekFeedback={weekFeedback} />
@@ -132,7 +136,7 @@ class DisplaySwipeableTabs extends Component {
                         </TabContainer>
                         <TabContainer dir={theme.direction}>
                             {/* This will contain the quarterly bar chart view */}
-                            {/* {JSON.stringify(this.state.quarterlyqualityCount)} */}
+                            {JSON.stringify(this.state.quarterlyqualityCount)}
                             {/* {this.state.quarterlyqualityCount.map((quarterFeedback, index) => {
                                         return (
                                             <DisplayQuarterlyGraph key={index} quarterFeedback={quarterFeedback} />
@@ -141,7 +145,7 @@ class DisplaySwipeableTabs extends Component {
                         </TabContainer>
                         <TabContainer dir={theme.direction}>
                             {/* This will contain the annually bar chart view */}
-                            {/* {JSON.stringify(this.state.annuallyqualityCount)} */}
+                            {JSON.stringify(this.state.annuallyqualityCount)}
                             {/* {this.state.annuallyqualityCount.map((annualFeedback, index) => {
                                         return (
                                             <DisplayAnnuallyGraph key={index} annualFeedback={annualFeedback} />
