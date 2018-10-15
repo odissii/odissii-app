@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
         `;
         pool.query(queryText, [supervisorId])
         .then(response => {
-            console.log(`/api/feedback GET success:`, response);
+            console.log(`/api/feedback GET success:`, response.rows);
             res.send(response.rows);
         }).catch(error => {
             console.log(`/api/feedback GET error:`, error);

@@ -55,23 +55,27 @@ CREATE TABLE feedback (
   "supervisor_id" INT NOT NULL REFERENCES "person",
   "employee_id" INT NOT NULL REFERENCES "employee",
   "date_created" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_DATE,
-  "quality" VARCHAR (50) NOT NULL,
+  "quality_id" INT NOT NULL REFERENCES "quality_types",
   "task_related" BOOLEAN DEFAULT false,
   "culture_related" BOOLEAN DEFAULT false,
   "details" VARCHAR NOT NULL,
   "date_edited" TIMESTAMPTZ
 );
+
 --defines each type of quality, assigned to feedback records 
- CREATE TABLE quality_types (
- 	"id" serial primary key, 
- 	"name" varchar(50)
- );
+CREATE TABLE quality_types (
+  "id" serial primary key, 
+  "name" varchar(50)
+);
+INSERT INTO "quality_types" ("name") VALUES ('praise'), ('instruct'), ('correct');
+
 --a table for all of the images associated with feedback 
 CREATE TABLE feedback_images (
 	"id" SERIAL PRIMARY KEY, 
 	"image_path" VARCHAR (255),
 	"feedback_id" INT NOT NULL REFERENCES "feedback"
 );
+
 -- a table of reminders for a supervisor to follow up with an employee
 CREATE TABLE follow_up (
   "id" SERIAL PRIMARY KEY,

@@ -62,7 +62,7 @@ const totalsByWeek = feedback => {
   const weekOneStart = moment().subtract(1, 'weeks').startOf('isoWeek');
   const thisWeekStart = moment().startOf('isoWeek');
 
-  console.log(weekThreeStart, weekTwoStart, weekOneStart, thisWeekStart);
+  // console.log(weekThreeStart, weekTwoStart, weekOneStart, thisWeekStart);
 
   return feedback.reduce((summary, entry) => {
     const date = moment(entry.date_created);
