@@ -1,0 +1,23 @@
+h2 {
+    padding: 10px;
+    text-decoration: underline;
+}
+
+.header {
+    top: 0;
+    position: sticky;
+    padding: 10px;
+    background-color: white;
+    z-index: +1;
+}
+
+.outer {
+    display: flex;
+    flex-direction: column;
+}
+
+.btnContainer{
+    position: fixed;
+    right: 25px;
+    bottom: 35px;
+}

@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
+import { Link } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
+import axios from 'axios';
 import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
 import { USER_ACTIONS } from '../../../redux/actions/userActions';
-import axios from 'axios';
-//chart
-import { Bar } from 'react-chartjs-2';
+//Components
+import DisplayFeedback from './DisplayFeedback/DisplayFeedback';
+import DisplayOverallGraph from './DisplayGraphs/DisplayOverallGraph/DisplayOverallGraph';
+import DisplaySwipeableTabs from './DisplaySwipeableTabs/DisplaySwipeableTabs';
+//Styling
+import './IndividualEmployeeSummaryView.css';
+import { withStyles } from '@material-ui/core/styles';
+//Buttons
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 //Material Table
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,104 +27,102 @@ const mapStateToProps = state => ({
     feedback: state.feedback.feedback,
 });
 
+const styles = {
+    row: {
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: 'black',
+    },
+}; //end of styles
+
 class IndividualEmployeeSummaryView extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
-            chartData: {},
-            qualityCount: [],
-        };
+            totalQualityCount: [],
+        }
     } //end of constructor
 
     componentDidMount() {
-        this.getFeedbackCount();
+        this.getTotalFeedbackCount();
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
-    }
+    } //end of componentDidMount
 
-    getFeedbackCount() {
+    //This will get the total feedback of each category for the employee
+    getTotalFeedbackCount() {
         axios.get(`/api/feedback/employeeFeedbackCount/1`)
             .then((response) => {
                 this.setState({
-                    qualityCount: response.data
+                    totalQualityCount: response.data
                 })
-                console.log('qualityCount:', this.state.qualityCount);
             }).catch((error) => {
-                console.log('error in getFeedbackCount', error);
-                alert('Cannot get client feedback counts!')
+                console.log('error in getTotalFeedbackCount', error);
+                alert('Cannot get total client feedback counts!')
             });
-    }
+    } //end of getTotalFeedbackCount()
 
     render() {
-        const options = {
-            scales: {
-                xAxes: [{
-                    stacked: true
-                }],
-                yAxes: [{
-                    stacked: true
-                }]
-            }
-        }
 
-        let data = {
-            datasets: [{
-                label: 'Praise',
-                data: this.state.qualityCount.count,
-                backgroundColor: '#0f77e6',
-                borderWidth: 1,
-                stack: '1'
-            },
-            {
-                label: 'Instruct',
-                data: [12],
-                backgroundColor: '#f17416',
-                borderWidth: 1,
-                stack: '2'
-
-            },
-            {
-                label: 'Correct',
-                data: [5],
-                backgroundColor: 'lightgrey',
-                borderWidth: 1,
-                stack: '3'
-            }],
-            labels: ['label']
-        }
-
-        let content = null;
-        content = (
-            <div>
-                <Bar
-                    data={data}
-                    options={options}
-                />
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Category</TableCell>
-                            <TableCell>Feedback</TableCell>
-                            <TableCell>Date Given</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
-                        {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
-                            return (
-                                <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
-                            )
-                        })}
-                    </TableBody>
-                </Table>
-            </div>
-        )
         return (
             <div>
-                {content}
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        <div className="outer">
+                            <div className="header">
+                                <h1>
+                                    {/* This arrow_back icon button will take the user back to the /employees view */}
+                                    <Button component={Link} to={"/employees"}>
+                                        <Icon>arrow_back</Icon>
+                                    </Button>
+                                    {/* If the selected employee name is not yet render, display null, otherwise display the first name */}
+                                    {this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}
+                                </h1>
+                            </div>
+                            <h2>Overall Summary:</h2>
+                            {/* {JSON.stringify(this.state.totalQualityCount)} */}
+                            {/* This will map over the over the total feedback */}
+                            {this.state.totalQualityCount.map((totalFeedback, index) => {
+                                return (
+                                    <DisplayOverallGraph key={index} totalFeedback={totalFeedback} />
+                                )
+                            })}
+                            {/* This is the FAB for making a new feedback */}
+                            <div className="btnContainer">
+                                <Button variant="fab" color="secondary" aria-label="Edit" style={styles.stickyButton}
+                                    component={Link} to={"/feedback/new"}>
+                                    <Icon>edit_icon</Icon>
+                                </Button>
+                            </div>
+                            <h2>Feedbacks:</h2>
+                            <DisplaySwipeableTabs />
+                            <h2>Latest Feedbacks:</h2>
+                            <div>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow styles={styles.row}>
+                                            <TableCell>Category</TableCell>
+                                            <TableCell>Feedback</TableCell>
+                                            <TableCell>Date Given</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
+                                        {/* This will map over the array and pass it as "feedback" to the DisplayFeedback Component */}
+                                        {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
+                                            return (
+                                                <DisplayFeedback key={index} feedback={feedbacksAtIndex} />
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </div>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
 }
 
-export default connect(mapStateToProps)(IndividualEmployeeSummaryView);
+export default withStyles(styles)(connect(mapStateToProps)(IndividualEmployeeSummaryView));
