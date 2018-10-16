@@ -4,7 +4,6 @@ import login from './loginReducer';
 import people from './peopleReducer';
 import feedback from './feedbackReducer';
 import search from './searchReducer';
-import filter from './filterReducer';
 import followup from './followupReducer';
 import sort from './sortReducer';
 
@@ -17,7 +16,6 @@ const store = combineReducers({
   people,
   feedback,
   search,
-  filter,
   followup,
   sort
 });

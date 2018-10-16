@@ -33,43 +33,17 @@ const invertDirection = {
 }
 
 class AllEmployeeList extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            columnToSort: '',
-            sortDirection: 'desc',
-        }
-    }
-
     componentDidMount() {
         this.getEmployees();
+        orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
     }
 
     getEmployees = () => {
         this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
     }
 
-    getEmpoloyeesByName = () => {
-        if (this.props.filter === '' || this.props.filter === 'name') {
-            this.getEmpoloyeesByName();
-        } else if (this.props.filter === 'date') {
-            this.getEmployeesByFeedbackDate();
-        } else if (this.props.filter === 'feedback') {
-            this.getEmployeesByFeedbackQuantity();
-        }
-    }
-
-    getEmployeesByFeedbackDate = () => {
-
-    }
-
-    getEmployeesByFeedbackQuantity = () => {
-
-    }
-
     handleSort = columnName => {
         this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName});
-        
         let direction = this.props.sort.column === columnName ? invertDirection[this.props.sort.direction] : 'desc';
         this.props.dispatch({type: 'ADD_SORT_DIRECTION', payload: direction });
     }
@@ -114,7 +88,6 @@ class AllEmployeeList extends React.Component {
                         })}
                     </TableBody>
                 </Table>
-        
             );
         }
         return (

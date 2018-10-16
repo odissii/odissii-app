@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import EmployeeFilter from './EmployeeFilter/EmployeeFilter';
 import EmployeeAppBar from './EmployeeAppBar/EmployeeAppBar';
 import AllEmployeeList from './EmployeeList/AllEmployeeList';
 import Nav from '../../components/Nav/Nav';
