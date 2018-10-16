@@ -102,7 +102,7 @@ class AddPerson extends Component {
     return (
         <div>
             <div className="center">
-            <Typography variant="display1">Add a Person</Typography>
+            <Typography variant="display1">Add Staff</Typography>
             <br/>
             <FormLabel className="label-spacing">Role:</FormLabel>
                 <NativeSelect value={this.state.role_id} onChange={(event)=>this.handleChangeFor('role_id', event)}>
@@ -112,7 +112,7 @@ class AddPerson extends Component {
                 </NativeSelect>
             </div>
             {this.state.role_id === '1' && <div className="add-person-form">
-            <Typography>Set up the supervisor's profile and create a username and password for them.</Typography>
+            <Typography>Set up a supervisor's profile and create a username and password for them.</Typography>
             <br/>
                 <FormControl>
                     <FormLabel>First Name</FormLabel>
@@ -128,7 +128,7 @@ class AddPerson extends Component {
                     <FormLabel>Password</FormLabel>
                         <Input type="password" onChange={(event)=>this.handleChangeFor('password', event)} required/>
                     <Button onClick={this.createSupervisor} variant="contained" color="primary">Submit</Button>
-                    <Button>Cancel</Button>
+                    <Button onClick={()=>this.props.history.push('/dashboard')}>Cancel</Button>
                 </FormControl></div>}
             {this.state.role_id === "employee" && <p>employee setup</p>}
    </div>
