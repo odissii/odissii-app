@@ -22,6 +22,7 @@ import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
 import EditSupervisor from './components/EditPerson/EditSupervisor'; 
 import EditEmployee from './components/EditPerson/EditEmployee'; 
+import SupervisorDetailView from './components/SupervisorDetailView/SupervisorDetailView';
 
 import './styles/main.css';
 
@@ -78,6 +79,10 @@ const App = () => (
         <Route
           path="/info"
           component={InfoPage}
+        />
+        <Route 
+          path="/view/supervisor/:personId"
+          component={SupervisorDetailView}
         />
         <Route 
         path="/edit/supervisor/:personId" 
