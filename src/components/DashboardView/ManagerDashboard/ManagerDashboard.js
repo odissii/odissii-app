@@ -105,7 +105,6 @@ class ManagerDashboard extends React.Component {
   render(){
     return (
       <div className="padding-bottom">
-      {JSON.stringify(this.props.feedback)}
         <Grid container spacing={0}>
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
@@ -123,6 +122,7 @@ class ManagerDashboard extends React.Component {
                          {array.map((feedback, j)=> {
                               return(
                               <Grid item xs={12} lg={8} key={j}>
+                              <div className="card-container">
                                 <div className="card">
                                       <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
                                       <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
@@ -134,6 +134,7 @@ class ManagerDashboard extends React.Component {
                                           target="_blank"
                                         >Download CSV</CSVLink>}
                               </div>
+                            </div>
                         </Grid>
                       );
                   })} 
