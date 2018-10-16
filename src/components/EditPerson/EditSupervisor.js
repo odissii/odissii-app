@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios'; 
-import {FormControl, FormLabel, Input, Button, Checkbox} from '@material-ui/core';
+import {FormControl, FormLabel, Input, Button} from '@material-ui/core';
 import './editperson.css';
 import swal from 'sweetalert'; 
 import {connect} from 'react-redux'; 

@@ -89,7 +89,7 @@ router.get('/supervisors/count', (req, res) => {
                         ON "person"."id" = "feedback"."supervisor_id"
                         JOIN "employee" 
                         ON "employee"."id" = "feedback"."employee_id"
-                        WHERE "feedback"."supervisor_id" = $1  AND "date_created" > $2 AND "date_created" < $3
+                        WHERE "feedback"."supervisor_id" = $1 AND "date_created" > $2 AND "date_created" < $3
                         GROUP BY "feedback"."quality_id", "feedback"."supervisor_id", "quality_types"."id", "person"."first_name", "person"."last_name"`;
         pool.query(query, [supervisor, startDate, endDate]).then((results) => {
             res.send(results.rows);
@@ -104,6 +104,8 @@ router.get('/supervisors/count', (req, res) => {
 router.get('/supervisors/reports', (req, res) => {
     if(req.isAuthenticated){
         const supervisor = req.query.id;
+        const start = req.query.start;
+        const end = req.query.end; 
     const query = `SELECT  "feedback"."supervisor_id", ("person"."first_name" || ' ' || "person"."last_name") as supervisor, "feedback"."date_created", ( "employee"."first_name"  || ' ' || "employee"."last_name") as employee, "feedback"."details", "quality_types"."name" as "type"   
                         FROM "feedback" 
                         JOIN "quality_types"
@@ -112,8 +114,8 @@ router.get('/supervisors/reports', (req, res) => {
                         ON "feedback"."supervisor_id" = "person"."id"
                         JOIN "employee" 
                         ON "feedback"."employee_id" = "employee"."id"
-                        WHERE "feedback"."supervisor_id" = $1;`;
-        pool.query(query, [supervisor]).then((results) => {
+                        WHERE "feedback"."supervisor_id" = $1 AND "date_created" > $2 AND "date_created" < $3;`;
+        pool.query(query, [supervisor, start, end]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
             console.log('Error getting reports', error);
