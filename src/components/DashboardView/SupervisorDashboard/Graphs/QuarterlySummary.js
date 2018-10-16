@@ -8,32 +8,21 @@ const mapStateToProps = state => ({
   quality_types: state.quality_types
 });
 
-const quality_types = [
-  {
-    id: 1,
-    name: 'praise'
-  },
-  {
-    id: 2,
-    name: 'instruct'
-  },
-  {
-    id: 3,
-    name: 'correct'
-  }
-];
-
 // REACT COMPONENT
 class QuarterlySummary extends React.Component {
   constructor(props) {
     super(props);
   }
+
   componentDidMount() {
     if (!this.props.quality_types.length) {
       this.props.dispatch({type: QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
     }
   }
+
   render() {
+    if (!this.props.quality_types.length) return null;
+    
     return (
       <Doughnut data={
           {
@@ -48,19 +37,6 @@ class QuarterlySummary extends React.Component {
     );
   }
 }
-
-// const QuarterlySummary = props => (
-//   <Doughnut data={
-//       {
-//         labels: ['Praise', 'Instruct', 'Correct'],
-//         datasets: [{
-//           data: feedbackQualityForCurrentQuarter(props.data, props.quality_types),
-//           backgroundColor: ['#0f77e6', '#f17416', 'lightgray']
-//         }]
-//       }
-//     } 
-//   />
-// );
 
 export default connect(mapStateToProps)(QuarterlySummary);
 

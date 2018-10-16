@@ -1,5 +1,7 @@
 import React from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { QUALITY_ACTIONS } from '../../../../redux/actions/qualityActions';
 import { Bar } from 'react-chartjs-2';
 
 const barOptions = {
@@ -13,66 +15,78 @@ const barOptions = {
   }, 
 };
 
-// REACT COMPONENT
-const PastThreeWeeks = props => {
-  const weekNames = namesOfPastThreeWeeks();
-  // console.log('week names:', weekNames);
-  const threeWeeksFeedback = props.data.filter(feedback => moment(feedback.date_created).isAfter(moment().subtract(3, 'weeks').startOf('isoWeek')));
-  // console.log('three weeks:', threeWeeksFeedback);
-  const totals = totalsByWeek(threeWeeksFeedback);
-  // console.log('totals:', totals);
+const mapStateToProps = state => ({
+  quality_types: state.quality_types
+});
 
-  const data = {
-    labels: weekNames,
-    datasets: [
-      {
-        label: 'Correct',
-        backgroundColor: 'lightgray',
-        data: qualityByWeek(totals, 'correct')
-      },
-      {
-        label: 'Instruct',
-        backgroundColor: '#f17416',
-        data: qualityByWeek(totals, 'instruct')
-      },
-      {
-        label: 'Praise',
-        backgroundColor: '#0f77e6',
-        data: qualityByWeek(totals, 'praise')
-      },
-    ]
-  };
+class PastThreeWeeks extends React.Component {
+  componentDidMount() {
+    if (!this.props.quality_types.length) {
+      this.props.dispatch({type: QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
+    }
+  }
 
-  return <Bar data={data} options={barOptions} />;
-};
+  render() {
+    const { quality_types, data } = this.props;
 
-export default PastThreeWeeks;
+    if (!(quality_types.length && data.length)) return null;
+
+    console.log('quality types:', quality_types);
+    const weekNames = namesOfPastThreeWeeks();
+    const threeWeeksFeedback = data.filter(lastThreeWeeksOnly);
+    const weeklyQualityTotals = totalsByWeek(threeWeeksFeedback, quality_types);
+
+    const graphData = {
+      labels: weekNames,
+      datasets: [
+        {
+          label: 'Correct',
+          backgroundColor: 'lightgray',
+          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'correct'))
+        },
+        {
+          label: 'Instruct',
+          backgroundColor: '#f17416',
+          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'instruct'))
+        },
+        {
+          label: 'Praise',
+          backgroundColor: '#0f77e6',
+          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'praise'))
+        },
+      ]
+    };
+
+    return <Bar data={graphData} options={barOptions} />;
+  }
+}
+
+export default connect(mapStateToProps)(PastThreeWeeks);
 
 
+const lastThreeWeeksOnly = feedback => moment(feedback.date_created).isAfter(moment().subtract(3, 'weeks').startOf('isoWeek'));
 
-const blankSummary = {
-  praise: 0,
-  instruct: 0,
-  correct: 0
-};
+const getIdForQuality = (types, name) => types.find(type => type.name === name).id;
 
-const totalsByWeek = feedback => {
+// for each week for the past three whole weeks, get the sums of each quality type given 
+const totalsByWeek = (feedback, quality_types) => {
   const weekThreeStart = moment().subtract(3, 'weeks').startOf('isoWeek');
   const weekTwoStart = moment().subtract(2, 'weeks').startOf('isoWeek');
   const weekOneStart = moment().subtract(1, 'weeks').startOf('isoWeek');
   const thisWeekStart = moment().startOf('isoWeek');
 
-  // console.log(weekThreeStart, weekTwoStart, weekOneStart, thisWeekStart);
+  const blankSummary = quality_types.reduce((summary, quality) => {
+    summary[quality.id] = 0;
+    return summary;
+  }, {});
 
   return feedback.reduce((summary, entry) => {
-    const date = moment(entry.date_created);
-    // console.log('date:', date);
-    if (date.isBetween(weekThreeStart, weekTwoStart)) {
-      summary.threeWeeksAgo[entry.quality] += 1;
+    const date = moment(entry.date_created);    if (date.isBetween(weekThreeStart, weekTwoStart)) {
+      summary.threeWeeksAgo[entry.quality_id] += 1;
     } else if (date.isBetween(weekTwoStart, weekOneStart)) {
-      summary.twoWeeksAgo[entry.quality] += 1;
+      summary.twoWeeksAgo[entry.quality_id] += 1;
     } else if (date.isBetween(weekOneStart, thisWeekStart)) {
-      summary.oneWeekAgo[entry.quality] += 1;
+      summary.oneWeekAgo[entry.quality_id] += 1;
     }
 
     return summary;
@@ -91,8 +105,4 @@ const namesOfPastThreeWeeks = () => ([
 ]);
 
 // get the tally objects for each week and return an array with only the values for a specific quality
-const qualityByWeek = (totals, quality) => Object.values(totals).map(week => week[quality]);
-
-
-
-// moment().subtract(3, 'week').startOf('isoWeek').format('MMM DD')
+const qualityByWeek = (totals, qualityId) => Object.values(totals).map(week => week[qualityId]);
