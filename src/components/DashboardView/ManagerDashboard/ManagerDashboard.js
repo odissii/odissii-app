@@ -24,7 +24,6 @@ class ManagerDashboard extends React.Component {
       super(props);
       this.state = {
         sortedSupervisors: [],
-        reports: {},
         praise: [],
         correct: [],
         instruct: []
@@ -67,17 +66,14 @@ class ManagerDashboard extends React.Component {
   //this gets more detailed reports about each feedback given by a supervisor, breaking each record down into employee, the details given, and the quality of the feedback
   //this data is used in a CSV file which can be downloaded by a manager 
   getFeedbackDetails = (id) => {
-    let today = new Date();
-    let end = moment(today).format('L');
-    let start = moment(today).subtract(1, 'year').format('L');  
+      let today = new Date();
+      let end = moment(today).format('L');
+      let start = moment(today).subtract(1, 'year').format('L');  
     axios({
       method: 'GET',
       url: `/api/feedback/supervisors/reports?id=${id}&start=${start}&end=${end}`
     }).then((response) => {
       this.props.dispatch({type: FEEDBACK_ACTIONS.SET_ALL_DETAILED_FEEDBACK_BY_MANAGER_SUPERVISORS, payload: response.data, supervisor: id});
-      // this.setState({
-      //     reports: {...this.state.reports, [id]: response.data}
-      //   });
       }).catch((error) => {
       console.log('Error getting feedback details', error); 
     })
@@ -106,7 +102,6 @@ class ManagerDashboard extends React.Component {
           })   
         }
     }
-    
   render(){
     return (
       <div className="padding-bottom">
