@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import {FormControl, Input, Button, FormLabel, NativeSelect, Typography} from '@material-ui/core';
 import './addperson.css'; 
+import {connect} from 'react-redux'; 
 
+const mapStateToProps = state => ({
+  supervisor: state.people.staff.supervisors
+});
 class AddPerson extends Component {
   constructor(props) {
     super(props);
@@ -17,40 +21,24 @@ class AddPerson extends Component {
       email_address: '',
       role_id: '',
       message: '',
+      supervisor_id: ''
     };
   }
-
+  componentDidMount(){
+    this.props.dispatch({type: 'FETCH_SUPERVISORS'});
+  }
+  createEmployee = () => {
+    this.props.dispatch({type: 'ADD_EMPLOYEE', payload: this.state});
+  }
   createSupervisor = (event) => {
     event.preventDefault();
-
     if (this.state.username === '' || this.state.password === '') {
       this.setState({
         message: 'Set a username and password!',
       });
-    } else {
-      
-      const {
-        username, 
-        password, 
-        employeeId, 
-        first_name, 
-        last_name, 
-        email_address, 
-        role_id
-      } = this.state;
-
-      const body = {
-        username, 
-        password, 
-        employeeId, 
-        first_name, 
-        last_name, 
-        email_address, 
-        role_id
-      };
-
+    } 
       // making the request to the server to post the new user's registration
-      axios.post('/api/user/register/', body)
+      axios.post('/api/staff/register/supervisor', this.state)
         .then((response) => {
           if (response.status === 201) {
             alert('Supervisor registered!');
@@ -62,8 +50,10 @@ class AddPerson extends Component {
                 last_name: '',
                 email_address: '',
                 role_id: '',
+                image_path: '',
                 message: '',
             });
+            this.props.dispatch({type: 'FETCH_SUPERVISORS'});
           } else {
             this.setState({
               message: 'Oops! That didn\'t work. The username might already be taken. Try again!',
@@ -75,8 +65,7 @@ class AddPerson extends Component {
             message: 'Oops! Something went wrong! Is the server running?',
           });
         });
-    }
-  } // end createSupervisor
+    } // end createSupervisor
 
   handleChangeFor = (propertyName, event) => {
     this.setState({
@@ -130,10 +119,32 @@ class AddPerson extends Component {
                     <Button onClick={this.createSupervisor} variant="contained" color="primary">Submit</Button>
                     <Button onClick={()=>this.props.history.push('/dashboard')}>Cancel</Button>
                 </FormControl></div>}
-            {this.state.role_id === "employee" && <p>employee setup</p>}
+            {this.state.role_id === "employee" && <div className="add-person-form">
+            <FormControl>
+                    <FormLabel>First Name</FormLabel>
+                        <Input type="text"  onChange={(event)=>this.handleChangeFor('first_name', event)} required/>
+                    <FormLabel>Last Name</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('last_name', event)} required/>
+                    <FormLabel>Employee ID</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('employeeId', event)} required/>
+                    <FormLabel>Image</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('image_path', event)} required/>
+                    <FormLabel>Assign Supervisor</FormLabel>
+                        <NativeSelect onChange={(event)=>this.handleChangeFor('supervisor_id', event)} required>
+                          <option value="">Select One</option>
+                        {this.props.supervisor.map((supervisor, i) => {
+                          return (
+                            <option value={supervisor.supervisor_id}>{supervisor.first_name} {supervisor.last_name}</option>
+                          );
+                        })}
+                        </NativeSelect>
+                      <Button onClick={this.createEmployee} variant="contained" color="primary">Submit</Button>
+                    <Button onClick={()=>this.props.history.push('/dashboard')}>Cancel</Button>
+              </FormControl>
+            </div>}
    </div>
     );
   }
 }
 
-export default AddPerson;
+export default connect(mapStateToProps)(AddPerson);

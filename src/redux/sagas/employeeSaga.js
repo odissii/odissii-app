@@ -29,6 +29,7 @@ function* fetchAllEmployees(){
 function* addEmployee(action){
     try {
         yield call(axios.post, '/api/staff/employee', action.payload);
+        yield put (swal(`${action.payload.first_name} ${action.payload.last_name} created!`));
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
     } catch(error){
         console.log('Cannot add new employee', error);  
