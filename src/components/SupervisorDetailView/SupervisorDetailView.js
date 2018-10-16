@@ -7,6 +7,7 @@ import { USER_ROLES } from '../../constants';
 
 import QuarterlySummary from '../DashboardView/SupervisorDashboard/Graphs/QuarterlySummary';
 import PastThreeWeeks from '../DashboardView/SupervisorDashboard/Graphs/PastThreeWeeks';
+import PastTwelveMonths from '../DashboardView/SupervisorDashboard/Graphs/PastTwelveMonths';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -56,7 +57,8 @@ class SupervisorDetailView extends React.Component {
         <h2>supervisor detail view</h2>
         <button onClick={() => this.props.history.push('/dashboard')}>Back</button>
         <QuarterlySummary data={feedbackHistory} />
-        <PastThreeWeeks data={feedbackHistory}/>
+        <PastThreeWeeks data={feedbackHistory} />
+        <PastTwelveMonths data={feedbackHistory} />
       </div>
     );
   }

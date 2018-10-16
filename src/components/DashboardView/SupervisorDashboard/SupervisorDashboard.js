@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { Grid } from '@material-ui/core'; 
 import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
+import PastTwelveMonths from './Graphs/PastTwelveMonths';
 import QuarterlySummary from './Graphs/QuarterlySummary';
 import PastThreeWeeks from './Graphs/PastThreeWeeks';
 
@@ -30,9 +31,12 @@ class SupervisorDashboard extends React.Component {
         </div>
         <div>
           Past Three Weeks
-          <PastThreeWeeks data={feedbackHistory}/>
+          <PastThreeWeeks data={feedbackHistory} />
         </div>
-        
+        <div>
+          Past Twelve Months
+          <PastTwelveMonths data={feedbackHistory} />
+        </div>
       </div>
     )
   }
