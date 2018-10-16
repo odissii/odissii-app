@@ -17,8 +17,8 @@ const store = combineReducers({
   people,
   feedback,
   search,
-  sort
-  filter,
+  sort,
+  // filter,
   followup,
   quality_types,
 });
