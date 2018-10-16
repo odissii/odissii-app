@@ -1,35 +1,81 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { QUALITY_ACTIONS } from '../../../../redux/actions/qualityActions';
 import moment from 'moment';
 import { Doughnut } from 'react-chartjs-2';
 
-// REACT COMPONENT
-const QuarterlySummary = props => (
-  <Doughnut data={
-      {
-        labels: ['Praise', 'Instruct', 'Correct'],
-        datasets: [{
-          data: feedbackQualityForCurrentQuarter(props.data),
-          backgroundColor: ['#0f77e6', '#f17416', 'lightgray']
-        }]
-      }
-    } 
-  />
-);
+const mapStateToProps = state => ({
+  quality_types: state.quality_types
+});
 
-export default QuarterlySummary;
+const quality_types = [
+  {
+    id: 1,
+    name: 'praise'
+  },
+  {
+    id: 2,
+    name: 'instruct'
+  },
+  {
+    id: 3,
+    name: 'correct'
+  }
+];
+
+// REACT COMPONENT
+class QuarterlySummary extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    if (!this.props.quality_types.length) {
+      this.props.dispatch({type: QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
+    }
+  }
+  render() {
+    return (
+      <Doughnut data={
+          {
+            labels: ['Praise', 'Instruct', 'Correct'],
+            datasets: [{
+              data: feedbackQualityForCurrentQuarter(this.props.data, this.props.quality_types),
+              backgroundColor: ['#0f77e6', '#f17416', 'lightgray']
+            }]
+          }
+        }
+      />
+    );
+  }
+}
+
+// const QuarterlySummary = props => (
+//   <Doughnut data={
+//       {
+//         labels: ['Praise', 'Instruct', 'Correct'],
+//         datasets: [{
+//           data: feedbackQualityForCurrentQuarter(props.data, props.quality_types),
+//           backgroundColor: ['#0f77e6', '#f17416', 'lightgray']
+//         }]
+//       }
+//     } 
+//   />
+// );
+
+export default connect(mapStateToProps)(QuarterlySummary);
 
 // reduces the feedback down into an array with three numbers,
 // representing the amount of praise, instruct, or correct
 // for the current quarter
-const feedbackQualityForCurrentQuarter = feedback => {
+const feedbackQualityForCurrentQuarter = (feedback, quality_types) => {
   const currentQuarter = moment().quarter();
   // const startOfQuarter = getStartingMonthOfCurrentQuarter(currentMonth);
 
   const quality = feedback.reduce((summary, entry) => {
     if (moment(entry.date_created).quarter() === currentQuarter) {
-      summary[entry.quality] += 1;
+      summary[quality_types.find(type => type.id === entry.quality_id).name] += 1;
     }
-    return summary
+    return summary;
   }, {
     praise: 0,
     instruct: 0,
