@@ -38,13 +38,13 @@ router.get('/supervisors/all', (req, res) => {
         const query = `SELECT DISTINCT "feedback"."supervisor_id", "first_name", "last_name",
                         (SELECT COUNT ("feedback"."quality_id")
                             FROM "feedback"
-                            WHERE "feedback"."quality_id" = 2) as correct,
+                            WHERE "feedback"."quality_id" = 2) as instruct,
                         (SELECT COUNT ("feedback"."quality_id") 
                             FROM "feedback" 
-                            WHERE "feedback"."quality_id" = 3) as praise,
+                            WHERE "feedback"."quality_id" = 3) as correct,
                         (SELECT COUNT ("feedback"."quality_id")
                             FROM "feedback" 
-                            WHERE "feedback"."quality_id" = 1) as instruct
+                            WHERE "feedback"."quality_id" = 1) as praise
                         FROM "feedback" 
                         FULL OUTER JOIN "quality_types" 
                         ON "quality_types"."id" = "feedback"."quality_id"
@@ -75,20 +75,22 @@ router.get('/supervisors/count', (req, res) => {
         const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid",
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback"
-                                WHERE "feedback"."quality_id" = 2 AND "feedback"."supervisor_id" = $1) as correct,
+                                WHERE "feedback"."quality_id" = 2 AND "feedback"."supervisor_id" = 396 ) as instruct,
                                 (SELECT COUNT ("feedback"."quality_id") 
                                 FROM "feedback" 
-                                WHERE "feedback"."quality_id" = 3 AND "feedback"."supervisor_id" = $1) as praise,
+                                WHERE "feedback"."quality_id" = 3 AND "feedback"."supervisor_id" = 396 ) as correct,
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback" 
-                                WHERE "feedback"."quality_id" = 1 AND "feedback"."supervisor_id" = $1) as instruct
+                                WHERE "feedback"."quality_id" = 1 AND "feedback"."supervisor_id" = 396 ) as praise
                         FROM "feedback" 
                         JOIN "quality_types" 
                         ON "quality_types"."id" = "feedback"."quality_id"
                         JOIN "person" 
                         ON "person"."id" = "feedback"."supervisor_id"
-                        WHERE "feedback"."supervisor_id" = $1 AND "date_created" > $2 AND "date_created" < $3
-                        GROUP BY "feedback"."quality_id", "feedback"."supervisor_id", "quality_types"."id", "person"."first_name", "person"."last_name";`;
+                        JOIN "employee" 
+                        ON "employee"."id" = "feedback"."employee_id"
+                        WHERE "feedback"."supervisor_id" = $1  AND "date_created" > $2 AND "date_created" < $3
+                        GROUP BY "feedback"."quality_id", "feedback"."supervisor_id", "quality_types"."id", "person"."first_name", "person"."last_name"`;
         pool.query(query, [supervisor, startDate, endDate]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
@@ -97,6 +99,28 @@ router.get('/supervisors/count', (req, res) => {
         })
     } else {
         res.sendStatus(403);
+    }
+})
+router.get('/supervisors/reports', (req, res) => {
+    if(req.isAuthenticated){
+        const supervisor = req.query.id;
+    const query = `SELECT  "feedback"."supervisor_id", ("person"."first_name" || ' ' || "person"."last_name") as supervisor, "feedback"."date_created", ( "employee"."first_name"  || ' ' || "employee"."last_name") as employee, "feedback"."details", "quality_types"."name" as "type"   
+                        FROM "feedback" 
+                        JOIN "quality_types"
+                        ON "quality_types"."id" = "feedback"."quality_id"
+                        JOIN "person"
+                        ON "feedback"."supervisor_id" = "person"."id"
+                        JOIN "employee" 
+                        ON "feedback"."employee_id" = "employee"."id"
+                        WHERE "feedback"."supervisor_id" = $1;`;
+        pool.query(query, [supervisor]).then((results) => {
+            res.send(results.rows);
+        }).catch((error) => {
+            console.log('Error getting reports', error);
+            res.sendStatus(500); 
+        })
+    } else {
+        res.sendStatus(403); 
     }
 })
 // gets all feedback for a specific employee where a manager ID or supervisor ID matches the req.user.id
@@ -145,7 +169,15 @@ router.get('/employeeFeedbackCount/1', (req, res) => {
 //will get all of the feedback for the past 3-4 weeks count for the specific employee
 router.get('/employeeWeeklyFeedbackCount/1', (req, res) => {
     console.log('in GET /ememployeeWeeklyFeedbackCount');
-    const weeklyFeedbackQuery = ``;
+    const weeklyFeedbackQuery = `SELECT "date_created", "quality_types"."name"
+                                    FROM "feedback" 
+                                    JOIN "quality_types"
+                                    ON "feedback"."quality_id" = "quality_types"."id"
+                                    JOIN "employee"
+                                    ON "feedback"."employee_id" = "employee"."id"
+                                    WHERE "employee_id" = 1 
+                                    AND "date_created" > CURRENT_DATE - INTERVAL '30' DAY
+                                    ORDER BY "date_created" DESC;`;
     pool.query(weeklyFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {
@@ -155,7 +187,15 @@ router.get('/employeeWeeklyFeedbackCount/1', (req, res) => {
 //will get all of the quarterly feedback count for the specific employee
 router.get('/employeeQuarterlyFeedbackCount/1', (req, res) => {
     console.log('in GET /employeeQuarterlyFeedbackCount');
-    const quarterlyFeedbackQuery = ``;
+    const quarterlyFeedbackQuery = `SELECT "date_created", "quality_types"."name"
+                                    FROM "feedback" 
+                                    RIGHT JOIN "quality_types"
+                                    ON "feedback"."quality_id" = "quality_types"."id"
+                                    JOIN "employee"
+                                    ON "feedback"."employee_id" = "employee"."id"
+                                    WHERE "employee_id" = 1 
+                                    AND "date_created" > CURRENT_DATE - INTERVAL '92' DAY
+                                    ORDER BY "date_created" DESC;`;
     pool.query(quarterlyFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {
@@ -165,7 +205,15 @@ router.get('/employeeQuarterlyFeedbackCount/1', (req, res) => {
 //will get all of the annually feedback for the specific employee
 router.get('/employeeAnnuallyFeedbackCount/1', (req, res) => {
     console.log('in GET /employeeAnnuallyFeedbackCount');
-    const annuallyFeedbackQuery = ``;
+    const annuallyFeedbackQuery = `SELECT "date_created", "quality_types"."name"
+                                    FROM "feedback" 
+                                    RIGHT JOIN "quality_types"
+                                    ON "feedback"."quality_id" = "quality_types"."id"
+                                    JOIN "employee"
+                                    ON "feedback"."employee_id" = "employee"."id"
+                                    WHERE "employee_id" = 1 
+                                    AND "date_created" > CURRENT_DATE - INTERVAL '365' DAY
+                                    ORDER BY "date_created" DESC;`;
     pool.query(annuallyFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {

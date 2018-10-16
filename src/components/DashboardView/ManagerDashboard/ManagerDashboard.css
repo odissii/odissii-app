@@ -2,7 +2,7 @@
     /* height: 35vh; */
     /* width: 20vw;   */
     padding: 5%;
-    margin: 1vw;
+    margin: .5vw;
     float: left; 
     border: 1px solid gray;
     text-align: center; 
@@ -10,4 +10,8 @@
 }
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.padding-bottom{
+    padding-bottom: 20vh; 
+    background-color: white; 
 }

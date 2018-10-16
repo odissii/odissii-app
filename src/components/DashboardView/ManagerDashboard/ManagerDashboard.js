@@ -8,6 +8,7 @@ import { USER_ACTIONS } from '../../../redux/actions/userActions';
 import axios from 'axios';
 import './ManagerDashboard.css';
 import {CSVLink} from 'react-csv';
+import moment from 'moment';
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -24,6 +25,7 @@ class ManagerDashboard extends React.Component {
         sortedSupervisors: [],
         feedbackData: [],
         totalFeedback: [], 
+        reports: {},
         praise: [],
         correct: [],
         instruct: []
@@ -52,10 +54,9 @@ class ManagerDashboard extends React.Component {
     })
   }
   getFeedbackCounts = (id) => {
-    let year = new Date().getFullYear();
-    console.log(year)
-    let start = '01-01-' + year
-    let end = '12-31-' + year
+    let today = new Date();
+    let end = moment(today).format('L');
+    let start = moment(today).subtract(1, 'year').format('L');  
     axios({
       method: 'GET',
       url: `/api/feedback/supervisors/count?id=${id}&start=${start}&end=${end}`
@@ -64,15 +65,30 @@ class ManagerDashboard extends React.Component {
         feedbackData: [...this.state.feedbackData, response.data], 
         totalFeedback: response.data
       });
-      this.sortData(); 
-    }).catch((error) => {
-      console.log('Error getting supervisors', error); 
+        this.sortData(); 
+      
+      }).catch((error) => {
+      console.log('Error getting feedback counts', error); 
+    })
+  }
+  getFeedbackDetails = (id) => {
+    axios({
+      method: 'GET',
+      url: `/api/feedback/supervisors/reports?id=${id}`
+    }).then((response) => {
+      console.log(response.data);
+      this.setState({
+          reports: {...this.state.reports, [id]: response.data}
+        });
+      }).catch((error) => {
+      console.log('Error getting feedback details', error); 
     })
   }
   getSupervisorFeedbackReports = (array) => {
     for (let i = 0; i < array.length; i++){
       let id = array[i].supervisor_id; 
       this.getFeedbackCounts(id); 
+      this.getFeedbackDetails(id);
     }
   }
   sortSupervisors = () => {
@@ -91,21 +107,15 @@ class ManagerDashboard extends React.Component {
             instruct: [...this.state.instruct, parseInt(this.state.totalFeedback[i].instruct)],
           })   
         }
-      
     }
+    
   render(){
     return (
-      <div>
-        <Grid container xs={12} spacing={0}>
+      <div className="padding-bottom">
+        <Grid container spacing={0}>
         <Grid item xs={12}>
           <h1>Manager's Dashboard</h1>
-            <p className="center">Feedback given since January 1</p>
-            <CSVLink data={this.state.feedbackData[0]}
-                filename={"supervisor-feedback.csv"}
-                className="btn btn-primary"
-                target="_blank">
-                Download Reports
-            </CSVLink>
+            <p className="center">Feedback given past 12 months</p>
             </Grid>
             <Grid item xs={12}>
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
@@ -113,28 +123,31 @@ class ManagerDashboard extends React.Component {
           <Grid item xs={12}>
               <h2 className="center">All Supervisors</h2>
           </Grid>
-                      {this.state.feedbackData.map((array, i) => {
+                {this.state.feedbackData.map((array, i) => {
                         return(
                         <div key={i}>
-                          <span>{array.map((feedback)=> {
+                         {array.map((feedback, j)=> {
                               return(
-                               <Grid item xs={12} lg={8} key={feedback.sid}>
+                              <Grid item xs={12} lg={8} key={j}>
                                 <div className="card">
                                       <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
-                                      <Button color ="primary" onClick={()=>this.props.history.push('/')}>Summary</Button>
+                                      <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
                                       <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
-                                       <p>Feedback given since January 1</p>
-                                        <IndividualManagerGraph feedback={feedback} key={i}/> 
-                                </div>
-                              </Grid>
-                              );
-                            })}
-                          </span>
-                        </div>
+                                       <p>Feedback given past 12 months</p>
+                                        <IndividualManagerGraph feedback={feedback}/> 
+                                        {this.state.reports[feedback.sid] && <CSVLink data={this.state.reports[feedback.sid]}
+                                          filename={`${feedback.last_name}-feedback.csv`}
+                                          target="_blank"
+                                        >Download CSV</CSVLink>}
+                              </div>
+                        </Grid>
                       );
                   })} 
-         </Grid>
-        </div>
+                  </div> 
+              );
+            })}
+    </Grid>
+    </div>
     );
   }
 }
