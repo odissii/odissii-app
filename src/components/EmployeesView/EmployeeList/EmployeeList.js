@@ -20,8 +20,11 @@ const styles = {
         marginTop: 5,
     },
     tableCell: {
-        padding: 0,
+    
         textAlign: 'center',
+    },
+    tableCell2: {
+        
     }
 }
 
