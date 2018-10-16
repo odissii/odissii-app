@@ -123,7 +123,9 @@ class ManagerDashboard extends React.Component {
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
             </Grid>
           <Grid item xs={12}>
+          <br/>
               <Typography variant="headline" className="center">All Supervisors</Typography>
+              <br/>
           </Grid>
                 {this.props.feedback.map((array, i) => {
                         return(

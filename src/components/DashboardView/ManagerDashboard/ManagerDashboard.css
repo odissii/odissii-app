@@ -2,7 +2,10 @@
     /* height: 35vh; */
     /* width: 20vw;   */
     padding: 5%;
-    margin: .5vw;
+    margin-left: .5vw;
+    margin-right: .5vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
     float: left; 
     border: 1px solid gray;
     text-align: center; 
@@ -12,8 +15,7 @@
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 .card-container{
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 6vw;
   text-align: center; 
 }
 .padding-bottom{
