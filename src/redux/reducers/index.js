@@ -4,8 +4,8 @@ import login from './loginReducer';
 import people from './peopleReducer';
 import feedback from './feedbackReducer';
 import search from './searchReducer';
-import filter from './filterReducer';
 import followup from './followupReducer';
+import sort from './sortReducer';
 import quality_types from './qualityReducer';
 
 
@@ -17,7 +17,8 @@ const store = combineReducers({
   people,
   feedback,
   search,
-  filter,
+  sort,
+  // filter,
   followup,
   quality_types,
 });
