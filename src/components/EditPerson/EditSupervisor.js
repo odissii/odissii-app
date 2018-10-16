@@ -4,7 +4,7 @@ import {FormControl, FormLabel, Input, Button} from '@material-ui/core';
 import './editperson.css';
 import swal from 'sweetalert'; 
 import {connect} from 'react-redux'; 
-import {PEOPLE_ACTIONS} from '../../../redux/actions/userActions';
+import { PEOPLE_ACTIONS } from '../../redux/actions/peopleActions';
 
 class EditSupervisor extends Component {
     constructor(props){
@@ -43,12 +43,13 @@ class EditSupervisor extends Component {
                 data: this.state
             }).then((response) => {
                     swal('Success!', `${this.state.first_name} ${this.state.last_name} edited`, 'success');
-                    this.props.dispatch({type: PEOPLE_ACTIONS.FETCH_SUPERVISORS})
+                    this.props.dispatch({type: PEOPLE_ACTIONS.FETCH_SUPERVISORS});
                     this.props.history.push('/dashboard'); 
             }).catch((error) => {
                 swal('Warning', `Something went wrong editing ${this.state.first_name} ${this.state.last_name}. Please try again in a few minutes`);
                 console.log('Cannot update supervisor', error);
-            }
+            })
+            
           }
         handleChangefor = (event, property) => {
             this.setState({
