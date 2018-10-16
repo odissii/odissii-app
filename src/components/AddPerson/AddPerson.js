@@ -126,9 +126,9 @@ class AddPerson extends Component {
                     <FormLabel>Username</FormLabel>
                         <Input type="text" onChange={(event)=>this.handleChangeFor('username', event)} required/>
                     <FormLabel>Password</FormLabel>
-                        <Input type="text" onChange={(event)=>this.handleChangeFor('password', event)} required/>
+                        <Input type="password" onChange={(event)=>this.handleChangeFor('password', event)} required/>
                     <Button onClick={this.createSupervisor} variant="contained" color="primary">Submit</Button>
-                    <Button onClick={this.props.history.push('/dashboard')}>Cancel</Button>
+                    <Button>Cancel</Button>
                 </FormControl></div>}
             {this.state.role_id === "employee" && <p>employee setup</p>}
    </div>
