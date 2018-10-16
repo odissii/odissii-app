@@ -19,7 +19,7 @@ const feedback = (state = feedbackTypes, action) => {
         return {...state, feedbackDetailsByAllSupervisors: {...state.feedbackDetailsByAllSupervisors, [action.supervisor]: action.payload}}; 
     } else if (action.type === 'CLEAR_FEEDBACK'){
         return {...state, feedbackCountsByAllSupervisors: [], feedbackDetailsByAllSupervisors: []}
-    return state; 
+     } return state; 
 }
 
 // this is an object representing a row of feedback just added to the database
