@@ -23,7 +23,9 @@ class SupervisorDashboard extends React.Component {
   render(){
     const { feedbackHistory } = this.props;
     return (
-      <div>
+      // this styling is here until we add padding to the container
+      // to compensate for when bottom nav is showing
+      <div style={{paddingBottom: '70px'}}>
         <h2>Supervisor Dashboard</h2>
         <div>
           Current Quarter
