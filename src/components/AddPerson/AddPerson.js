@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {Button, FormLabel, NativeSelect} from '@material-ui/core';
+import {FormControl, Input, Button, FormLabel, NativeSelect, Typography} from '@material-ui/core';
+import './addperson.css'; 
 
 class AddPerson extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class AddPerson extends Component {
     };
   }
 
-  registerUser = (event) => {
+  createSupervisor = (event) => {
     event.preventDefault();
 
     if (this.state.username === '' || this.state.password === '') {
@@ -52,20 +53,30 @@ class AddPerson extends Component {
       axios.post('/api/user/register/', body)
         .then((response) => {
           if (response.status === 201) {
-            this.props.history.push('/home');
+            alert('Supervisor registered!');
+            this.setState({
+                username: '',
+                password: '',
+                employeeId: '',
+                first_name: '',
+                last_name: '',
+                email_address: '',
+                role_id: '',
+                message: '',
+            });
           } else {
             this.setState({
-              message: 'Ooops! That didn\'t work. The username might already be taken. Try again!',
+              message: 'Oops! That didn\'t work. The username might already be taken. Try again!',
             });
           }
         })
         .catch(() => {
           this.setState({
-            message: 'Ooops! Something went wrong! Is the server running?',
+            message: 'Oops! Something went wrong! Is the server running?',
           });
         });
     }
-  } // end registerUser
+  } // end createSupervisor
 
   handleChangeFor = (propertyName, event) => {
     this.setState({
@@ -91,6 +102,8 @@ class AddPerson extends Component {
     return (
         <div>
             <div className="center">
+            <Typography variant="display1">Add a Person</Typography>
+            <br/>
             <FormLabel className="label-spacing">Role:</FormLabel>
                 <NativeSelect value={this.state.role_id} onChange={(event)=>this.handleChangeFor('role_id', event)}>
                     <option value="">Select One</option>
@@ -98,7 +111,25 @@ class AddPerson extends Component {
                     <option value="employee">Employee</option>  
                 </NativeSelect>
             </div>
-            {this.state.role_id === '1' && <p>supervisor setup</p>}
+            {this.state.role_id === '1' && <div className="add-person-form">
+            <Typography>Set up the supervisor's profile and create a username and password for them.</Typography>
+            <br/>
+                <FormControl>
+                    <FormLabel>First Name</FormLabel>
+                        <Input type="text"  onChange={(event)=>this.handleChangeFor('first_name', event)} required/>
+                    <FormLabel>Last Name</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('last_name', event)} required/>
+                    <FormLabel>Employee ID</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('employeeId', event)} required/>
+                    <FormLabel>Email</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('email_address', event)} required/>
+                    <FormLabel>Username</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('username', event)} required/>
+                    <FormLabel>Password</FormLabel>
+                        <Input type="text" onChange={(event)=>this.handleChangeFor('password', event)} required/>
+                    <Button onClick={this.createSupervisor} variant="contained" color="primary">Submit</Button>
+                    <Button onClick={this.props.history.push('/dashboard')}>Cancel</Button>
+                </FormControl></div>}
             {this.state.role_id === "employee" && <p>employee setup</p>}
    </div>
     );
