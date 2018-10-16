@@ -86,6 +86,15 @@ class ManagerDashboard extends React.Component {
       this.getFeedbackDetails(id);
     }
   }
+  navTo = (id) => {
+    //clears feedback in redux to prevent duplicate information when navigating back and forth to this page 
+    this.props.dispatch({type: 'CLEAR_FEEDBACK'});
+    //navigates to the supervisor edit page
+    this.props.history.push(`/view/supervisor/${id}`);
+  }
+  navToEmployees = () => {
+    this.props.history.push('/employees');
+  }
   sortSupervisors = (array) => {
     for(let i = 0; i < array.length; i++){
       this.setState({
@@ -125,8 +134,8 @@ class ManagerDashboard extends React.Component {
                               <div className="card-container">
                                 <div className="card">
                                       <Typography variant="headline">{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></Typography>
-                                      <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
-                                      <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
+                                      <Button color ="primary" onClick={()=>this.navTo(feedback.sid)}>Summary</Button>
+                                      <Button color ="primary" onClick={this.navToEmployees}>Employees</Button>
                                        <Typography>Feedback given past 12 months</Typography>
                                         <IndividualManagerGraph feedback={feedback}/> 
                                         {this.props.detailedFeedback[feedback.sid] && <CSVLink data={this.props.detailedFeedback[feedback.sid]}

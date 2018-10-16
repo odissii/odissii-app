@@ -17,7 +17,8 @@ const feedback = (state = feedbackTypes, action) => {
         return {...state, feedbackCountsByAllSupervisors: [...state.feedbackCountsByAllSupervisors, action.payload]}; 
     } else if (action.type === FEEDBACK_ACTIONS.SET_ALL_DETAILED_FEEDBACK_BY_MANAGER_SUPERVISORS){
         return {...state, feedbackDetailsByAllSupervisors: {...state.feedbackDetailsByAllSupervisors, [action.supervisor]: action.payload}}; 
-    }
+    } else if (action.type === 'CLEAR_FEEDBACK'){
+        return {...state, feedbackCountsByAllSupervisors: [], feedbackDetailsByAllSupervisors: []}
     return state; 
 }
 
