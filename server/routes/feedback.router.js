@@ -29,12 +29,31 @@ router.get('/', (req, res) => {
         res.sendStatus(401);
     }
 });
+
+// gets all feedback entries by a specific supervisor for the past 12 months
+router.get('/supervisor/:id', (req, res) => {
+    if (req.isAuthenticated() && req.user.role === 'manager') {
+        const supervisorId = req.params.id;
+        const queryText = `SELECT * FROM "feedback" WHERE "supervisor_id" = $1 AND "date_created" >= (CURRENT_DATE - INTERVAL '12 months');`;
+        pool.query(queryText, [supervisorId])
+        .then(response => {
+            console.log(`/api/feedback/supervisor/${supervisorId} GET success`);
+            res.send(response.rows);
+        }).catch(error => {
+            console.log(`/api/feedback/supervisor/${supervisorId} GET error:`, error);
+            res.sendStatus(500);
+        })
+    } else {
+        res.sendStatus(401);
+    }
+});
+
 // gets all feedback created by all supervisors associated with a specific manager, who is referenced by req.user.id
 // will need to do a full join with the feedback_images table to get all associated feedback images
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/supervisors/all', (req, res) => {
-    if (req.isAuthenticated) {
+    if (req.isAuthenticated()) {
         const query = `SELECT DISTINCT "feedback"."supervisor_id", "first_name", "last_name",
                         (SELECT COUNT ("feedback"."quality_id")
                             FROM "feedback"
@@ -102,7 +121,7 @@ router.get('/supervisors/count', (req, res) => {
     }
 })
 router.get('/supervisors/reports', (req, res) => {
-    if(req.isAuthenticated){
+    if(req.isAuthenticated()){
         const supervisor = req.query.id;
         const start = req.query.start;
         const end = req.query.end; 

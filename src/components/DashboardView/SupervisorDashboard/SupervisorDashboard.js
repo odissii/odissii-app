@@ -20,12 +20,10 @@ class SupervisorDashboard extends React.Component {
   }
 
   render(){
-    const {user, feedbackHistory} = this.props;
+    const { feedbackHistory } = this.props;
     return (
       <div>
-        This is the supervisor dashboard.
-        {/* {JSON.stringify(user)} */}
-        {/* {JSON.stringify(feedbackHistory)} */}
+        <h2>Supervisor Dashboard</h2>
         <div>
           Current Quarter
           <QuarterlySummary data={feedbackHistory} />
