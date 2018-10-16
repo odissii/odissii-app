@@ -3,8 +3,10 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
-
+const moment = require('moment');
 const router = express.Router();
+const Chance = require('chance');
+const chance = new Chance();
 
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -56,7 +58,23 @@ router.post('/register', (req, res, next) => {
 router.post('/login', userStrategy.authenticate('local'), (req, res) => {
   res.sendStatus(200);
 });
+router.put('/resetpassword', (req, res) => {
+  const username = req.body.email; // e-mail from the form
+  const token = chance.hash(); // Create a unique token
+  const today = req.body.today; 
+  const expiration = moment(today).add(48, 'hours').format();
+  console.log(expiration);
+  // TODO: Include an expiration 48 hours in the future
+  let queryText = `UPDATE "person" SET "token" = $1 WHERE "username" = $2;`;
+  pool.query(queryText, [token, username]).then((result) => {
+    console.log(`http://localhost:3000/register/${token}`); // TODO: Node mailer goes here && remove this line of code!!!!
+    res.sendStatus(200);
+  }).catch((error) => {
+    console.log(error);
+    res.sendStatus(500);
+  });
 
+})
 // clear all server session information about this user
 router.get('/logout', (req, res) => {
   // Use passport's built-in method to log out the user

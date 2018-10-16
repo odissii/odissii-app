@@ -23,7 +23,7 @@ import InfoPage from './components/InfoPage/InfoPage';
 import EditSupervisor from './components/EditPerson/EditSupervisor'; 
 import EditEmployee from './components/EditPerson/EditEmployee'; 
 import SupervisorDetailView from './components/SupervisorDetailView/SupervisorDetailView';
-
+import ResetPassword from './components/ResetPassword/ResetPassword'; 
 import './styles/main.css';
 
 const App = () => (
@@ -79,6 +79,10 @@ const App = () => (
         <Route
           path="/info"
           component={InfoPage}
+        />
+        <Route
+          path="/reset/password"
+          component={ResetPassword}
         />
         <Route 
           path="/view/supervisor/:personId"
