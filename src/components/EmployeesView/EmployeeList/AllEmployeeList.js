@@ -4,6 +4,7 @@ import { Grid, Avatar, IconButton, Table, TableHead, TableCell, TableBody, Table
 import { USER_ROLES } from '../../../constants';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
 import Edit from '@material-ui/icons/Edit';
+import orderBy from 'lodash/orderBy';
 
 const moment = require('moment');
 
@@ -13,6 +14,7 @@ const mapStateToProps = state => ({
     employees: state.people.staff.supervisorEmployees,
     search: state.search,
     filter: state.filter,
+    sort: state.sort,
 })
 
 const styles = {
@@ -25,7 +27,19 @@ const styles = {
     }
 }
 
+const invertDirection = {
+    asc: 'desc',
+    desc: 'asc'
+}
+
 class AllEmployeeList extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            columnToSort: '',
+            sortDirection: 'desc',
+        }
+    }
 
     componentDidMount() {
         this.getEmployees();
@@ -53,20 +67,29 @@ class AllEmployeeList extends React.Component {
 
     }
 
+    handleSort = columnName => {
+        this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName});
+        
+        let direction = this.props.sort.column === columnName ? invertDirection[this.props.sort.direction] : 'desc';
+        this.props.dispatch({type: 'ADD_SORT_DIRECTION', payload: direction });
+    }
+
     render() {
         let content = null;
+        let data = orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
+        
         if (this.props.user.role === USER_ROLES.MANAGER) {
-            let filteredEmployees = this.props.people.filter(
+            let filteredEmployees = data.filter(
                 (employee) => {
                     return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
                 }
             )
             content = (
                 <Table style={styles.table}>
-                    <TableHead>
+                    <TableHead>  
                         <TableRow>
-                            <TableCell style={styles.tableCell}>Employee Name</TableCell>
-                            <TableCell style={styles.tableCell}>Last&nbsp;Feedback</TableCell>
+                            <TableCell style={styles.tableCell} onClick={() => this.handleSort('last_name')}>Employee Name</TableCell>
+                            <TableCell style={styles.tableCell} onClick={() => this.handleSort('recent')}>Last&nbsp;Feedback</TableCell>
                             <TableCell style={styles.tableCell}>Edit</TableCell>
                         </TableRow>
                     </TableHead>
@@ -91,6 +114,7 @@ class AllEmployeeList extends React.Component {
                         })}
                     </TableBody>
                 </Table>
+        
             );
         }
         return (

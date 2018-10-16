@@ -15,7 +15,6 @@ class SupervisorEmployees extends React.Component {
     return (
       <div>
         <EmployeeAppBar />
-        <EmployeeFilter />
         <EmployeeList />
       </div>
     );

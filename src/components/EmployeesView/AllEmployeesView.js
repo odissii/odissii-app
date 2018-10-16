@@ -33,7 +33,6 @@ class SupervisorEmployees extends React.Component {
             allEmployees = (
                 <div>
                     <EmployeeAppBar />
-                    <EmployeeFilter />
                     <Divider />
                     <AllEmployeeList />
                 </div>
