@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import axios from 'axios'; 
-import {FormControl, FormLabel, Input, Button, Checkbox} from '@material-ui/core';
+import {FormControl, FormLabel, Input, Button} from '@material-ui/core';
 import './editperson.css';
 import swal from 'sweetalert'; 
 import {connect} from 'react-redux'; 
+import {PEOPLE_ACTIONS} from '../../../redux/actions/userActions';
 
 class EditSupervisor extends Component {
     constructor(props){
@@ -35,44 +36,19 @@ class EditSupervisor extends Component {
               console.log('Error getting supervisor', error); 
           });
       }; 
-      deletePerson = () => {
-        console.log('deleting person');
-        swal({
-            title: `Are you sure you want to delete ${this.state.first_name} ${this.state.last_name}?`,
-            text: "This action cannot be undone.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-          })
-          .then((willDelete) => {
-            if (willDelete) {
-                axios.delete(`/api/staff/supervisor?id=${this.state.id}`)
-                .then((response) => {
-                    swal(`${this.state.first_name} ${this.state.last_name} removed`);
-                    this.props.history.push('/dashboard');
-                }).catch((error) =>{
-                    console.log('Error deleting person', error);
-                })
-            }
-          });   
-        }
         editPerson = () => {
             axios({
                 method: 'PUT',
                 url: '/api/staff/supervisor',
                 data: this.state
             }).then((response) => {
-                if(this.state.remove === true){
-                    this.deletePerson();
-                } else {
                     swal('Success!', `${this.state.first_name} ${this.state.last_name} edited`, 'success');
+                    this.props.dispatch({type: PEOPLE_ACTIONS.FETCH_SUPERVISORS})
                     this.props.history.push('/dashboard'); 
-                }
             }).catch((error) => {
                 swal('Warning', `Something went wrong editing ${this.state.first_name} ${this.state.last_name}. Please try again in a few minutes`);
                 console.log('Cannot update supervisor', error);
-            })
-            // this.props.dispatch({type: 'UPDATE_SUPERVISOR', payload: this.state});
+            }
           }
         handleChangefor = (event, property) => {
             this.setState({
