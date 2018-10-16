@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, IconButton, Button } from '@material-ui/core'; 
+import { Grid, IconButton, Button, Typography} from '@material-ui/core'; 
 import { Edit } from '@material-ui/icons';
 import IndividualManagerGraph from './Graphs/IndividualManagerGraph';
 import ManagerOverviewGraph from './Graphs/ManagerOverviewGraph'; 
@@ -107,14 +107,14 @@ class ManagerDashboard extends React.Component {
       <div className="padding-bottom">
         <Grid container spacing={0}>
         <Grid item xs={12}>
-          <h1>Manager's Dashboard</h1>
-            <p className="center">Feedback given past 12 months</p>
+          <Typography variant="display1" className="center">{this.props.user.first_name}'s Dashboard</Typography>
+            <Typography variant="subheading" className="center">Feedback given past 12 months</Typography>
             </Grid>
             <Grid item xs={12}>
               <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct}/> 
             </Grid>
           <Grid item xs={12}>
-              <h2 className="center">All Supervisors</h2>
+              <Typography variant="headline" className="center">All Supervisors</Typography>
           </Grid>
                 {this.props.feedback.map((array, i) => {
                         return(
@@ -124,10 +124,10 @@ class ManagerDashboard extends React.Component {
                               <Grid item xs={12} lg={8} key={j}>
                               <div className="card-container">
                                 <div className="card">
-                                      <h3>{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></h3>
+                                      <Typography variant="headline">{feedback.first_name} {feedback.last_name} <IconButton onClick={()=> this.editPerson(feedback.sid)}><Edit/></IconButton></Typography>
                                       <Button color ="primary" onClick={()=>this.props.history.push(`/view/supervisor/${feedback.sid}`)}>Summary</Button>
                                       <Button color ="primary" onClick={()=>this.props.history.push('/employees')}>Employees</Button>
-                                       <p>Feedback given past 12 months</p>
+                                       <Typography>Feedback given past 12 months</Typography>
                                         <IndividualManagerGraph feedback={feedback}/> 
                                         {this.props.detailedFeedback[feedback.sid] && <CSVLink data={this.props.detailedFeedback[feedback.sid]}
                                           filename={`${feedback.last_name}-feedback.csv`}

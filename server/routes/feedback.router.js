@@ -75,13 +75,13 @@ router.get('/supervisors/count', (req, res) => {
         const query = `SELECT DISTINCT "person"."first_name", "person"."last_name", "feedback"."supervisor_id" as "sid",
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback"
-                                WHERE "feedback"."quality_id" = 2 AND "feedback"."supervisor_id" = 396 ) as instruct,
+                                WHERE "feedback"."quality_id" = 2 AND "feedback"."supervisor_id" = $1 ) as instruct,
                                 (SELECT COUNT ("feedback"."quality_id") 
                                 FROM "feedback" 
-                                WHERE "feedback"."quality_id" = 3 AND "feedback"."supervisor_id" = 396 ) as correct,
+                                WHERE "feedback"."quality_id" = 3 AND "feedback"."supervisor_id" = $1 ) as correct,
                                 (SELECT COUNT ("feedback"."quality_id")
                                 FROM "feedback" 
-                                WHERE "feedback"."quality_id" = 1 AND "feedback"."supervisor_id" = 396 ) as praise
+                                WHERE "feedback"."quality_id" = 1 AND "feedback"."supervisor_id" = $1 ) as praise
                         FROM "feedback" 
                         JOIN "quality_types" 
                         ON "quality_types"."id" = "feedback"."quality_id"
