@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Input, Button, Typography} from '@material-ui/core'; 
 import axios from 'axios';
 import './resetpassword.css'; 
+import swal from 'sweetalert'; 
+import moment from 'moment';
 
 class ResetPassword extends Component {
     constructor(props) {
@@ -15,27 +17,31 @@ class ResetPassword extends Component {
         })
     }
     handleSubmit = () => {
-        const today = new Date.now(); 
+        let today = Date.now();
+        today = moment(today).format();
         axios({
             method: 'PUT',
-            url: '/api/user/resetpassword',
+            url: '/api/user/createtoken',
             data: {email: this.state.email, today: today}
         }).then((response) => {
-            alert('Please check your e-mail! (including your spam folder)');
+            swal('Please check your e-mail! (including your spam folder)');
+            //send an email with nodemailer that includes the token 
             this.props.history.push('/home'); 
         }).catch((error) => {
             console.log(error);
-            alert('Something went wrong');
+            swal('Something went wrong');
         });
     }
     render(){
         return(
-            <div className="reset-form">
+        <div>
             <Typography variant="headline">Reset Password</Typography>
+            <div className="reset-form">
             <Typography>Enter the email address associated with this account.</Typography>
                 <Input onChange={this.handleChange} />
                 <Button onClick={this.handleSubmit}>Submit</Button>
             </div>
+        </div>
         );
     }
 }

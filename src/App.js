@@ -24,6 +24,7 @@ import EditSupervisor from './components/EditPerson/EditSupervisor';
 import EditEmployee from './components/EditPerson/EditEmployee'; 
 import SupervisorDetailView from './components/SupervisorDetailView/SupervisorDetailView';
 import ResetPassword from './components/ResetPassword/ResetPassword'; 
+import NewPassword from './components/ResetPassword/NewPassword/NewPassword';
 import './styles/main.css';
 
 const App = () => (
@@ -81,7 +82,7 @@ const App = () => (
           component={InfoPage}
         />
         <Route
-          path="/reset/password"
+          exact path="/reset/password"
           component={ResetPassword}
         />
         <Route 
@@ -94,6 +95,9 @@ const App = () => (
        <Route 
         path="/edit/employee/:personId" 
         component={EditEmployee}/>
+         <Route 
+        exact path="/reset/password/:token" 
+        component={NewPassword}/>
       <Route render={() => <h1>404</h1>} />
       </Switch>
     </Router>
