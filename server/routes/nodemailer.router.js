@@ -3,6 +3,10 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 
 router.post('/nodemailer/password', (req, res) => {
+    make
+
+
+
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -36,12 +40,6 @@ router.post('/nodemailer/password', (req, res) => {
             console.log("info.response: " + info.response);
         }
         transporter.close();
-    })
-    .then((response) => {
-        res.sendStatus(201);
-    }).catch((error) => {
-        console.log('nodmailer- password reset failed', error);
-        res.sendStatus(500);
     });
 })
 
