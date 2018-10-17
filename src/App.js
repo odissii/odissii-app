@@ -22,8 +22,8 @@ import UserPage from './components/UserPage/UserPage';
 import InfoPage from './components/InfoPage/InfoPage';
 import EditSupervisor from './components/EditPerson/EditSupervisor'; 
 import EditEmployee from './components/EditPerson/EditEmployee'; 
+import AddPerson from './components/AddPerson/AddPerson'; 
 import SupervisorDetailView from './components/SupervisorDetailView/SupervisorDetailView';
-
 import './styles/main.css';
 
 const App = () => (
@@ -77,8 +77,8 @@ const App = () => (
           component={UserPage}
         />
         <Route
-          path="/info"
-          component={InfoPage}
+          path="/addperson"
+          component={AddPerson}
         />
         <Route 
           path="/view/supervisor/:personId"
