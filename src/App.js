@@ -30,7 +30,7 @@ import './styles/main.css';
 
 const App = () => (
   <GridContainer>
-    <Header title="Project Base" />
+    {/* <Header title="Project Base" /> */}
     <Router>
       <Switch>
         <Redirect exact from="/" to="/home" />

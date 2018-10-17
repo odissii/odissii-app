@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
+import AppBar from './AppBar/AppBar'
 import Nav from '../../components/Nav/Nav';
-
 import { USER_ACTIONS } from '../../redux/actions/userActions';
-
 import SupervisorDashboard from './SupervisorDashboard/SupervisorDashboard';
 import ManagerDashboard from './ManagerDashboard/ManagerDashboard';
-
 import { USER_ROLES } from '../../constants';
 
 const mapStateToProps = state => ({
@@ -37,10 +34,11 @@ class DashboardView extends React.Component {
 
     return (
       <div>
-        <Nav />
+        <AppBar />
         <div>
           {userDashboard}
         </div>
+        <Nav/>
       </div>
       
     )

@@ -8,9 +8,9 @@ import { USER_ACTIONS } from '../../../redux/actions/userActions';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions'; 
 import { FEEDBACK_ACTIONS } from '../../../redux/actions/feedbackActions';
 import axios from 'axios';
-import './ManagerDashboard.css';
 import {CSVLink} from 'react-csv';
 import moment from 'moment';
+import './ManagerDashboard.css';
 
 const mapStateToProps = state => ({
   user: state.user,
