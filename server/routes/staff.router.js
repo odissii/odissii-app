@@ -1,7 +1,7 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
-
+const encryptLib = require('../modules/encryption');
 /**
  * GET routes
  */
@@ -40,7 +40,7 @@ router.get('/supervisor/profile', (req, res) => {
 router.get('/employee/profile', (req, res) => {
     if(req.isAuthenticated){
         const employee = req.query.id;
-        const query = `SELECT "employee"."id", "first_name", "last_name", "employee"."employeeId", "image_path", "inactive", "supervisor_id"."supervisor_employee" FROM "employee" JOIN "supervisor_employee" ON "employee_id" = "supervisor_employee"."employee_id" WHERE "employee"."id" = $1;`;
+        const query = `SELECT "employee"."id", "first_name", "last_name", "employee"."employeeId", "image_path", "inactive", "supervisor_employee"."supervisor_id" FROM "employee" JOIN "supervisor_employee" ON "employee_id" = "supervisor_employee"."employee_id" WHERE "employee"."id" = $1;`;
         pool.query(query, [employee]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
@@ -106,6 +106,7 @@ router.post('/employee', (req, res) => {
     try {
         await client.query('BEGIN');     
         const employee = req.body;
+        console.log(req.body);
         let query = `INSERT INTO "employee" ("employeeId", "first_name", "last_name", "image_path") VALUES ($1, $2, $3, $4) RETURNING "id";`;
         let values = [employee.employeeId, employee.first_name, employee.last_name, employee.image_path];
         let result = await client.query(query, values);
@@ -160,7 +161,7 @@ router.post('/register/supervisor', (req, res) => {
           let values = [ username, password, employeeId, first_name, last_name, email_address,role_id];
           const supervisorResult = await client.query(query, values);
           const supervisorId = supervisorResult.rows[0].id;
-          query = `INSERT INTO "supervisor_manager" ("supervisor_id", "manager_id");`;
+          query = `INSERT INTO "supervisor_manager" ("supervisor_id", "manager_id") VALUES ($1, $2);`;
           const result = await client.query(query, [supervisorId, req.user.id]);
           await client.query('COMMIT');
           res.sendStatus(201); 
@@ -186,17 +187,35 @@ router.post('/register/supervisor', (req, res) => {
 // edits an employee's record 
 router.put('/employee', (req, res) => {
     if (req.isAuthenticated){
+        console.log('editing employee', req.body);
+        ( async()=> {
+            const client = await pool.connect();
+            try {
+                await client.query('BEGIN'); 
         const detailsToEdit = req.body; 
-        const query = `UPDATE "employee" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "image_path" = $4, "inactive" = $5, "supervisor_id" = $6 WHERE "id" = $7;`;
-        pool.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employee_ID, detailsToEdit.image_path, detailsToEdit.inactive, detailsToEdit.supervisor_id, detailsToEdit.id]).then((results)=>{
-            res.sendStatus(200);
-        }).catch((error) => {
-            console.log('Error updating employee', error);
-            res.sendStatus(500);
-        })
-    } else { 
-        res.sendStatus(403);
-    }
+        console.log('req.body', detailsToEdit)
+        let query = `UPDATE "employee" SET "first_name" = $1, "last_name" = $2, "employeeId" = $3, "image_path" = $4, "inactive" = $5 WHERE "id" = $6;`;
+        console.log('query', query);
+        const editResult = await client.query(query, [detailsToEdit.first_name, detailsToEdit.last_name, detailsToEdit.employeeId, detailsToEdit.image_path, detailsToEdit.inactive, detailsToEdit.id]);
+        query = `UPDATE "supervisor_employee" SET "supervisor_id" = $1 WHERE "employee_id" = $2;`;
+        const updateSupervisor = await client.query(query, [req.body.supervisor_id, req.body.employeeId]);
+        await client.query('COMMIT');
+        res.sendStatus(201); 
+  } catch(error){
+      console.log('ROLLBACK', error);
+      await client.query('ROLLBACK');
+      throw error;
+  } finally {
+      client.release;
+      console.log('release'); 
+  }
+}) ().catch((error) => {
+  console.log('CATCH', error);
+  res.sendStatus(500);
+});
+} else {
+  res.sendStatus(403);
+}
 });
 // edits a supervisor's record in person table 
 router.put('/supervisor', (req, res) => {

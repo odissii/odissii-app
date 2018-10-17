@@ -50,7 +50,7 @@ function* deleteEmployee(action){
 function* updateEmployee(action){
     try {
         yield call(axios.put, '/api/staff/employee', action.payload);
-        yield put(swal('Success!', 'Employee edited', 'success')); 
+        // yield put(swal('Success!', 'Employee edited', 'success')); 
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
     } catch(error){
         console.log('Cannot update employee', error);
