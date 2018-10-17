@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { PEOPLE_ACTIONS } from '../actions/peopleActions';
 import axios from 'axios'; 
-
+import swal from 'sweetalert';
 // fetch all employees belonging to a supervisor
 // function* fetchEmployees(){
 
@@ -29,6 +29,7 @@ function* fetchAllEmployees(){
 function* addEmployee(action){
     try {
         yield call(axios.post, '/api/staff/employee', action.payload);
+        yield put (swal(`${action.payload.first_name} ${action.payload.last_name} created!`));
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
     } catch(error){
         console.log('Cannot add new employee', error);  
@@ -38,7 +39,7 @@ function* addEmployee(action){
 //will be called to delete an employee & then it'll fetch all the employees
 function* deleteEmployee(action){
     try {
-        yield call(axios.delete, '/api/staff/employee', action.payload);
+        yield call(axios.delete, `/api/staff/employee?id=${action.payload}`);
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
     } catch(error){
         console.log('Cannot delete employee', error);
@@ -49,6 +50,7 @@ function* deleteEmployee(action){
 function* updateEmployee(action){
     try {
         yield call(axios.put, '/api/staff/employee', action.payload);
+        yield put(swal('Success!', 'Employee edited', 'success')); 
         yield put({type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES});
     } catch(error){
         console.log('Cannot update employee', error);

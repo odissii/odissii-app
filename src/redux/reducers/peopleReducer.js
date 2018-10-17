@@ -14,7 +14,7 @@ const staff = (state = peopleType, action) => {
         return {...state, supervisorEmployees: action.payload};
     } else if (action.type === PEOPLE_ACTIONS.SET_ALL_EMPLOYEES) {
         return {...state, allEmployees: action.payload}
-    }
+    } 
     return state;
 };
 

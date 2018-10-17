@@ -31,6 +31,7 @@ app.use('/api/feedback', feedbackRouter);
 app.use('/api/followup', followupRouter);
 app.use('/api/staff', staffRouter);
 app.use('/api/nodemailer', nodemailerRouter);
+app.use('/api/quality', qualityRouter);
 
 // Serve static files
 app.use(express.static('build'));
