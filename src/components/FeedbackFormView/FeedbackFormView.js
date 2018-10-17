@@ -174,9 +174,6 @@ class FeedbackFormView extends React.Component {
                 {this.props.quality_types.map(quality => (
                   <FormControlLabel key={quality.id} value={quality.id.toString()} label={quality.name} control={<Radio />}/>
                 ))}
-                {/* <FormControlLabel value="praise" label="Praise" control={<Radio />}/>
-                <FormControlLabel value="instruct" label="Instruct" control={<Radio />}/>
-                <FormControlLabel value="correct" label="Correct" control={<Radio />}/> */}
               </RadioGroup>
             </FormControl>
             <FormControl>
