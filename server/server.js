@@ -12,7 +12,10 @@ const userRouter = require('./routes/user.router');
 const feedbackRouter = require('./routes/feedback.router');
 const followupRouter = require('./routes/followup.router');
 const staffRouter = require('./routes/staff.router'); 
+const nodemailerRouter = require('./routes/nodemailer.router');
 const qualityRouter = require('./routes/quality.router');
+
+
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
