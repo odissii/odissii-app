@@ -34,7 +34,9 @@ input {
 input[type="submit"] {
     margin: 10px;
 }
-
+.label-spacing{
+    margin-right: 1vw; 
+}
 .message {
     padding: 10px 0;
 }
