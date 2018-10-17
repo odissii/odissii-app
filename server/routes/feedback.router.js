@@ -31,6 +31,8 @@ router.get('/detail/:feedbackId', (req, res) => {
               "feedback"."employee_id",
               "feedback"."date_created",
               "feedback"."quality_id",
+              "feedback"."task_related",
+              "feedback"."culture_related",
               "feedback"."details",
               "feedback"."date_edited",
               "employee"."employeeId",
@@ -60,6 +62,8 @@ router.get('/detail/:feedbackId', (req, res) => {
               "feedback"."employee_id",
               "feedback"."date_created",
               "feedback"."quality_id",
+              "feedback"."task_related",
+              "feedback"."culture_related",
               "feedback"."details",
               "feedback"."date_edited",
               "employee"."employeeId",
@@ -382,6 +386,10 @@ router.post('/images', (req, res) => {
  */
 // edits a feedback record 
 router.put('/', (req, res) => {
-
+  if (req.isAuthenticated()) {
+    const feedback = req.body
+  } else {
+    res.sendStatus(401);
+  }
 });
 module.exports = router;

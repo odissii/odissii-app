@@ -98,7 +98,7 @@ class FeedbackFormView extends React.Component {
       });
     }
 
-    console.log(formField, event.target.value);
+    // console.log(formField, event.target.value);
   };
 
   handleFormSubmit = event => {

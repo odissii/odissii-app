@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
+import _ from 'lodash';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
@@ -21,6 +22,8 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 
+const booleanFields = ['task_related', 'culture_related', 'followUpNeeded'];
+
 const mapStateToProps = state => ({
   user: state.user,
   quality_types: state.quality_types,
@@ -32,12 +35,7 @@ class FeedbackDetailView extends React.Component {
     super(props);
     this.state = {
       originalFeedback: null,
-      quality_id: null,
-      task_related: false,
-      culture_related: false,
-      details: '',
-      followUpNeeded: false,
-      follow_up_date: null,
+      formFields: null,
     };
   }
 
@@ -54,20 +52,15 @@ class FeedbackDetailView extends React.Component {
     if (!user.isLoading && user.userName === null) {
       history.push('/home');
     } else if (!user.isLoading && user.userName) {
-      if (!this.state.feedback) {
+      if (!this.state.originalFeedback) {
         console.log('axios request')
         axios.get(`/api/feedback/detail/${this.props.match.params.feedbackId}`)
         .then(response => {
           const data = response.data;
+          data.quality_id = data.quality_id.toString();
           this.setState({
             originalFeedback: data,
-            formFields: {
-              quality_id: data.quality_id,
-              task_related: data.task_related,
-              culture_related: data.culture_related,
-              details: data.details,
-              // follow_up_date: data.follow_up_date,
-            }
+            formFields: {...data}
           });
         }).catch(error => {
           console.log(`/api/feedback/detail/${this.props.match.params.feedbackId} GET request error:`, error);
@@ -78,7 +71,41 @@ class FeedbackDetailView extends React.Component {
 
   getQualityName = qualityId => this.props.quality_types.find(type => type.id === qualityId);
 
-  // handleInputChange = 
+  handleInputChange = fieldName => event => {
+    if (booleanFields.includes(fieldName)) {
+      this.setState({
+        formFields: {
+          ...this.state.formFields,
+          [fieldName]: !this.state.formFields[fieldName]
+        }
+      });
+    } else {
+      this.setState({
+        formFields: {
+          ...this.state.formFields,
+          [fieldName]: String(event.target.value)
+        }
+      });
+    }
+    console.log(fieldName, event.target.value);
+  };
+
+  abandonChanges = () => {
+    this.setState({
+      formFields: {...this.state.originalFeedback}
+    });
+  };
+
+  handleFormSubmit = () => {
+    axios.put('/api/feedback', this.state.formFields)
+    .then(response => {
+      this.setState({
+        originalFeedback: {...this.state.formFields}
+      });
+    }).catch(error => {
+      console.log('/api/feedback PUT error:', error);
+    });
+  };
 
   render() {
     const { originalFeedback, formFields } = this.state;
@@ -108,26 +135,39 @@ class FeedbackDetailView extends React.Component {
           <FormControl>
             <FormLabel>This feedback is:</FormLabel>
             <FormGroup>
-                <FormControlLabel 
-                  control={
-                    <Switch 
-                      checked={formFields.task_related}
-                      onChange={this.handleInputChange('task_related')}
-                    />
-                  }
-                  label="Task-Related"
-                />
-                <FormControlLabel 
-                  control={
-                    <Switch 
-                      checked={formFields.culture_related}
-                      onChange={this.handleInputChange('culture_related')}
-                    />
-                  }
-                  label="Culture-Related"
-                />
-              </FormGroup>
+              <FormControlLabel 
+                control={
+                  <Switch 
+                    checked={formFields.task_related}
+                    onChange={this.handleInputChange('task_related')}
+                  />
+                }
+                label="Task-Related"
+              />
+              <FormControlLabel 
+                control={
+                  <Switch 
+                    checked={formFields.culture_related}
+                    onChange={this.handleInputChange('culture_related')}
+                  />
+                }
+                label="Culture-Related"
+              />
+            </FormGroup>
           </FormControl>
+          <TextField required
+            label="Feedback Details"
+            placeholder="Type or dictate feedback details"
+            value={formFields.details}
+            onChange={this.handleInputChange('details')}
+            multiline
+          />
+          {!_.isEqual(originalFeedback, formFields) && 
+            <div>
+              <Button onClick={this.abandonChanges}>Cancel</Button>
+              <Button type="submit" color="primary" variant="contained">Save</Button>
+            </div>
+          }
         </form>
       );
     } else {
