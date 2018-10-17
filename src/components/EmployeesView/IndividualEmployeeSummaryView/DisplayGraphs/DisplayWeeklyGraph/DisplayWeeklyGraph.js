@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
     quality_types: state.quality_types
 });
 
-const lastFourWeeksOnly = feedback => moment(feedback.date_created).isAfter(moment().subtract(4, 'weeks').startOf('isoWeek'));
+const lastFourWeeksOnly = feedback => moment(feedback.date_created).isSameOrAfter(moment().subtract(4, 'weeks').startOf('isoWeek'));
 
 const getIdForQuality = (types, name) => types.find(type => type.name === name).id;
 
@@ -28,13 +28,13 @@ const totalsByWeek = (feedback, quality_types) => {
 
     return feedback.reduce((summary, entry) => {
         const date =  moment(entry.date_created);
-        if (date.isBetween(weekFourStart, weekThreeStart)) {
+        if (date.isBetween(weekFourStart, weekThreeStart, null, '[)')) {
             summary.fourWeeksAgo[entry.id] += 1;
-        } else if (date.isBetween(weekThreeStart, weekTwoStart)) {
+        } else if (date.isBetween(weekThreeStart, weekTwoStart, null, '[)')) {
             summary.threeWeeksAgo[entry.id] += 1;
-        } else if (date.isBetween(weekTwoStart, weekOneStart)) {
+        } else if (date.isBetween(weekTwoStart, weekOneStart, null, '[)')) {
             summary.twoWeeksAgo[entry.id] += 1;
-        } else if (date.isBetween(weekOneStart, thisWeekStart)) {
+        } else if (date.isBetween(weekOneStart, thisWeekStart, null, '[)')) {
             summary.oneWeekAgo[entry.id] += 1;
         }
         return summary;
@@ -102,10 +102,8 @@ class DisplayWeeklyGraph extends Component {
         }
         return (
             <div>
-                {/* {JSON.stringify(this.props.data)}
                 {JSON.stringify(fourWeeksFeedback)}
-                {JSON.stringify(quality_types)}
-                {JSON.stringify(weeklyQualityTotals)} */}
+                {JSON.stringify(weeklyQualityTotals)}
                 <Bar
                     data={barData}
                     options={options}
