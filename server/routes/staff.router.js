@@ -54,7 +54,10 @@ router.get('/employee/profile', (req, res) => {
 // get all employees associated with a supervisor
 router.get('/employees/:id', (req, res) => {
     if (req.isAuthenticated()) {
-        const query = `SELECT DISTINCT  ON ("employee"."id") "employee"."id", "employee"."employeeId", "employee"."first_name", "employee"."last_name", "employee"."image_path", "supervisor_employee"."supervisor_id", "feedback"."date_created"  as recent FROM "feedback" 
+        const query = `SELECT DISTINCT  ON ("employee"."id") "employee"."id", "employee"."employeeId", "employee"."first_name", 
+        "employee"."last_name", "employee"."image_path", "supervisor_employee"."supervisor_id",  
+        "employee"."id" IN (SELECT "employee_id" FROM "follow_up" WHERE "completed" = false) as incomplete, "feedback"."date_created"  as recent 
+        FROM "feedback" 
         RIGHT JOIN "employee" ON "employee"."id" = "feedback"."employee_id"  
         LEFT JOIN "follow_up" ON "employee"."id" = "follow_up"."employee_id"
         RIGHT JOIN "supervisor_employee" ON "supervisor_employee"."employee_id" = "employee"."id"
@@ -74,7 +77,9 @@ router.get('/employees/:id', (req, res) => {
 //this is getting all employees that exist
 router.get('/allEmployees', (req, res) => {
     if (req.isAuthenticated()) {
-        const query = `SELECT DISTINCT  ON ("employee"."id") "employee"."id", "employee"."employeeId", "employee"."first_name", "employee"."last_name", "employee"."image_path", "feedback"."date_created"  as recent FROM "feedback" 
+        const query = `SELECT DISTINCT  ON ("employee"."id") "employee"."id", "employee"."employeeId", "employee"."first_name", 
+        "employee"."last_name", "employee"."image_path", "feedback"."date_created"  as recent 
+        FROM "feedback" 
         RIGHT JOIN "employee" ON "employee"."id" = "feedback"."employee_id"  
         LEFT JOIN "follow_up" ON "employee"."id" = "follow_up"."employee_id"
         ORDER BY  "employee"."id"ASC, recent DESC;`;
