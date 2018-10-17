@@ -150,7 +150,7 @@ router.get('/supervisors/reports', (req, res) => {
 // should set a limit of responses
 router.get('/employee', (req, res) => {
     console.log('in GET /employee');
-    const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."name", "details"
+    const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."id", "details"
                                 FROM "feedback" 
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
@@ -180,7 +180,7 @@ router.get('/employeeFeedbackCount/1', (req, res) => {
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
                                 WHERE "employee"."id" = 1
-                                GROUP BY "employee"."id", "quality_types"."name";;`;
+                                GROUP BY "employee"."id", "quality_types"."name";`;
     pool.query(empFeedbackCntQuery)
         .then(result => res.send(result.rows))
         .catch(error => {
@@ -190,15 +190,14 @@ router.get('/employeeFeedbackCount/1', (req, res) => {
 //will get all of the feedback for the past 3-4 weeks count for the specific employee
 router.get('/employeeWeeklyFeedbackCount/1', (req, res) => {
     console.log('in GET /ememployeeWeeklyFeedbackCount');
-    const weeklyFeedbackQuery = `SELECT "date_created", "quality_types"."name"
+    const weeklyFeedbackQuery = `SELECT "date_created", "quality_types"."id"
                                     FROM "feedback" 
-                                    JOIN "quality_types"
-                                    ON "feedback"."quality_id" = "quality_types"."id"
-                                    JOIN "employee"
-                                    ON "feedback"."employee_id" = "employee"."id"
-                                    WHERE "employee_id" = 1 
-                                    AND "date_created" > CURRENT_DATE - INTERVAL '30' DAY
-                                    ORDER BY "date_created" DESC;`;
+                                    RIGHT JOIN "quality_types"
+ON "feedback"."quality_id" = "quality_types"."id"
+JOIN "employee"
+ON "feedback"."employee_id" = "employee"."id"
+WHERE "employee_id" = 1
+ORDER BY "date_created" DESC;`;
     pool.query(weeklyFeedbackQuery)
         .then(result => res.send(result.rows))
         .catch(error => {

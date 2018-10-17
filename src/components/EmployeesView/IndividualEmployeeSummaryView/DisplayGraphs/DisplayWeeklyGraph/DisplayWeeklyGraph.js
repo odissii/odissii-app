@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { QUALITY_ACTIONS } from '../../../../redux/actions/qualityActions';
+import { QUALITY_ACTIONS } from '../../../../../redux/actions/qualityActions';
 //Chart
 import { Bar } from 'react-chartjs-2';
 //Date formatter
@@ -29,13 +29,13 @@ const totalsByWeek = (feedback, quality_types) => {
     return feedback.reduce((summary, entry) => {
         const date =  moment(entry.date_created);
         if (date.isBetween(weekFourStart, weekThreeStart)) {
-            summary.fourWeeksAgo[entry.quality_id] += 1;
+            summary.fourWeeksAgo[entry.id] += 1;
         } else if (date.isBetween(weekThreeStart, weekTwoStart)) {
-            summary.threeWeeksAgo[entry.quality_id] += 1;
+            summary.threeWeeksAgo[entry.id] += 1;
         } else if (date.isBetween(weekTwoStart, weekOneStart)) {
-            summary.twoWeeksAgo[entry.quality_id] += 1;
+            summary.twoWeeksAgo[entry.id] += 1;
         } else if (date.isBetween(weekOneStart, thisWeekStart)) {
-            summary.oneWeekAgo[entry.quality_id] += 1;
+            summary.oneWeekAgo[entry.id] += 1;
         }
         return summary;
     }, ({
@@ -48,9 +48,9 @@ const totalsByWeek = (feedback, quality_types) => {
 
 const namesOfPastFourWeeks = () => ([
     moment().subtract(4, 'weeks').startOf('isoWeek').format('MMM DD'),
-    moment().subtract(4, 'weeks').startOf('isoWeek').format('MMM DD'),
-    moment().subtract(4, 'weeks').startOf('isoWeek').format('MMM DD'),
-    moment().subtract(4, 'weeks').startOf('isoWeek').format('MMM DD'),
+    moment().subtract(3, 'weeks').startOf('isoWeek').format('MMM DD'),
+    moment().subtract(2, 'weeks').startOf('isoWeek').format('MMM DD'),
+    moment().subtract(1, 'weeks').startOf('isoWeek').format('MMM DD'),
 ]);
 
 const qualityByWeek = (totals, qualityId) => Object.values(totals).map(week => week[qualityId]);
@@ -87,29 +87,25 @@ class DisplayWeeklyGraph extends Component {
                 label: 'Praise',
                 data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'Praise')),
                 backgroundColor: '#0f77e6',
-                borderWidth: 1,
-                stack: '1'
             },
             {
                 label: 'Instruct',
                 data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'Instruct')),
                 backgroundColor: '#f17416',
-                borderWidth: 1,
-                stack: '2'
-
             },
             {
                 label: 'Correct',
                 data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'Correct')),
                 backgroundColor: 'lightgrey',
-                borderWidth: 1,
-                stack: '3'
             }],
             labels: weekNames,
         }
         return (
             <div>
-                {JSON.stringify(this.props.data)}
+                {/* {JSON.stringify(this.props.data)}
+                {JSON.stringify(fourWeeksFeedback)}
+                {JSON.stringify(quality_types)}
+                {JSON.stringify(weeklyQualityTotals)} */}
                 <Bar
                     data={barData}
                     options={options}
