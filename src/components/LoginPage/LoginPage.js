@@ -62,7 +62,7 @@ class LoginPage extends Component {
     return (
       <div>
         {this.renderAlert()}
-        <form onSubmit={this.login}>
+        <form>
           <h1>Login</h1>
           <div>
             <label htmlFor="username">
@@ -87,7 +87,7 @@ class LoginPage extends Component {
             </label>
           </div>
           <div>
-            <Button variant="contained">Submit</Button>
+            <Button variant="contained" onClick={this.login}>Submit</Button>
             <Link to="/register">Register</Link><br/>
             <Link to="/reset/password">Forgot Password</Link>
           </div>
