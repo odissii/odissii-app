@@ -18,7 +18,8 @@ const styles = {
 class EditPersonAppBar extends React.Component {
 
     handleClick = (event) => {
-        this.props.history.push('/allEmployees');
+        console.log('in handleClick');
+        this.props.history.push('/dashboard');
     }
     render() {
         return (

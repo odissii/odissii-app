@@ -15,8 +15,6 @@ import './ManagerDashboard.css';
 const mapStateToProps = state => ({
   user: state.user,
   people: state.people,
-  feedback: state.feedback.feedback.feedbackCountsByAllSupervisors,
-  detailedFeedback: state.feedback.feedback.feedbackDetailsByAllSupervisors
 });
 
 class ManagerDashboard extends React.Component {
@@ -26,7 +24,9 @@ class ManagerDashboard extends React.Component {
         sortedSupervisors: [],
         praise: [],
         correct: [],
-        instruct: []
+        instruct: [], 
+        feedbackCounts: [], 
+        reports: {}
       }
   }
   componentWillMount(){
@@ -57,7 +57,9 @@ class ManagerDashboard extends React.Component {
       method: 'GET',
       url: `/api/feedback/supervisors/count?id=${id}&start=${start}&end=${end}`
     }).then((response) => {
-      this.props.dispatch({type: FEEDBACK_ACTIONS.SET_ALL_FEEDBACK_BY_MANAGER_SUPERVISORS, payload: response.data});
+      this.setState({
+          feedbackCounts: [...this.state.feedbackCounts, response.data]
+      })
         this.sortData(response.data); 
       }).catch((error) => {
       console.log('Error getting feedback counts', error); 
@@ -73,7 +75,12 @@ class ManagerDashboard extends React.Component {
       method: 'GET',
       url: `/api/feedback/supervisors/reports?id=${id}&start=${start}&end=${end}`
     }).then((response) => {
-      this.props.dispatch({type: FEEDBACK_ACTIONS.SET_ALL_DETAILED_FEEDBACK_BY_MANAGER_SUPERVISORS, payload: response.data, supervisor: id});
+      this.setState({
+        reports: {
+          ...this.state.reports, 
+          [id]: response.data
+        }
+      })
       }).catch((error) => {
       console.log('Error getting feedback details', error); 
     })
@@ -127,7 +134,7 @@ class ManagerDashboard extends React.Component {
               <Typography variant="headline" className="center">All Supervisors</Typography>
               <br/>
           </Grid>
-                {this.props.feedback.map((array, i) => {
+                {this.state.feedbackCounts.map((array, i) => {
                         return(
                         <div key={i}>
                          {array.map((feedback, j)=> {
@@ -140,7 +147,7 @@ class ManagerDashboard extends React.Component {
                                       <Button color ="primary" onClick={this.navToEmployees}>Employees</Button>
                                        <Typography>Feedback given past 12 months</Typography>
                                         <IndividualManagerGraph feedback={feedback}/> 
-                                        {this.props.detailedFeedback[feedback.sid] && <CSVLink data={this.props.detailedFeedback[feedback.sid]}
+                                        {this.state.reports[feedback.sid] && <CSVLink data={this.state.reports[feedback.sid]}
                                           filename={`${feedback.last_name}-feedback.csv`}
                                           target="_blank"
                                         >Download CSV</CSVLink>}

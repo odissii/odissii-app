@@ -35,11 +35,12 @@ class ResetPassword extends Component {
     render(){
         return(
         <div>
-            <Typography variant="headline">Reset Password</Typography>
             <div className="reset-form">
+            <Typography variant="headline">Reset Password</Typography>
             <Typography>Enter the email address associated with this account.</Typography>
                 <Input onChange={this.handleChange} />
                 <Button onClick={this.handleSubmit}>Submit</Button>
+                <Button onClick={()=>this.props.history.push('/home')}>Cancel</Button>
             </div>
         </div>
         );

@@ -4,6 +4,7 @@ import axios from 'axios';
 import {FormControl, Input, Button, FormLabel, NativeSelect, Typography} from '@material-ui/core';
 import './addperson.css'; 
 import {connect} from 'react-redux'; 
+import AppBar from '../EditPerson/EditPersonAppBar/EditSupervisorAppBar.js';
 
 const mapStateToProps = state => ({
   supervisor: state.people.staff.supervisors
@@ -26,6 +27,11 @@ class AddPerson extends Component {
   }
   componentDidMount(){
     this.props.dispatch({type: 'FETCH_SUPERVISORS'});
+  }
+  componentDidUpdate() {
+    if (!this.props.user.isLoading && this.props.user.userName === null) {
+      this.props.history.push('/home');
+    }
   }
   createEmployee = () => {
     this.props.dispatch({type: 'ADD_EMPLOYEE', payload: this.state});
@@ -90,6 +96,7 @@ class AddPerson extends Component {
   render() {
     return (
         <div>
+          <AppBar/>
             <div className="center">
             <Typography variant="display1">Add Staff</Typography>
             <br/>

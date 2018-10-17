@@ -5,7 +5,7 @@ import './editperson.css';
 import swal from 'sweetalert'; 
 import {connect} from 'react-redux'; 
 import { PEOPLE_ACTIONS } from '../../redux/actions/peopleActions';
-
+import AppBar from './EditPersonAppBar/EditSupervisorAppBar'; 
 class EditSupervisor extends Component {
     constructor(props){
         super(props);
@@ -58,6 +58,8 @@ class EditSupervisor extends Component {
         }
     render(){
         return(
+            <div>
+                <AppBar/>
             <div className="edit-person-form">
             <h1>Edit Supervisor</h1>
                 <FormControl>
@@ -76,6 +78,7 @@ class EditSupervisor extends Component {
                     <Button onClick={()=>this.props.history.push('/dashboard')}>Cancel</Button>
                 </FormControl>
             </div>
+        </div>
         );
     }
 }
