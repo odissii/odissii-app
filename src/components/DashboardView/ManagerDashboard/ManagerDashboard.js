@@ -57,9 +57,20 @@ class ManagerDashboard extends React.Component {
       method: 'GET',
       url: `/api/feedback/supervisors/count?id=${id}&start=${start}&end=${end}`
     }).then((response) => {
-      this.setState({
-          feedbackCounts: [...this.state.feedbackCounts, response.data]
-      })
+      let feedback = [...this.state.feedbackCounts, response.data];
+      console.log(feedback);
+      feedback.sort(function(a, b){
+        let nameA = a[0].last_name;
+        let nameB = b[0].last_name;
+        console.log('a', nameA, 'b', nameB);
+        if(nameA < nameB) return -1;
+        if(nameA > nameB) return 1;
+        console.log(feedback); 
+        return 0;
+    });
+    this.setState({
+      feedbackCounts: feedback
+    })
         this.sortData(response.data); 
       }).catch((error) => {
       console.log('Error getting feedback counts', error); 
@@ -103,11 +114,23 @@ class ManagerDashboard extends React.Component {
     this.props.history.push('/employees');
   }
   sortSupervisors = (array) => {
+    let sortedSupervisors = [];
     for(let i = 0; i < array.length; i++){
-      this.setState({
-        sortedSupervisors: [...this.state.sortedSupervisors, array[i].first_name + ' ' + array[i].last_name]
-      })
+     sortedSupervisors.push(array[i].first_name + ' ' + array[i].last_name);
+     console.log(sortedSupervisors);
+     sortedSupervisors.sort(function(a, b){
+      let nameA = a[0].last_name;
+      let nameB = b[0].last_name;
+      console.log('a', nameA, 'b', nameB);
+      if(nameA < nameB) return -1;
+      if(nameA > nameB) return 1;
+      console.log(sortedSupervisors); 
+      return 0;
+  });
     }
+    this.setState({
+      sortedSupervisors: sortedSupervisors
+    })
   }
   sortData = (array) => {
     for(let i = 0; i < array.length; i++){
@@ -121,6 +144,8 @@ class ManagerDashboard extends React.Component {
   render(){
     return (
       <div className="padding-bottom">
+      {JSON.stringify(this.state.sortedSupervisors)}
+      {JSON.stringify(this.state.feedbackCounts)}
         <Grid container spacing={0}>
         <Grid item xs={12}>
           <Typography variant="display1" className="center">{this.props.user.first_name}'s Dashboard</Typography>

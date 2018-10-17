@@ -67,6 +67,8 @@ class EmployeeList extends React.Component {
 
     render() {
         let content = null;
+        // array, property, direction
+        // lodash orderBy
         let data = orderBy(this.props.employees, this.props.sort.column, this.props.sort.direction);
 
 

@@ -7,7 +7,8 @@ import {connect} from 'react-redux';
 import AppBar from '../EditPerson/EditPersonAppBar/EditSupervisorAppBar.js';
 
 const mapStateToProps = state => ({
-  supervisor: state.people.staff.supervisors
+  supervisor: state.people.staff.supervisors,
+  user: state.user
 });
 class AddPerson extends Component {
   constructor(props) {
