@@ -109,7 +109,7 @@ class FeedbackFormView extends React.Component {
     const data = {
       supervisorId,
       employeeId,
-      dateCreated: Date.now(),
+      dateCreated: new Date(),
       quality_id,
       taskRelated,
       cultureRelated,

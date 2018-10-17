@@ -96,11 +96,14 @@ class FeedbackDetailView extends React.Component {
     });
   };
 
-  handleFormSubmit = () => {
-    axios.put('/api/feedback', this.state.formFields)
+  handleFormSubmit = event => {
+    event.preventDefault();
+    const editedFeedback = {...this.state.formFields, date_edited: new Date()};
+    axios.put('/api/feedback', editedFeedback)
     .then(response => {
       this.setState({
-        originalFeedback: {...this.state.formFields}
+        originalFeedback: {...editedFeedback},
+        formFields: {...editedFeedback}
       });
     }).catch(error => {
       console.log('/api/feedback PUT error:', error);
@@ -190,6 +193,7 @@ class FeedbackDetailView extends React.Component {
         <Grid item xs={12}>
           <div>Feedback for: {`${originalFeedback.first_name} ${originalFeedback.last_name}`}</div>
           <div>Feedback created on: {moment(originalFeedback.date_created).format("dddd, MMMM Do YYYY, h:mm:ss a")}</div>
+          {originalFeedback.date_edited && <div>Last edit on: {moment(originalFeedback.date_edited).format("dddd, MMMM Do YYYY, h:mm:ss a")}</div>}
           {content}
         </Grid>
       </Grid>

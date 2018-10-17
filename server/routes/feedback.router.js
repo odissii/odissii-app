@@ -387,7 +387,30 @@ router.post('/images', (req, res) => {
 // edits a feedback record 
 router.put('/', (req, res) => {
   if (req.isAuthenticated()) {
-    const feedback = req.body
+    const feedback = req.body;
+    const queryText = `
+      UPDATE "feedback" SET 
+        "quality_id" = $2,
+        "task_related" = $3,
+        "culture_related" = $4,
+        "details" = $5,
+        "date_edited" = $6
+      WHERE "id" = $1;
+    `;
+    pool.query(queryText, [
+      feedback.id, 
+      feedback.quality_id, 
+      feedback.task_related,
+      feedback.culture_related,
+      feedback.details,
+      feedback.date_edited,
+    ]).then(response => {
+      console.log('/api/feedback PUT success');
+      res.sendStatus(200);
+    }).catch(error => {
+      console.log('/api/feedback PUT error:', error);
+      res.sendStatus(500);
+    });
   } else {
     res.sendStatus(401);
   }
