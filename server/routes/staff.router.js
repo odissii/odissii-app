@@ -40,7 +40,7 @@ router.get('/supervisor/profile', (req, res) => {
 router.get('/employee/profile', (req, res) => {
     if(req.isAuthenticated){
         const employee = req.query.id;
-        const query = `SELECT "id", "first_name", "last_name", "employee"."employeeId", "image_path", "inactive", "supervisor_id" FROM "employee" WHERE "id" = $1;`;
+        const query = `SELECT "employee"."id", "first_name", "last_name", "employee"."employeeId", "image_path", "inactive", "supervisor_id"."supervisor_employee" FROM "employee" JOIN "supervisor_employee" ON "employee_id" = "supervisor_employee"."employee_id" WHERE "employee"."id" = $1;`;
         pool.query(query, [employee]).then((results) => {
             res.send(results.rows);
         }).catch((error) => {
@@ -101,15 +101,31 @@ router.get('/allEmployees', (req, res) => {
 // then adds employee to manager_employee junction table
 router.post('/employee', (req, res) => {
     if(req.isAuthenticated){
+( async()=> {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');     
         const employee = req.body;
-        const query = `INSERT INTO "employee" ("employeeId", "first_name", "last_name", "image_path", "supervisor_id") VALUES ($1, $2, $3, $4, $5);`;
-        pool.query(query, [employee.employeeId, employee.first_name, employee.last_name, employee.image_path, employee.supervisor_id]).then((results)=> {
+        let query = `INSERT INTO "employee" ("employeeId", "first_name", "last_name", "image_path") VALUES ($1, $2, $3, $4) RETURNING "id";`;
+        let values = [employee.employeeId, employee.first_name, employee.last_name, employee.image_path];
+        let result = await client.query(query, values);
+        let employeeID = result.rows[0].id;
+        query = `INSERT INTO "supervisor_employee" ("employee_id", "supervisor_id") VALUES ($1, $2);`;
+        const junctionInsert = await client.query(query, [employeeID, employee.supervisor_id]);
+        await client.query('COMMIT');
             res.sendStatus(201);
-        }).catch((error) => {
-            console.log('Error posting employee', error);
-            res.sendStatus(500);
-        })
-    } else {
+        }catch(error){
+            console.log('ROLLBACK', error);
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release;
+        }
+    })().catch((error)=>{
+        console.log('CATCH', error);
+        res.sendStatus(500);
+    });
+ } else {
         res.sendStatus(403);
     }
 });
