@@ -1,10 +1,10 @@
-const filterReducer = (state= '', action) => {
+const idReducer = (state= '', action) => {
     switch (action.type) {
-        case 'ADD_FILTER':
+        case 'EMPLOYEE_TO_VIEW':
             return action.payload;
         default:
             return state;
     }
 };
 
-export default filterReducer;
+export default idReducer;

@@ -46,26 +46,22 @@ class Nav extends Component {
     // if manager logged in, will render appropriate nav bar
     if (this.props.user && this.props.user.role === USER_ROLES.MANAGER) {
       content = (
-        <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
             <BottomNavigationAction className="nav" icon={<ShowChart />} component={Link} to={"/dashboard"} />
             <BottomNavigationAction className="nav" icon={<Group />} component={Link} to={"/allEmployees"} />
-            <BottomNavigationAction className="nav" icon={<PersonAdd />} component={Link} to={"/employee/new"} />
+            <BottomNavigationAction className="nav" icon={<PersonAdd />} component={Link} to={"/addperson"} />
             <BottomNavigationAction className="nav" icon={<Menu />} component={Link} to={"/settings"} />
           </BottomNavigation>
-        </div>
       )
       // if supervisor logged in, will render appropriate nav bar
     } else if (this.props.user && this.props.user.role === USER_ROLES.SUPERVISOR) {
       content = (
-        <div className="navbar">
           <BottomNavigation value={value} style={styles.stickToBottom} onChange={this.handleChange}>
             <BottomNavigationAction className="nav" icon={<ShowChart />} component={Link} to={"/dashboard"} />
             <BottomNavigationAction className="nav" icon={<Group />} component={Link} to={"/employees"} />
             <BottomNavigationAction className="nav" icon={<Create />} component={Link} to={"/feedback/new"} />
             <BottomNavigationAction className="nav" icon={<Menu />} component={Link} to={"/settings"} />
           </BottomNavigation>
-        </div>
       )
     }
     return (

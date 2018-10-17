@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { AppBar, Toolbar, IconButton, Typography, InputBase } from '@material-ui/core';
-import { USER_ROLES } from '../../../constants';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Search from '@material-ui/icons/Search';
 
@@ -33,7 +32,7 @@ class EmployeeAppBar extends React.Component {
             <AppBar position="sticky">
                 <Toolbar>
                     <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
-                    <Typography>Employees</Typography>
+                    <Typography>All Employees</Typography>
                     <div style={styles.grow} />
                     <div>
                         <Search />

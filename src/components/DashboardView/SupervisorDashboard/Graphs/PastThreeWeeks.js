@@ -31,7 +31,7 @@ class PastThreeWeeks extends React.Component {
 
     if (!(quality_types.length && data.length)) return null;
 
-    console.log('quality types:', quality_types);
+    // console.log('quality types:', quality_types);
     const weekNames = namesOfPastThreeWeeks();
     const threeWeeksFeedback = data.filter(lastThreeWeeksOnly);
     const weeklyQualityTotals = totalsByWeek(threeWeeksFeedback, quality_types);

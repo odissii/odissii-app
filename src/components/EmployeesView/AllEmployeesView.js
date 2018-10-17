@@ -1,10 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import EmployeeFilter from './EmployeeFilter/EmployeeFilter';
-import EmployeeAppBar from './EmployeeAppBar/EmployeeAppBar';
+import AllEmployeeAppBar from './EmployeeAppBar/AllEmployeeAppBar';
 import AllEmployeeList from './EmployeeList/AllEmployeeList';
 import Nav from '../../components/Nav/Nav';
+import {Divider} from '@material-ui/core'
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { USER_ROLES } from '../../constants';
 
@@ -31,8 +31,8 @@ class SupervisorEmployees extends React.Component {
         if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
             allEmployees = (
                 <div>
-                    <EmployeeAppBar />
-                    <EmployeeFilter />
+                    <AllEmployeeAppBar />
+                    <Divider />
                     <AllEmployeeList />
                 </div>
             )

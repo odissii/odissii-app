@@ -5,8 +5,6 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 import Nav from '../../components/Nav/Nav';
 import SupervisorEmployees from './SupervisorEmployees/SupervisorEmployees';
-import { USER_ROLES } from '../../constants';
-
 
 const mapStateToProps = state => ({
   user: state.user,
