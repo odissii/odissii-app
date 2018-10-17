@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Avatar, IconButton, Table, TableHead, TableCell, TableBody, TableRow } from '@material-ui/core';
+import { withRouter } from 'react-router';
+import { Grid, Avatar, Button, Table, TableHead, TableCell, TableBody, TableRow } from '@material-ui/core';
 import { USER_ROLES } from '../../../constants';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
 import Edit from '@material-ui/icons/Edit';
 import orderBy from 'lodash/orderBy';
+
 
 const moment = require('moment');
 
@@ -48,6 +50,10 @@ class AllEmployeeList extends React.Component {
         this.props.dispatch({type: 'ADD_SORT_DIRECTION', payload: direction });
     }
 
+    handleClick = (id) => {
+        this.props.history.push(`/edit/employee/${id}`);
+    }
+
     render() {
         let content = null;
         let data = orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
@@ -76,13 +82,12 @@ class AllEmployeeList extends React.Component {
                                             {employee.first_name}&nbsp;{employee.last_name}</div>
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
-                                {moment(employee.recent).format("MM/DD/YYYY")} 
-                                {/* figure out redering for if no date */}
+                                {employee.recent && moment(employee.recent).format("MM/DD/YYYY")} 
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
-                                    <IconButton>
+                                    <Button onClick={() => this.handleClick(employee.id)}>
                                         <Edit />
-                                    </IconButton>
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         })}
@@ -98,4 +103,4 @@ class AllEmployeeList extends React.Component {
     }
 }
 
-export default connect(mapStateToProps)(AllEmployeeList);
+export default withRouter(connect(mapStateToProps)(AllEmployeeList));

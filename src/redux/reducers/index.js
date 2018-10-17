@@ -6,6 +6,7 @@ import feedback from './feedbackReducer';
 import search from './searchReducer';
 import followup from './followupReducer';
 import sort from './sortReducer';
+import id from './idReducer';
 
 
 //Lets make a bigger object for our store, with the objects from our reducers.
@@ -17,7 +18,8 @@ const store = combineReducers({
   feedback,
   search,
   followup,
-  sort
+  sort,
+  id
 });
 
 export default store;
