@@ -6,7 +6,17 @@ import { Bar } from 'react-chartjs-2';
 const moment = require('moment');
 
 class DisplayWeeklyGraph extends Component {
+    
     render() {
+
+        const blankSummary = {
+            praise: 0,
+            instruct: 0,
+            correct: 0
+        }
+
+
+
         const options = {
             scales: {
                 xAxes: [{
@@ -21,14 +31,14 @@ class DisplayWeeklyGraph extends Component {
         let data = {
             datasets: [{
                 label: 'Praise',
-                data: [this.props.praise],
+                data: [this.props.data.name === 'Praise'],
                 backgroundColor: '#0f77e6',
                 borderWidth: 1,
                 stack: '1'
             },
             {
                 label: 'Instruct',
-                data: [this.props.instruct],
+                data: [this.props.data.name === 'Instruct'],
                 backgroundColor: '#f17416',
                 borderWidth: 1,
                 stack: '2'
@@ -36,7 +46,7 @@ class DisplayWeeklyGraph extends Component {
             },
             {
                 label: 'Correct',
-                data: [this.props.correct],
+                data: [this.props.data.name === 'Correct'],
                 backgroundColor: 'lightgrey',
                 borderWidth: 1,
                 stack: '3'
@@ -44,10 +54,13 @@ class DisplayWeeklyGraph extends Component {
             labels: []
         }
         return (
-            <Bar
-                data={data}
-                options={options}
-            />
+            <div>
+                {JSON.stringify(this.props.data)}
+                <Bar
+                    data={data}
+                    options={options}
+                />
+            </div>
         )
     }
 }

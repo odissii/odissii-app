@@ -12,6 +12,7 @@ const QuarterlySummary = props => (
           backgroundColor: ['#0f77e6', '#f17416', 'lightgray']
         }]
       }
+      
     } 
   />
 );

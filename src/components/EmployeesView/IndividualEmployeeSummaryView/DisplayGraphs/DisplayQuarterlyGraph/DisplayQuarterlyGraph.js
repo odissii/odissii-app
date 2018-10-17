@@ -5,6 +5,7 @@ import { Bar } from 'react-chartjs-2';
 //Date formatter
 const moment = require('moment');
 
+
 class DisplayQuarterlyGraph extends Component {
     render() {
         const options = {
