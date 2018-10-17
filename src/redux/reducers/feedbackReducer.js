@@ -4,7 +4,8 @@ import { FEEDBACK_ACTIONS } from '../actions/feedbackActions';
 const feedbackTypes = {
     currentEmployee: [],
     allFeedbackBySupervisor: [],
-    feedbackByAllSupervisors: []
+    feedbackCountsByAllSupervisors: [],
+    feedbackDetailsByAllSupervisors: {}
 }
 
 const feedback = (state = feedbackTypes, action) => {
@@ -13,9 +14,12 @@ const feedback = (state = feedbackTypes, action) => {
     }  else if (action.type === FEEDBACK_ACTIONS.SET_ALL_FEEDBACK_BY_CURRENT_SUPERVISOR){
         return {...state, allFeedbackBySupervisor: action.payload}; 
     } else if (action.type === FEEDBACK_ACTIONS.SET_ALL_FEEDBACK_BY_MANAGER_SUPERVISORS){
-        return {...state, feedbackByAllSupervisors: action.payload}; 
-    }
-    return state; 
+        return {...state, feedbackCountsByAllSupervisors: [...state.feedbackCountsByAllSupervisors, action.payload]}; 
+    } else if (action.type === FEEDBACK_ACTIONS.SET_ALL_DETAILED_FEEDBACK_BY_MANAGER_SUPERVISORS){
+        return {...state, feedbackDetailsByAllSupervisors: {...state.feedbackDetailsByAllSupervisors, [action.supervisor]: action.payload}}; 
+    } else if (action.type === 'CLEAR_FEEDBACK'){
+        return {...state, feedbackCountsByAllSupervisors: [], feedbackDetailsByAllSupervisors: []}
+     } return state; 
 }
 
 // this is an object representing a row of feedback just added to the database

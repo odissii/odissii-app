@@ -3,14 +3,17 @@ import axios from 'axios';
 import {FormControl, FormLabel, Input, Button, Checkbox, NativeSelect} from '@material-ui/core';
 import './editperson.css';
 import {connect} from 'react-redux';
+import { PEOPLE_ACTIONS } from '../../redux/actions/peopleActions';
 
+const mapStateToProps = state => ({
+    user: state.user,
+    supervisors: state.people.staff.supervisors
+  });
 class EditEmployee extends Component {
     constructor(props){
         super(props);
-        //these will be generated through the component did mount thing 
         this.state = {
             employee: {},
-            supervisors: []
         }
     }
     componentDidMount = () => {
@@ -20,8 +23,7 @@ class EditEmployee extends Component {
             this.setState({ 
                 employee: response.data[0]
             });
-            this.getSupervisors();
-            //then go through and set each value of the response to state 
+            this.props.dispatch({type: PEOPLE_ACTIONS.FETCH_SUPERVISORS})
           }).catch((error)=> {
               console.log('Error getting employee', error); 
           });
@@ -32,21 +34,11 @@ class EditEmployee extends Component {
             console.log('editing person');
             this.props.dispatch({type: 'UPDATE_EMPLOYEE', payload: this.state});
           }
-    getSupervisors = () => {
-            axios.get('/api/staff/supervisors/').then((response) => {
-                this.setState({
-                    supervisors: response.data
-                });
-          }).catch((error)=> {
-              console.log('Error getting supervisors', error); 
-          });
-        }
     handleChangefor = (property, event) => {
             this.setState({
                 employee:{
                     [property]: event.target.value
                 }
-       
             })
         }
     handleCheck = () => {
@@ -69,9 +61,9 @@ class EditEmployee extends Component {
                     <Input type="text" value={this.state.employee.image_path} onChange={(event)=>this.handleChangefor('image_path', event)}/>
                     <FormLabel>Reassign Supervisor</FormLabel>
                     <NativeSelect
-                        value={this.state.supervisor_id}
+                        value={this.state.employee.supervisor_id}
                         onChange={(event)=>this.handleChangeFor('supervisor_id', event)}>
-                      {this.state.supervisors.map((supervisor, i) => {
+                      {this.props.supervisors.map((supervisor, i) => {
                           return (
                               <option key={i} value={supervisor.supervisor_id}>{supervisor.first_name} {supervisor.last_name}</option>
                           );
@@ -89,4 +81,4 @@ class EditEmployee extends Component {
         );
     }
 }
-export default connect()(EditEmployee); 
+export default connect(mapStateToProps)(EditEmployee); 
