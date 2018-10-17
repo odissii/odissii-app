@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Grid, Avatar, Table, TableHead, TableCell, TableBody, TableRow } from '@material-ui/core';
+import Announcement from '@material-ui/icons/Announcement';
 import axios from 'axios';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
 import orderBy from 'lodash/orderBy';
@@ -22,7 +24,7 @@ const styles = {
     tableCell: {
         padding: 0,
         textAlign: 'center',
-    }
+    },
 }
 
 const invertDirection = {
@@ -57,6 +59,11 @@ class EmployeeList extends React.Component {
         this.props.dispatch({ type: 'ADD_SORT_DIRECTION', payload: direction });
     }
 
+    handleClick = (event) => {
+        this.props.dispatch({ type: 'EMPLOYEE_TO_VIEW', payload: event })
+        this.props.history.push('/individualEmployee');
+    }
+
 
     render() {
         let content = null;
@@ -75,19 +82,22 @@ class EmployeeList extends React.Component {
                         <TableRow>
                             <TableCell style={styles.tableCell} onClick={() => this.handleSort('last_name')}>Employee Name</TableCell>
                             <TableCell style={styles.tableCell} onClick={() => this.handleSort('recent')}>Last&nbsp;Feedback</TableCell>
+                            <TableCell style={styles.tableCell}>Follow Up</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {filteredEmployees.map((employee) => {
-                            return <TableRow key={employee.id} value={employee}>
+                            return <TableRow key={employee.id} value={employee} onClick={() => this.handleClick(employee.id)}>
                                 <TableCell style={styles.tableCell}>
                                     <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
                                         <Avatar style={{ marginRight: '10px' }} alt={employee.first_name} src={employee.image_path} />
                                         {employee.first_name}&nbsp;{employee.last_name}</div>
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
-                                    {moment(employee.recent).format("MM/DD/YYYY")}
-                                    {/* figure out rendering for it no date */}
+                                    {employee.recent && moment(employee.recent).format("MM/DD/YYYY")}
+                                </TableCell>
+                                <TableCell style={styles.tableCell}>
+                                 {employee.incomplete && <Announcement />}
                                 </TableCell>
                             </TableRow>
                         })}
@@ -104,4 +114,4 @@ class EmployeeList extends React.Component {
     }
 }
 
-export default connect(mapStateToProps)(EmployeeList);
+export default withRouter(connect(mapStateToProps)(EmployeeList));

@@ -10,6 +10,15 @@ const mapStateToProps = state => ({
     user: state.user,
 })
 
+const styles = {
+    grow: {
+        flexGrow: 1,
+    },
+    input: {
+        width: 100,
+    }
+}
+
 class EmployeeAppBar extends React.Component {
     handleChange = (event) => {
         this.props.dispatch({ type: 'ADD_SEARCH', payload: event.target.value });
@@ -25,10 +34,14 @@ class EmployeeAppBar extends React.Component {
                 <Toolbar>
                     <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
                     <Typography>Employees</Typography>
+                    <div style={styles.grow} />
+                    <div>
                         <Search />
                         <InputBase
+                            style={styles.input}
                             placeholder="Search..."
                             onChange={this.handleChange} />
+                    </div>
                 </Toolbar>
             </AppBar>
         )
