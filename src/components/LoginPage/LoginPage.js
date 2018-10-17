@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { triggerLogin, formError, clearError } from '../../redux/actions/loginActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
-import {Button, FormControl} from '@material-ui/core';
+import {Button, FormLabel, Input} from '@material-ui/core';
 
 
 const mapStateToProps = state => ({
@@ -65,33 +65,34 @@ class LoginPage extends Component {
         <form>
           <h1>Login</h1>
           <div>
-            <label htmlFor="username">
+            <FormLabel  htmlFor="username">
               Username:
-              <input
+              <Input
                 type="text"
                 name="username"
                 value={this.state.username}
                 onChange={this.handleInputChangeFor('username')}
               />
-            </label>
+            </FormLabel>
           </div>
           <div>
-            <label htmlFor="password">
+            <FormLabel htmlFor="password">
               Password:
-              <input
+              <Input
                 type="password"
                 name="password"
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
               />
-            </label>
+            </FormLabel >
           </div>
           <div>
-            <Button onClick={this.login} className="center" variant="contained">Sign In</Button><br/>
+            <Button onClick={this.login} className="center" variant="contained" color="primary">Sign In</Button><br/> 
             <Button onClick={()=>this.props.history.push('/register')}>Register</Button>
-            <Button onClick={()=>this.props.history.push('/reset/password')}>Reset Password</Button>
-          </div>
+            <Button onClick={()=>this.props.history.push('/reset/password')}>Forgot Password?</Button>
+            </div>
         </form>
+            
       </div>
     );
   }
