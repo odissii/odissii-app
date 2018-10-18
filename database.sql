@@ -20,7 +20,9 @@ CREATE TABLE person (
     "first_name" VARCHAR (255) NOT NULL,
     "last_name" VARCHAR (255) NOT NULL,
     "email_address" VARCHAR (500) NOT NULL,
-    "role_id" INT NOT NULL REFERENCES "role"
+    "role_id" INT NOT NULL REFERENCES "role",
+    "token" varchar,
+    "expiration" TIMESTAMP DEFAULT now()
 );
 
 -- junction table to link a "supervisor" person to a "manager" person
@@ -30,10 +32,10 @@ CREATE TABLE supervisor_manager (
   "manager_id" INT NOT NULL REFERENCES "person"
 );
 
--- junction table to link a "manager" person to an employee
-CREATE TABLE manager_employee (
+-- junction table to link a "supervisor" person to an employee
+CREATE TABLE supervisor_employee (
   "id" SERIAL PRIMARY KEY,
-  "manager_id" INT NOT NULL REFERENCES "person",
+  "supervisor_id" INT NOT NULL REFERENCES "person",
   "employee_id" INT NOT NULL REFERENCES "employee"
 );
 
@@ -43,7 +45,8 @@ CREATE TABLE employee (
   "employeeId" VARCHAR (255) UNIQUE NOT NULL,
   "first_name" VARCHAR (255) NOT NULL,
   "last_name" VARCHAR (255) NOT NULL,
-  "image_path" VARCHAR (255)
+  "image_path" VARCHAR (255),
+  "inactive" boolean DEFAULT false
 );
 
 -- Feedback entries created by one supervisor for one employee
