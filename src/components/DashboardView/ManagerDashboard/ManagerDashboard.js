@@ -62,10 +62,8 @@ class ManagerDashboard extends React.Component {
       feedback.sort(function(a, b){
         let nameA = a[0].last_name;
         let nameB = b[0].last_name;
-        console.log('a', nameA, 'b', nameB);
         if(nameA < nameB) return -1;
         if(nameA > nameB) return 1;
-        console.log(feedback); 
         return 0;
     });
     this.setState({
@@ -116,15 +114,13 @@ class ManagerDashboard extends React.Component {
   sortSupervisors = (array) => {
     let sortedSupervisors = [];
     for(let i = 0; i < array.length; i++){
-     sortedSupervisors.push(array[i].first_name + ' ' + array[i].last_name);
+     sortedSupervisors.push(array[i].last_name + ', ' + array[i].first_name );
      console.log(sortedSupervisors);
      sortedSupervisors.sort(function(a, b){
-      let nameA = a[0].last_name;
-      let nameB = b[0].last_name;
-      console.log('a', nameA, 'b', nameB);
+      let nameA = a[0];
+      let nameB = b[0];
       if(nameA < nameB) return -1;
       if(nameA > nameB) return 1;
-      console.log(sortedSupervisors); 
       return 0;
   });
     }
@@ -144,8 +140,6 @@ class ManagerDashboard extends React.Component {
   render(){
     return (
       <div className="padding-bottom">
-      {JSON.stringify(this.state.sortedSupervisors)}
-      {JSON.stringify(this.state.feedbackCounts)}
         <Grid container spacing={0}>
         <Grid item xs={12}>
           <Typography variant="display1" className="center">{this.props.user.first_name}'s Dashboard</Typography>
