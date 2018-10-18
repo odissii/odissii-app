@@ -9,6 +9,7 @@ import axios from 'axios';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
 import orderBy from 'lodash/orderBy';
 
+
 const moment = require('moment');
 
 const mapStateToProps = state => ({
@@ -117,7 +118,7 @@ class EmployeeList extends React.Component {
                             return <TableRow key={employee.id} value={employee} onClick={() => this.handleClick(employee.id)}>
                                 <TableCell style={styles.tableCell}>
                                     <Grid style={styles.gridRow}>
-                                        <Avatar style={styles.avatar} alt={employee.first_name} src={employee.image_path} />
+                                        <Avatar style={styles.avatar} alt={employee.first_name && employee.last_name} src={employee.image_path || 'images/avatar.png'} />
                                         {employee.first_name}&nbsp;{employee.last_name}</Grid>
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
