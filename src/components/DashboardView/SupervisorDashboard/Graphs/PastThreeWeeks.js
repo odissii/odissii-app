@@ -42,17 +42,17 @@ class PastThreeWeeks extends React.Component {
         {
           label: 'Correct',
           backgroundColor: 'lightgray',
-          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'Correct'))
+          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'correct'))
         },
         {
           label: 'Instruct',
           backgroundColor: '#f17416',
-          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'Instruct'))
+          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'instruct'))
         },
         {
           label: 'Praise',
           backgroundColor: '#0f77e6',
-          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'Praise'))
+          data: qualityByWeek(weeklyQualityTotals, getIdForQuality(quality_types, 'praise'))
         },
       ]
     };
