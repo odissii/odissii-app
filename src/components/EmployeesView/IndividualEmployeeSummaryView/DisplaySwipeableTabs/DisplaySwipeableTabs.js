@@ -89,7 +89,6 @@ class DisplaySwipeableTabs extends Component {
                     >
                         <TabContainer dir={theme.direction}>
                             {/* This will contain the past 30 days bar chart view */}
-                            {/* {JSON.stringify(this.props.feedback.currentEmployee.name)} */}
                             <DisplayWeeklyGraph data={this.props.feedback.currentEmployee} />      
                         </TabContainer>
                         <TabContainer dir={theme.direction}>
