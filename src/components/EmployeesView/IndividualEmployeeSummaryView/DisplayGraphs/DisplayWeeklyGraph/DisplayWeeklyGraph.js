@@ -77,7 +77,10 @@ class DisplayWeeklyGraph extends Component {
                     stacked: true
                 }],
                 yAxes: [{
-                    stacked: true
+                    stacked: true,
+                    ticks: {
+                        suggestedMax: 5,
+                    }
                 }]
             },
         }
