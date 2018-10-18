@@ -8,6 +8,10 @@ import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
 
 import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
@@ -21,6 +25,7 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 const booleanFields = ['task_related', 'culture_related', 'follow_up_needed'];
 
@@ -119,6 +124,10 @@ class FeedbackDetailView extends React.Component {
     });
   };
 
+  backToPreviousPage = () => {
+    this.props.history.push('/employees');
+  };
+
   render() {
     const { originalFeedback, formFields } = this.state;
     const { quality_types } = this.props;
@@ -130,7 +139,7 @@ class FeedbackDetailView extends React.Component {
 
     if (editingAllowed) {
       content = (
-        <form style={{width: '75%', maxWidth: '500px'}} onSubmit={this.handleFormSubmit}>
+        <form onSubmit={this.handleFormSubmit} style={{marginTop: '20px'}}>
           <FormControl required>
             <FormLabel>Feedback Quality</FormLabel>
             <RadioGroup
@@ -192,7 +201,7 @@ class FeedbackDetailView extends React.Component {
           </FormControl>}
           <TextField required
             label="Feedback Details"
-            placeholder="Type or dictate feedback details"
+            placeholder="Add feedback details"
             value={formFields.details}
             onChange={this.handleInputChange('details')}
             multiline
@@ -221,11 +230,33 @@ class FeedbackDetailView extends React.Component {
     }
 
     return (
-      <Grid container>
+      <Grid container justify="center">
+        <AppBar position="sticky">
+          <Toolbar>
+            <IconButton onClick={this.backToPreviousPage}><ArrowBack /></IconButton>
+            <Typography>Feedback Detail</Typography>
+          </Toolbar>
+        </AppBar>
         <Grid item xs={12}>
-          <div>Feedback for: {`${originalFeedback.first_name} ${originalFeedback.last_name}`}</div>
-          <div>Feedback created on: {moment(originalFeedback.date_created).format("dddd, MMMM Do YYYY, h:mm:ss a")}</div>
-          {originalFeedback.date_edited && <div>Last edit on: {moment(originalFeedback.date_edited).format("dddd, MMMM Do YYYY, h:mm:ss a")}</div>}
+          <Typography variant="h4" className="center">
+            {`${originalFeedback.first_name} ${originalFeedback.last_name}`}
+          </Typography>
+          <Typography variant="subtitle2" className="center">
+            Feedback created on
+          </Typography>
+          <Typography variant="h6" className="center">
+            {moment(originalFeedback.date_created).format("dddd, MMMM Do YYYY")}
+          </Typography>
+          {originalFeedback.date_edited &&
+            <div>
+              <Typography variant="subtitle2" className="center">
+                Last edited on
+              </Typography>
+              <Typography variant="h6" className="center">
+                {moment(originalFeedback.date_edited).format("dddd, MMMM Do YYYY")}
+              </Typography>
+            </div>
+          }
           {content}
         </Grid>
       </Grid>

@@ -225,7 +225,7 @@ class FeedbackFormView extends React.Component {
             </FormControl>}
             <TextField required
               label="Feedback Details"
-              placeholder="Type or dictate feedback details"
+              placeholder="Add feedback details"
               value={details}
               onChange={this.handleInputChange('details')}
               multiline
