@@ -240,8 +240,8 @@ router.get('/supervisors/reports', (req, res) => {
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/employee', (req, res) => {
-  console.log('in GET /employee');
-  const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."name", "details"
+    console.log('in GET /employee');
+    const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."id", "details"
                                 FROM "feedback" 
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
@@ -271,67 +271,14 @@ router.get('/employeeFeedbackCount/1', (req, res) => {
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
                                 WHERE "employee"."id" = 1
-                                GROUP BY "employee"."id", "quality_types"."name";;`;
-  pool.query(empFeedbackCntQuery)
-    .then(result => res.send(result.rows))
-    .catch(error => {
-      console.log('error in GET /employeeFeedbackCount', error);
-    });
+                                GROUP BY "employee"."id", "quality_types"."name";`;
+    pool.query(empFeedbackCntQuery)
+        .then(result => res.send(result.rows))
+        .catch(error => {
+            console.log('error in GET /employeeFeedbackCount', error);
+        });
 });
-//will get all of the feedback for the past 3-4 weeks count for the specific employee
-router.get('/employeeWeeklyFeedbackCount/1', (req, res) => {
-  console.log('in GET /ememployeeWeeklyFeedbackCount');
-  const weeklyFeedbackQuery = `SELECT "date_created", "quality_types"."name"
-                                    FROM "feedback" 
-                                    JOIN "quality_types"
-                                    ON "feedback"."quality_id" = "quality_types"."id"
-                                    JOIN "employee"
-                                    ON "feedback"."employee_id" = "employee"."id"
-                                    WHERE "employee_id" = 1 
-                                    AND "date_created" > CURRENT_DATE - INTERVAL '30' DAY
-                                    ORDER BY "date_created" DESC;`;
-  pool.query(weeklyFeedbackQuery)
-    .then(result => res.send(result.rows))
-    .catch(error => {
-      console.log('error in GET /employeeWeeklyFeedbackCount', error);
-    });
-});
-//will get all of the quarterly feedback count for the specific employee
-router.get('/employeeQuarterlyFeedbackCount/1', (req, res) => {
-  console.log('in GET /employeeQuarterlyFeedbackCount');
-  const quarterlyFeedbackQuery = `SELECT "date_created", "quality_types"."name"
-                                    FROM "feedback" 
-                                    RIGHT JOIN "quality_types"
-                                    ON "feedback"."quality_id" = "quality_types"."id"
-                                    JOIN "employee"
-                                    ON "feedback"."employee_id" = "employee"."id"
-                                    WHERE "employee_id" = 1 
-                                    AND "date_created" > CURRENT_DATE - INTERVAL '92' DAY
-                                    ORDER BY "date_created" DESC;`;
-  pool.query(quarterlyFeedbackQuery)
-    .then(result => res.send(result.rows))
-    .catch(error => {
-      console.log('error in GET /employeeQuarterlyFeedbackCount', error);
-    });
-});
-//will get all of the annually feedback for the specific employee
-router.get('/employeeAnnuallyFeedbackCount/1', (req, res) => {
-  console.log('in GET /employeeAnnuallyFeedbackCount');
-  const annuallyFeedbackQuery = `SELECT "date_created", "quality_types"."name"
-                                    FROM "feedback" 
-                                    RIGHT JOIN "quality_types"
-                                    ON "feedback"."quality_id" = "quality_types"."id"
-                                    JOIN "employee"
-                                    ON "feedback"."employee_id" = "employee"."id"
-                                    WHERE "employee_id" = 1 
-                                    AND "date_created" > CURRENT_DATE - INTERVAL '365' DAY
-                                    ORDER BY "date_created" DESC;`;
-  pool.query(annuallyFeedbackQuery)
-    .then(result => res.send(result.rows))
-    .catch(error => {
-      console.log('error in GET /employeeAnnuallyFeedbackCount', error);
-    });
-});
+
 // gets the most recent feedback record submitted where the req.user.id matches the manager ID
 // used to display the confirmation record 
 router.get('/confirmation', (req, res) => {
