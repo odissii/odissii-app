@@ -80,17 +80,17 @@ class DisplayAnnuallyGraph extends Component {
             datasets: [{
                 label: 'Praise',
                 data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Praise')),
-                backgroundColor: '#0f77e6',
+                backgroundColor: '#4AC985',
             },
             {
                 label: 'Instruct',
                 data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Instruct')),
-                backgroundColor: '#f17416',
+                backgroundColor: '#6C9BD1',
             },
             {
                 label: 'Correct',
                 data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Correct')),
-                backgroundColor: 'lightgrey',
+                backgroundColor: '#F79B1B',
             }],
             labels: getMonthlyNames(),
         }

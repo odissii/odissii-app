@@ -20,17 +20,17 @@ const styles = {
     praiseAvatar: {
         margin: 10,
         color: '#fff',
-        backgroundColor: '#0f77e6',
+        backgroundColor: '#4AC985',
     },
     correctAvatar: {
         margin: 10,
         color: '#fff',
-        backgroundColor: 'lightgrey',
+        backgroundColor: '#F79B1B',
     },
     instructAvatar: {
         margin: 10,
         color: '#fff',
-        backgroundColor: '#f17416',
+        backgroundColor: '#6C9BD1',
     },
     row: {
         display: 'flex',
