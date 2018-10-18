@@ -33,9 +33,11 @@ class LoginPage extends Component {
   }
   login = (event) => {
     event.preventDefault();
+    console.log('logging in')
     if (this.state.username === '' || this.state.password === '') {
       this.props.dispatch(formError());
     } else {
+      console.log('in the else statement')
       this.props.dispatch(triggerLogin(this.state.username, this.state.password));
     }
   }
@@ -62,7 +64,7 @@ class LoginPage extends Component {
     return (
       <div>
         {this.renderAlert()}
-        <form onSubmit={this.login}>
+        <form>
           <h1>Login</h1>
           <div>
             <label htmlFor="username">
@@ -87,7 +89,7 @@ class LoginPage extends Component {
             </label>
           </div>
           <div>
-            <Button variant="contained">Submit</Button>
+            <Button type={'submit'} variant="contained">Submit</Button>
             <Link to="/register">Register</Link><br/>
             <Link to="/reset/password">Forgot Password</Link>
           </div>

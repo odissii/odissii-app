@@ -7,6 +7,7 @@ const moment = require('moment');
 const router = express.Router();
 const Chance = require('chance');
 const chance = new Chance();
+const transporter = require('../modules/nodemailer');
 
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -67,7 +68,28 @@ router.put('/createtoken', (req, res) => {
   // TODO: Include an expiration 48 hours in the future
   let queryText = `UPDATE "person" SET "token" = $1, "expiration" = $2 WHERE "email_address" = $3;`;
   pool.query(queryText, [token, expiration, email]).then((result) => {
-    console.log(`http://localhost:3000/#/reset/password/${token}`); // TODO: Node mailer goes here && remove this line of code!!!!
+    let mail = {
+      from: "odissii <j.petzoldt@gmail.com>",
+      to: `${req.body.email}`,
+      subject: "odissii password reset",
+      text: "You requested a password reset for your odissii login.",
+      html: `<p>You requested a password reset for your odissii login.</p>
+      <p>http://localhost:3000/#/reset/password/${token}</p>`
+  }
+  transporter.sendMail(mail, function(err, info) {
+      if (err) {
+          console.log('nodemailer error', err);
+      } else {
+          // see https://nodemailer.com/usage
+          console.log("info.messageId: " + info.messageId);
+          console.log("info.envelope: " + info.envelope);
+          console.log("info.accepted: " + info.accepted);
+          console.log("info.rejected: " + info.rejected);
+          console.log("info.pending: " + info.pending);
+          console.log("info.response: " + info.response);
+      }
+      transporter.close();
+  })
     res.sendStatus(200);
   }).catch((error) => {
     console.log(error);
