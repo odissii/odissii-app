@@ -38,17 +38,17 @@ class PastTwelveMonths extends React.Component {
         {
           label: 'Correct',
           backgroundColor: 'lightgray',
-          data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Correct'))
+          data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'correct'))
         },
         {
           label: 'Instruct',
           backgroundColor: '#f17416',
-          data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Instruct'))
+          data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'instruct'))
         },
         {
           label: 'Praise',
           backgroundColor: '#0f77e6',
-          data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Praise'))
+          data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'praise'))
         },
       ]
     }
