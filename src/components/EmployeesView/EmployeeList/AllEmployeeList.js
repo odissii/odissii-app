@@ -101,7 +101,7 @@ class AllEmployeeList extends React.Component {
                             return <TableRow key={employee.id} value={employee}>
                                 <TableCell style={styles.tableCell}>
                                         <Grid style={styles.gridRow}>
-                                            <Avatar style={styles.avatar} alt={employee.first_name} src={employee.image_path} />
+                                            <Avatar style={styles.avatar} alt={employee.first_name} src={employee.image_path || 'images/avatar.png'} />
                                             {employee.first_name}&nbsp;{employee.last_name}</Grid>
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>

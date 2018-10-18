@@ -87,13 +87,16 @@ class DisplayQuarterlyGraph extends Component {
         const monthlyTotals = totalsByMonth(data, quality_types);
 
         const options = {
+            responsive: true,
             scales: {
                 xAxes: [{
-                    stacked: true
+                    stacked: true,
                 }],
                 yAxes: [{
                     stacked: true,
-                    height: '90px',
+                    ticks: {
+                        suggestedMax: 5,
+                    }
                 }]
             },
         }
@@ -103,17 +106,20 @@ class DisplayQuarterlyGraph extends Component {
                 label: 'Praise',
                 data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Praise')),
                 backgroundColor: '#4AC985',
+                borderWidth: 1,
             },
             {
                 label: 'Instruct',
                 data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Instruct')),
                 backgroundColor: '#6C9BD1',
+                borderWidth: 1,
 
             },
             {
                 label: 'Correct',
                 data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'Correct')),
                 backgroundColor: '#F79B1B',
+                borderWidth: 1,
             }],
             labels: getQuarterlyMonthlyNames(),
         }
