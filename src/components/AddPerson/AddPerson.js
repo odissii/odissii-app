@@ -4,7 +4,7 @@ import axios from 'axios';
 import {FormControl, Input, Button, FormLabel, NativeSelect, Typography} from '@material-ui/core';
 import './addperson.css'; 
 import {connect} from 'react-redux'; 
-import AppBar from '../EditPerson/EditPersonAppBar/EditSupervisorAppBar.js';
+import AppBar from '../EmployeesView/EmployeeAppBar/AllEmployeeAppBar';
 
 const mapStateToProps = state => ({
   supervisor: state.people.staff.supervisors,
@@ -36,6 +36,18 @@ class AddPerson extends Component {
   }
   createEmployee = () => {
     this.props.dispatch({type: 'ADD_EMPLOYEE', payload: this.state});
+    //how to alert after a saga? 
+    this.setState({
+      username: '',
+      password: '',
+      employeeId: '',
+      first_name: '',
+      last_name: '',
+      email_address: '',
+      role_id: '',
+      image_path: '',
+      message: '',
+  });
   }
   createSupervisor = (event) => {
     event.preventDefault();

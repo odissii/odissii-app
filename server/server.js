@@ -12,7 +12,9 @@ const userRouter = require('./routes/user.router');
 const feedbackRouter = require('./routes/feedback.router');
 const followupRouter = require('./routes/followup.router');
 const staffRouter = require('./routes/staff.router'); 
-const nodemailerRouter = require('./routes/nodemailer.router');
+// const nodemailerRouter = require('./routes/nodemailer.router');
+const qualityRouter = require('./routes/quality.router');
+
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -31,7 +33,8 @@ app.use('/api/feedback', feedbackRouter);
 app.use('/api/followup', followupRouter);
 app.use('/api/staff', staffRouter);
 app.use('/api/nodemailer', nodemailerRouter);
-// app.use('/api/quality', qualityRouter);
+app.use('/api/quality', qualityRouter);
+
 
 // Serve static files
 app.use(express.static('build'));

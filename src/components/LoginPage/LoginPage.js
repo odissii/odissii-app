@@ -33,9 +33,11 @@ class LoginPage extends Component {
   }
   login = (event) => {
     event.preventDefault();
+    console.log('logging in')
     if (this.state.username === '' || this.state.password === '') {
       this.props.dispatch(formError());
     } else {
+      console.log('in the else statement')
       this.props.dispatch(triggerLogin(this.state.username, this.state.password));
     }
   }
@@ -87,7 +89,7 @@ class LoginPage extends Component {
             </FormLabel >
           </div>
           <div>
-            <Button onClick={this.login} className="center" variant="contained" color="primary">Sign In</Button><br/> 
+             <Button type={'submit'} variant="contained">Submit</Button>
             <Button onClick={()=>this.props.history.push('/register')}>Register</Button>
             <Button onClick={()=>this.props.history.push('/reset/password')}>Forgot Password?</Button>
             </div>

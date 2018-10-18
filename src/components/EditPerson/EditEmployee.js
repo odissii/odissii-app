@@ -14,13 +14,20 @@ class EditEmployee extends Component {
     constructor(props){
         super(props);
         this.state = {
-            employee: {},
+            employee: {
+                first_name: '',
+                last_name: '',
+                employeeId: '',
+                image_path: '', 
+                supervisor_id: ''
+            },
         }
     }
     componentDidMount = () => {
         const { match: { params } } = this.props;
         axios.get(`/api/staff/employee/profile?id=${params.personId}`)
           .then((response)=> {
+              console.log(response.data[0]);
             this.setState({ 
                 employee: response.data[0]
             });
@@ -33,11 +40,12 @@ class EditEmployee extends Component {
     // only active employees should render in employee lists. 
     editPerson = () => {
             console.log('editing person');
-            this.props.dispatch({type: 'UPDATE_EMPLOYEE', payload: this.state});
+            this.props.dispatch({type: 'UPDATE_EMPLOYEE', payload: this.state.employee});
           }
-    handleChangefor = (property, event) => {
+    handleChangeFor = (property, event) => {
             this.setState({
                 employee:{
+                    ...this.state.employee,
                     [property]: event.target.value
                 }
             })
@@ -55,13 +63,13 @@ class EditEmployee extends Component {
                 <h1>Edit Employee</h1>
                 <FormControl>
                     <FormLabel>First Name</FormLabel>
-                    <Input type="text" value={this.state.employee.first_name} onChange={(event)=>this.handleChangefor('first_name', event)}/>
+                    <Input value={this.state.employee.first_name} onChange={(event)=>this.handleChangeFor('first_name', event)}/>
                     <FormLabel>Last Name</FormLabel>
-                    <Input type="text" value={this.state.employee.last_name} onChange={(event)=>this.handleChangefor('last_name', event)}/>
+                    <Input value={this.state.employee.last_name} onChange={(event)=>this.handleChangeFor('last_name', event)}/>
                     <FormLabel>Employee ID</FormLabel>
-                    <Input type="text" value={this.state.employee.employeeId} onChange={(event)=>this.handleChangefor('employee_ID', event)}/>
+                    <Input value={this.state.employee.employeeId} onChange={(event)=>this.handleChangeFor('employeeId', event)}/>
                     <FormLabel>Image</FormLabel>
-                    <Input type="text" value={this.state.employee.image_path} onChange={(event)=>this.handleChangefor('image_path', event)}/>
+                    <Input value={this.state.employee.image_path} onChange={(event)=>this.handleChangeFor('image_path', event)}/>
                     <FormLabel>Reassign Supervisor</FormLabel>
                     <NativeSelect
                         value={this.state.employee.supervisor_id}

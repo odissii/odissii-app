@@ -64,7 +64,7 @@ class PastThreeWeeks extends React.Component {
 export default connect(mapStateToProps)(PastThreeWeeks);
 
 
-const lastThreeWeeksOnly = feedback => moment(feedback.date_created).isAfter(moment().subtract(3, 'weeks').startOf('isoWeek'));
+const lastThreeWeeksOnly = feedback => moment(feedback.date_created).isSameOrAfter(moment().subtract(3, 'weeks').startOf('isoWeek'));
 
 const getIdForQuality = (types, name) => types.find(type => type.name === name).id;
 
@@ -81,11 +81,12 @@ const totalsByWeek = (feedback, quality_types) => {
   }, {});
 
   return feedback.reduce((summary, entry) => {
-    const date = moment(entry.date_created);    if (date.isBetween(weekThreeStart, weekTwoStart)) {
+    const date = moment(entry.date_created);    
+    if (date.isBetween(weekThreeStart, weekTwoStart, 'days', '[]')) {
       summary.threeWeeksAgo[entry.quality_id] += 1;
-    } else if (date.isBetween(weekTwoStart, weekOneStart)) {
+    } else if (date.isBetween(weekTwoStart, weekOneStart, 'days', '[]')) {
       summary.twoWeeksAgo[entry.quality_id] += 1;
-    } else if (date.isBetween(weekOneStart, thisWeekStart)) {
+    } else if (date.isBetween(weekOneStart, thisWeekStart, 'days', '[]')) {
       summary.oneWeekAgo[entry.quality_id] += 1;
     }
 
