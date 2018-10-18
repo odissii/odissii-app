@@ -97,7 +97,7 @@ class DisplayAnnuallyGraph extends Component {
 
         return (
             <div>
-                {JSON.stringify(monthlyTotals)}
+                {/* {JSON.stringify(monthlyTotals)} */}
                 <Bar
                     data={barData}
                     options={options}

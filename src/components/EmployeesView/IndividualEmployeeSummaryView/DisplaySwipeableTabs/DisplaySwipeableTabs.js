@@ -62,52 +62,7 @@ class DisplaySwipeableTabs extends Component {
     componentDidMount() {
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
-        // this.getWeeklyFeedbackCount();
-        // this.getQuarterlyFeedbackCount();
-        // this.getAnnuallyFeedbackCount();
     }; //end of componentDidMount()
-
-    // //This will get the total feedback for the past 30 days of each category for the employee
-    // getWeeklyFeedbackCount() {
-    //     console.log('in getWeekly');  
-    //     axios.get(`/api/feedback/employeeWeeklyFeedbackCount/1`)
-    //         .then((response) => {
-    //             this.setState({
-    //                 weeklyQualityCount: response.data
-    //             })
-    //         }).catch((error) => {
-    //             console.log('error in getWeeklyFeedbackCount', error);
-    //             alert('Cannot get weekly feedback counts!')
-    //         });
-    // }; //end of getWeeklyFeedbackCount()
-
-    // //This will get the total quarterly feedback for each category for the employee
-    // getQuarterlyFeedbackCount() {
-    //     console.log('in getQuarterly');
-    //     axios.get(`/api/feedback/employeeQuarterlyFeedbackCount/1`)
-    //         .then((response) => {
-    //             this.setState({
-    //                 quarterlyQualityCount: response.data
-    //             })
-    //         }).catch((error) => {
-    //             console.log('error in getQuarterlyFeedbackCount', error);
-    //             alert('Cannot get quarterly feedback counts!')
-    //         });
-    // }; //end of getQuarterlyFeedbackCount()
-
-    // //This will get the total annually feedback for each category for the employee
-    // getAnnuallyFeedbackCount() {
-    //     console.log('in getAnnually');   
-    //     axios.get(`/api/feedback/employeeAnnuallyFeedbackCount/1`)
-    //         .then((response) => {
-    //             this.setState({
-    //                 annuallyQualityCount: response.data
-    //             })
-    //         }).catch((error) => {
-    //             console.log('error in getAnnuallyFeedbackCount', error);
-    //             alert('Cannot get annually feedback counts!')
-    //         });
-    // }; //end of getAnnuallyFeedbackCount()
 
     render() {
         const { theme } = this.props;
