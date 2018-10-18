@@ -97,10 +97,7 @@ class DisplayAnnuallyGraph extends Component {
 
         return (
             <div>
-                {/* {JSON.stringify(this.props.data)}
-                {JSON.stringify(fourWeeksFeedback)}
-                {JSON.stringify(quality_types)}
-                {JSON.stringify(weeklyQualityTotals)} */}
+                {JSON.stringify(monthlyTotals)}
                 <Bar
                     data={barData}
                     options={options}
