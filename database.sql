@@ -26,7 +26,7 @@ CREATE TABLE person (
 );
 
 -- junction table to link a "manager" person to a "supervisor" person
-CREATE TABLE manager_supervisor (
+CREATE TABLE supervisor_manager (
   "id" SERIAL PRIMARY KEY,
   "manager_id" INT NOT NULL REFERENCES "person",
   "supervisor_id" INT NOT NULL REFERENCES "person"
