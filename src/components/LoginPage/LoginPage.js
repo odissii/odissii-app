@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { triggerLogin, formError, clearError } from '../../redux/actions/loginActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import {Button} from '@material-ui/core';
 
 
 const mapStateToProps = state => ({
@@ -19,37 +20,32 @@ class LoginPage extends Component {
       password: '',
     };
   }
-
-  
   componentDidMount() {
     // starts request for server to check that we are logged in
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
     this.props.dispatch(clearError());
   }
-
   componentDidUpdate() {
     // if we have a response from the server and the user is logged in, redirect to the /user URL
     if (!this.props.user.isLoading && this.props.user.userName !== null) {
       this.props.history.push('/dashboard');
     }
   }
-
   login = (event) => {
     event.preventDefault();
-
+    console.log('logging in')
     if (this.state.username === '' || this.state.password === '') {
       this.props.dispatch(formError());
     } else {
+      console.log('in the else statement')
       this.props.dispatch(triggerLogin(this.state.username, this.state.password));
     }
   }
-
   handleInputChangeFor = propertyName => (event) => {
     this.setState({
       [propertyName]: event.target.value,
     });
   }
-
   renderAlert() {
     if (this.props.login.message !== '') {
       return (
@@ -68,7 +64,7 @@ class LoginPage extends Component {
     return (
       <div>
         {this.renderAlert()}
-        <form onSubmit={this.login}>
+        <form>
           <h1>Login</h1>
           <div>
             <label htmlFor="username">
@@ -93,12 +89,9 @@ class LoginPage extends Component {
             </label>
           </div>
           <div>
-            <input
-              type="submit"
-              name="submit"
-              value="Log In"
-            />
-            <Link to="/register">Register</Link>
+            <Button type={'submit'} variant="contained">Submit</Button>
+            <Link to="/register">Register</Link><br/>
+            <Link to="/reset/password">Forgot Password</Link>
           </div>
         </form>
       </div>
