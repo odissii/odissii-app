@@ -102,8 +102,8 @@ class DisplayWeeklyGraph extends Component {
         }
         return (
             <div>
-                {JSON.stringify(fourWeeksFeedback)}
-                {JSON.stringify(weeklyQualityTotals)}
+                {/* {JSON.stringify(fourWeeksFeedback)}
+                {JSON.stringify(weeklyQualityTotals)} */}
                 <Bar
                     data={barData}
                     options={options}
