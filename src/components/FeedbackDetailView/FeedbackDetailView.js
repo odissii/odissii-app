@@ -22,7 +22,7 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 
-const booleanFields = ['task_related', 'culture_related', 'followUpNeeded'];
+const booleanFields = ['task_related', 'culture_related', 'follow_up_needed'];
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -58,6 +58,12 @@ class FeedbackDetailView extends React.Component {
         .then(response => {
           const data = response.data;
           data.quality_id = data.quality_id.toString();
+          if (data.follow_up_date) {
+            data.follow_up_date = moment(data.follow_up_date).format('YYYY-MM-DD');
+            data.follow_up_needed = true;
+          } else {
+            data.follow_up_date = '';
+          }
           this.setState({
             originalFeedback: data,
             formFields: {...data}
@@ -101,6 +107,9 @@ class FeedbackDetailView extends React.Component {
     const editedFeedback = {...this.state.formFields, date_edited: new Date()};
     axios.put('/api/feedback', editedFeedback)
     .then(response => {
+      if (!editedFeedback.follow_up_needed) {
+        editedFeedback.follow_up_date = '';
+      }
       this.setState({
         originalFeedback: {...editedFeedback},
         formFields: {...editedFeedback}
@@ -158,6 +167,29 @@ class FeedbackDetailView extends React.Component {
               />
             </FormGroup>
           </FormControl>
+          <FormControl>
+            <FormControlLabel 
+              label="Follow-Up Needed?"
+              control={
+                <Checkbox 
+                  checked={formFields.follow_up_needed}
+                  onChange={this.handleInputChange('follow_up_needed')}
+                />
+              }
+            />
+          </FormControl>
+          {formFields.follow_up_needed && 
+          <FormControl>
+            <TextField 
+              type="date"
+              label="Follow-Up Date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={formFields.follow_up_date}
+              onChange={this.handleInputChange('follow_up_date')}
+            />
+          </FormControl>}
           <TextField required
             label="Feedback Details"
             placeholder="Type or dictate feedback details"

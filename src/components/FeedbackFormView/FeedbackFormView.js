@@ -211,19 +211,18 @@ class FeedbackFormView extends React.Component {
               />
             </FormControl>
               {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
-            {followUpNeeded
-            ? <FormControl>
-                <TextField 
-                  type="date"
-                  label="Follow-Up Date"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  value={followUpDate}
-                  onChange={this.handleInputChange('followUpDate')}
-                />
-              </FormControl> 
-            : null}
+            {followUpNeeded && 
+            <FormControl>
+              <TextField 
+                type="date"
+                label="Follow-Up Date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={followUpDate}
+                onChange={this.handleInputChange('followUpDate')}
+              />
+            </FormControl>}
             <TextField required
               label="Feedback Details"
               placeholder="Type or dictate feedback details"

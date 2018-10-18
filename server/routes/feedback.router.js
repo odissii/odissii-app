@@ -9,10 +9,9 @@ const router = express.Router();
 // get the details for one entry of feedback
 router.get('/detail/:feedbackId', (req, res) => {
   if (req.isAuthenticated()) {
+    const feedbackId = req.params.feedbackId;
     (async () => {
       try {
-        const feedbackId = req.params.feedbackId;
-
         // if the user is a manager, check if one of their supervisors wrote the feedback,
         // otherwise don't send it
         if (req.user.role === 'manager') {
@@ -38,9 +37,11 @@ router.get('/detail/:feedbackId', (req, res) => {
               "employee"."employeeId",
               "employee"."first_name",
               "employee"."last_name",
-              "employee"."image_path" AS "employee_image_path"
+              "employee"."image_path" AS "employee_image_path",
+              "follow_up"."follow_up_date" AS "follow_up_date"
             FROM "feedback" 
             JOIN "employee" ON "employee"."id" = "feedback"."employee_id" 
+            LEFT JOIN "follow_up" ON "follow_up"."employee_id" = "feedback"."employee_id" AND "follow_up"."completed" = false
             WHERE "feedback"."id" = $1;
           `, [feedbackId]);
 
@@ -69,14 +70,17 @@ router.get('/detail/:feedbackId', (req, res) => {
               "employee"."employeeId",
               "employee"."first_name",
               "employee"."last_name",
-              "employee"."image_path" AS "employee_image_path"
+              "employee"."image_path" AS "employee_image_path",
+              "follow_up"."follow_up_date" AS "follow_up_date"
             FROM "feedback"
-            JOIN "employee" on "employee"."id" = "feedback"."employee_id"
+            JOIN "employee" ON "employee"."id" = "feedback"."employee_id"
+            LEFT JOIN "follow_up" ON "follow_up"."employee_id" = "feedback"."employee_id" AND "follow_up"."completed" = false
             WHERE "feedback"."id" = $1 AND "feedback"."supervisor_id" = $2;
           `, [feedbackId, supervisorId]);
 
           const feedback = feedbackResponse.rows[0];
 
+          console.log('feedback:', feedback);
           res.send(feedback);
 
           // if the user isn't a supervisor or manager, something is weird,
@@ -89,6 +93,7 @@ router.get('/detail/:feedbackId', (req, res) => {
         throw error;
       }
     })().catch(error => {
+      console.log(error);
       res.sendStatus(500);
     });
   } else {
@@ -334,30 +339,79 @@ router.post('/images', (req, res) => {
 // edits a feedback record 
 router.put('/', (req, res) => {
   if (req.isAuthenticated()) {
-    const feedback = req.body;
-    const queryText = `
-      UPDATE "feedback" SET 
-        "quality_id" = $2,
-        "task_related" = $3,
-        "culture_related" = $4,
-        "details" = $5,
-        "date_edited" = $6
-      WHERE "id" = $1;
-    `;
-    pool.query(queryText, [
-      feedback.id, 
-      feedback.quality_id, 
-      feedback.task_related,
-      feedback.culture_related,
-      feedback.details,
-      feedback.date_edited,
-    ]).then(response => {
-      console.log('/api/feedback PUT success');
-      res.sendStatus(200);
-    }).catch(error => {
+    (async () => {
+      try {
+        const feedback = req.body;
+        const queryText = `
+          UPDATE "feedback" SET 
+            "quality_id" = $2,
+            "task_related" = $3,
+            "culture_related" = $4,
+            "details" = $5,
+            "date_edited" = $6
+          WHERE "id" = $1;
+        `;
+        await pool.query(queryText, [
+          feedback.id, 
+          feedback.quality_id, 
+          feedback.task_related,
+          feedback.culture_related,
+          feedback.details,
+          feedback.date_edited,
+        ]);
+
+        if (feedback.follow_up_needed) {
+          let followUpQueryText;
+          const response = await pool.query('SELECT * FROM "follow_up" WHERE "employee_id" = $1 AND "completed" = false;', [feedback.employee_id]);
+
+          // if there is existing pending follow up, update the date, otherwise, create a new one
+          if (response.rows.length) {
+            followUpQueryText = `
+              UPDATE "follow_up" SET 
+                "follow_up_date" = $1 
+              WHERE "employee_id" = $2;
+            `;
+          } else {
+            followUpQueryText = `
+              INSERT INTO "follow_up" ("follow_up_date", "employee_id") VALUES ($1, $2);
+            `;
+          }
+
+          await pool.query(followUpQueryText, [feedback.follow_up_date, feedback.employee_id]);
+        } else if (!feedback.follow_up_needed && feedback.follow_up_date) {
+          const followUpDeleteQueryText = `
+            DELETE FROM "follow_up"
+            WHERE "employee_id" = $1 
+            AND "completed" = false;
+          `;
+          await pool.query(followUpDeleteQueryText, [feedback.employee_id]);
+        }
+
+        console.log('/api/feedback PUT success');
+        res.sendStatus(200);
+      } catch(error) {
+        throw error;
+      }
+    })().catch(error => {
       console.log('/api/feedback PUT error:', error);
       res.sendStatus(500);
-    });
+    })
+
+    
+    // pool.query(queryText, [
+    //   feedback.id, 
+    //   feedback.quality_id, 
+    //   feedback.task_related,
+    //   feedback.culture_related,
+    //   feedback.details,
+    //   feedback.date_edited,
+    // ]).then(response => {
+    //   console.log('/api/feedback PUT success');
+    //   res.sendStatus(200);
+    // }).catch(error => {
+    //   console.log('/api/feedback PUT error:', error);
+    //   res.sendStatus(500);
+    // });
   } else {
     res.sendStatus(401);
   }
