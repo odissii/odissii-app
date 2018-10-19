@@ -7,6 +7,8 @@ import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import axios from 'axios';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
+import { USER_ROLES } from '../../../constants';
+
 import orderBy from 'lodash/orderBy';
 
 
@@ -18,6 +20,7 @@ const mapStateToProps = state => ({
     search: state.search,
     filter: state.filter,
     sort: state.sort,
+    people: state.people.staff.supervisorToView,
 })
 
 const styles = {
@@ -55,18 +58,34 @@ class EmployeeList extends React.Component {
     }
 
     getEmployees = () => {
-        const id = this.props.user.id
-        axios({
-            method: 'GET',
-            url: '/api/staff/employees/' + id
-        }).then((response) => {
-            const employees = response.data;
-            const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
-            this.props.dispatch(action);
-        }).catch((error) => {
-            console.log('Supervisor Employee List get error', error);
-            alert('Unable to GET supervisor employees');
-        })
+        if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
+            // const id = this.props.people;
+            // axios({
+            //     method: 'GET',
+            //     url: '/api/staff/employees/' + id
+            // }).then((response) => {
+            //     const employees = response.data;
+            //     const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
+            //     this.props.dispatch(action);
+            // }).catch((error) => {
+            //     console.log('Supervisor Employee List get error', error);
+            //     alert('Unable to GET supervisor employees');
+            // })
+        } else if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
+            const id = this.props.user.id
+            axios({
+                method: 'GET',
+                url: '/api/staff/employees/' + id
+            }).then((response) => {
+                const employees = response.data;
+                const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
+                this.props.dispatch(action);
+            }).catch((error) => {
+                console.log('Supervisor Employee List get error', error);
+                alert('Unable to GET supervisor employees');
+            })
+        }
+
     }
 
     handleSort = columnName => {
