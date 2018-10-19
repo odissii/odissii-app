@@ -129,7 +129,11 @@ class EmployeeList extends React.Component {
                                     Last&nbsp;Feedback{this.props.sort.column === 'recent' ? (
                                         this.props.sort.direction === 'asc' ? (
                                             <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
-                            <TableCell style={styles.tableCell}>Follow Up</TableCell>
+                            <TableCell style={styles.tableCell}
+                                onClick={() => this.handleSort('followUp')}>
+                                <Grid style={styles.grid}>Follow Up{this.props.sort.column === 'followUp' ? (
+                                    this.props.sort.direction === 'asc' ? (
+                                        <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
