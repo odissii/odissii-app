@@ -27,15 +27,6 @@ import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
 import { USER_ROLES } from '../../constants';
 
-// CREATE TABLE employee (
-//   id SERIAL PRIMARY KEY,
-//   employeeId VARCHAR (255) UNIQUE NOT NULL,
-//   first_name VARCHAR (255) NOT NULL,
-//   last_name VARCHAR (255) NOT NULL,
-//   image_path VARCHAR (255)
-// );
-
-
 const mapStateToProps = state => ({
   user: state.user,
   quality_types: state.quality_types,
@@ -117,8 +108,6 @@ class FeedbackFormView extends React.Component {
         [formField]: event.target.value
       });
     }
-
-    // console.log(formField, event.target.value);
   };
 
   handleFormSubmit = event => {
