@@ -59,18 +59,18 @@ class EmployeeList extends React.Component {
 
     getEmployees = () => {
         if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
-            // const id = this.props.people;
-            // axios({
-            //     method: 'GET',
-            //     url: '/api/staff/employees/' + id
-            // }).then((response) => {
-            //     const employees = response.data;
-            //     const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
-            //     this.props.dispatch(action);
-            // }).catch((error) => {
-            //     console.log('Supervisor Employee List get error', error);
-            //     alert('Unable to GET supervisor employees');
-            // })
+            const id = this.props.people.id;
+            axios({
+                method: 'GET',
+                url: '/api/staff/employees/' + id
+            }).then((response) => {
+                const employees = response.data;
+                const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
+                this.props.dispatch(action);
+            }).catch((error) => {
+                console.log('Supervisor Employee List get error', error);
+                alert('Unable to GET supervisor employees');
+            })
         } else if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
             const id = this.props.user.id
             axios({
