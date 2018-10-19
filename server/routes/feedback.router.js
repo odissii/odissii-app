@@ -269,21 +269,22 @@ router.get('/employee/:id', (req, res) => {
 router.get('/employeeFeedbackCount/:id', (req, res) => {
     if(req.isAuthenticated()) {
         console.log('in GET /employeeFeedbackCount');
+        const employeeId = req.params.id;
         const empFeedbackCntQuery = `SELECT DISTINCT
 	                            (SELECT COUNT ("feedback"."quality_id")
-	                            FROM "feedback" WHERE "feedback"."quality_id" = 1 AND "feedback"."employee_id" = 1) as Praise,
+	                            FROM "feedback" WHERE "feedback"."quality_id" = 1 AND "feedback"."employee_id" = $1) as Praise,
 	                            (SELECT COUNT ("feedback"."quality_id")
-	                            FROM "feedback" WHERE "feedback"."quality_id" = 2 AND "feedback"."employee_id" = 1) as Instruct,
+	                            FROM "feedback" WHERE "feedback"."quality_id" = 2 AND "feedback"."employee_id" = $1) as Instruct,
 	                            (SELECT COUNT ("feedback"."quality_id")
-	                            FROM "feedback" WHERE "feedback"."quality_id" = 3 AND "feedback"."employee_id" = 1) as Correct
+	                            FROM "feedback" WHERE "feedback"."quality_id" = 3 AND "feedback"."employee_id" = $1) as Correct
                                 FROM "employee"
                                 JOIN "feedback"
                                 ON "feedback"."employee_id" = "employee"."id"
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
-                                WHERE "employee"."id" = 1
+                                WHERE "employee"."id" = $1
                                 GROUP BY "employee"."id", "quality_types"."name";`;
-        pool.query(empFeedbackCntQuery)
+        pool.query(empFeedbackCntQuery, [employeeId])
             .then(result => res.send(result.rows))
             .catch(error => {
                 console.log('error in GET /employeeFeedbackCount', error);
