@@ -41,7 +41,7 @@ const styles = {
         alignItems: 'center',
     },
     avatar: {
-        marginRight: '10px', 
+        marginRight: '10px',
         marginLeft: '10px',
     }
 }
@@ -50,6 +50,7 @@ const invertDirection = {
     asc: 'desc',
     desc: 'asc'
 }
+
 class EmployeeList extends React.Component {
 
     componentDidMount() {
@@ -110,7 +111,8 @@ class EmployeeList extends React.Component {
         if (this.props.user.userName) {
             let filteredEmployees = data.filter(
                 (employee) => {
-                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
+                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 ||
+                        employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
                 }
             )
             content = (
@@ -130,7 +132,7 @@ class EmployeeList extends React.Component {
                                         this.props.sort.direction === 'asc' ? (
                                             <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
                             <TableCell style={styles.tableCell}
-                                onClick={() => this.handleSort('followUp')}>
+                                onClick={() => this.handleSort('incomplete')}>
                                 <Grid style={styles.grid}>Follow Up{this.props.sort.column === 'followUp' ? (
                                     this.props.sort.direction === 'asc' ? (
                                         <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
@@ -141,8 +143,10 @@ class EmployeeList extends React.Component {
                             return <TableRow key={employee.id} value={employee} onClick={() => this.handleClick(employee.id)}>
                                 <TableCell style={styles.tableCell}>
                                     <Grid style={styles.gridRow}>
-                                        <Avatar style={styles.avatar} alt={employee.first_name && employee.last_name} src={employee.image_path || 'images/avatar.png'} />
-                                        {employee.first_name}&nbsp;{employee.last_name}</Grid>
+                                        <Avatar style={styles.avatar} alt={employee.first_name && employee.last_name}
+                                            src={employee.image_path || 'images/avatar.png'} />
+                                        {employee.first_name}&nbsp;{employee.last_name}
+                                    </Grid>
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
                                     {employee.recent && moment(employee.recent).format("MM/DD/YYYY")}

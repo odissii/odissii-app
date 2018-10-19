@@ -25,7 +25,7 @@ const styles = {
     table: {
         marginTop: 5,
     },
-    tableCell : {
+    tableCell: {
         padding: 0,
         textAlign: 'center',
     },
@@ -39,7 +39,7 @@ const styles = {
         alignItems: 'center',
     },
     avatar: {
-        marginRight: '10px', 
+        marginRight: '10px',
         marginLeft: '10px',
     }
 }
@@ -60,9 +60,9 @@ class AllEmployeeList extends React.Component {
     }
 
     handleSort = columnName => {
-        this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName});
+        this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName });
         let direction = this.props.sort.column === columnName ? invertDirection[this.props.sort.direction] : 'desc';
-        this.props.dispatch({type: 'ADD_SORT_DIRECTION', payload: direction });
+        this.props.dispatch({ type: 'ADD_SORT_DIRECTION', payload: direction });
     }
 
     handleClick = (id) => {
@@ -72,27 +72,28 @@ class AllEmployeeList extends React.Component {
     render() {
         let content = null;
         let data = orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
-        
+
         if (this.props.user.role === USER_ROLES.MANAGER) {
             let filteredEmployees = data.filter(
                 (employee) => {
-                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
+                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 ||
+                        employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
                 }
             )
             content = (
                 <Table style={styles.table}>
-                    <TableHead>  
+                    <TableHead>
                         <TableRow>
-                            <TableCell style={styles.tableCell} 
-                            onClick={() => this.handleSort('last_name')}>
-                            <Grid style={styles.grid}>Employee Name{this.props.sort.column === 'last_name' ? (
-                                        this.props.sort.direction === 'asc' ? (
-                                            <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
-                            <TableCell style={styles.tableCell} 
-                            onClick={() => this.handleSort('recent')}>
-                            <Grid style={styles.grid}>Last&nbsp;Feedback{this.props.sort.column === 'recent' ? (
-                                        this.props.sort.direction === 'asc' ? (
-                                            <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
+                            <TableCell style={styles.tableCell}
+                                onClick={() => this.handleSort('last_name')}>
+                                <Grid style={styles.grid}>Employee Name{this.props.sort.column === 'last_name' ? (
+                                    this.props.sort.direction === 'asc' ? (
+                                        <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
+                            <TableCell style={styles.tableCell}
+                                onClick={() => this.handleSort('recent')}>
+                                <Grid style={styles.grid}>Last&nbsp;Feedback{this.props.sort.column === 'recent' ? (
+                                    this.props.sort.direction === 'asc' ? (
+                                        <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
                             <TableCell style={styles.tableCell}>Edit</TableCell>
                         </TableRow>
                     </TableHead>
@@ -100,12 +101,13 @@ class AllEmployeeList extends React.Component {
                         {filteredEmployees.map((employee) => {
                             return <TableRow key={employee.id} value={employee}>
                                 <TableCell style={styles.tableCell}>
-                                        <Grid style={styles.gridRow}>
-                                            <Avatar style={styles.avatar} alt={employee.first_name} src={employee.image_path || 'images/avatar.png'} />
-                                            {employee.first_name}&nbsp;{employee.last_name}</Grid>
+                                    <Grid style={styles.gridRow}>
+                                        <Avatar style={styles.avatar} alt={employee.first_name}
+                                            src={employee.image_path || 'images/avatar.png'} />
+                                        {employee.first_name}&nbsp;{employee.last_name}</Grid>
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
-                                {employee.recent && moment(employee.recent).format("MM/DD/YYYY")} 
+                                    {employee.recent && moment(employee.recent).format("MM/DD/YYYY")}
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
                                     <Button onClick={() => this.handleClick(employee.id)}>
@@ -120,7 +122,7 @@ class AllEmployeeList extends React.Component {
         }
         return (
             <Grid>
-                    {content}
+                {content}
             </Grid>
         );
     }
