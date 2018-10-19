@@ -115,6 +115,8 @@ class FeedbackFormView extends React.Component {
     const {employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details} = this.state;
     const supervisorId = this.props.user.id;
 
+    const employeeHasPendingFollowUp = this.props.employees.find(employee => employee.id == employeeId).incomplete;
+    
     const data = {
       supervisorId,
       employeeId,
@@ -130,7 +132,22 @@ class FeedbackFormView extends React.Component {
       payload: data
     });
 
-    if (followUpNeeded) {
+    if (employeeHasPendingFollowUp) {
+      axios.put(`/api/followup/complete/${employeeId}`)
+      .then(() => {
+        if (followUpNeeded) {
+          this.props.dispatch({
+            type: FOLLOW_UP_ACTIONS.ADD_FOLLOWUP,
+            payload: {
+              employeeId,
+              followUpDate
+            }
+          });
+        }
+      }).catch(error => {
+        console.log(`/api/followup/complete/${employeeId} PUT error:`, error);
+      });
+    } else if (followUpNeeded) {
       this.props.dispatch({
         type: FOLLOW_UP_ACTIONS.ADD_FOLLOWUP,
         payload: {
@@ -140,11 +157,7 @@ class FeedbackFormView extends React.Component {
       });
     }
 
-    console.log('form submitted:', data);
-  };
-
-  backToPreviousPage = event => {
-    console.log('back to previous page');
+    // console.log('form submitted:', data);
   };
 
   render() {
