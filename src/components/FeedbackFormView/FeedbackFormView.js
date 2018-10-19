@@ -16,6 +16,7 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import Nav from '../Nav/Nav';
 
@@ -64,7 +65,6 @@ class FeedbackFormView extends React.Component {
     if (!this.props.quality_types.length) {
       this.props.dispatch({ type:  QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
     }
-    
   }
   
   componentDidUpdate() {
@@ -175,10 +175,10 @@ class FeedbackFormView extends React.Component {
       <Grid container>
         <Grid item xs={12}>
           <Nav />
-          <div>
-            This is the feedback form.
-          </div>
-          <form style={{width: '75%', maxWidth: '500px'}} onSubmit={this.handleFormSubmit}>
+          <Typography variant="h4" className="center">
+            New Feedback
+          </Typography>
+          <form onSubmit={this.handleFormSubmit}>
             <FormControl required>
               <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
               <NativeSelect
