@@ -156,8 +156,10 @@ class FeedbackFormView extends React.Component {
         }
       });
     }
+  };
 
-    // console.log('form submitted:', data);
+  backToDashboard = () => {
+    this.props.history.push('/dashboard');
   };
 
   render() {
@@ -264,7 +266,7 @@ class FeedbackFormView extends React.Component {
               multiline
             />
             <div>
-              <Button onClick={this.backToPreviousPage}>Cancel</Button>
+              <Button onClick={this.backToDashboard}>Cancel</Button>
               <Button type="submit" color="primary" variant="contained">Submit</Button>
             </div>
           </form>
