@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
@@ -19,10 +20,11 @@ import Button from '@material-ui/core/Button';
 import Nav from '../Nav/Nav';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
+import { PEOPLE_ACTIONS } from '../../redux/actions/peopleActions';
 import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
 import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
-import { USER_ROLES, employees } from '../../constants';
+import { USER_ROLES } from '../../constants';
 
 // CREATE TABLE employee (
 //   id SERIAL PRIMARY KEY,
@@ -36,6 +38,7 @@ import { USER_ROLES, employees } from '../../constants';
 const mapStateToProps = state => ({
   user: state.user,
   quality_types: state.quality_types,
+  employees: state.people.staff.supervisorEmployees,
   newPostedFeedback: state.feedback.newPostedFeedback,
   newPostedFollowup: state.followup.newPostedFollowup,
 });
@@ -61,18 +64,23 @@ class FeedbackFormView extends React.Component {
     if (!this.props.quality_types.length) {
       this.props.dispatch({ type:  QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
     }
+    
   }
   
   componentDidUpdate() {
-    const {user, newPostedFeedback, newPostedFollowup, dispatch, history} = this.props;
+    const {user, employees, newPostedFeedback, newPostedFollowup, dispatch, history} = this.props;
 
     if (!user.isLoading && user.userName === null) {
       history.push('/home');
+    } else if (!user.isLoading && user.userName && user.role !== USER_ROLES.SUPERVISOR) {
+      history.push('/dashboard');
+    } else if (!user.isLoading && user.userName && user.role === USER_ROLES.SUPERVISOR) {
+      if (!employees.length) {
+        this.getEmployees();
+      }
     }
     
-    if (!user.isLoading && user.userName && user.role !== USER_ROLES.SUPERVISOR) {
-      history.push('/dashboard');
-    } else if (newPostedFeedback) {
+    if (newPostedFeedback) {
       if (this.state.followUpNeeded) {
         if (newPostedFollowup) {
           dispatch({type: FEEDBACK_ACTIONS.DISPLAY_FEEDBACK_CONFIRMATION});
@@ -84,6 +92,18 @@ class FeedbackFormView extends React.Component {
       }
     }
   }
+
+  getEmployees = () => {
+    const { user, dispatch } = this.props;
+    axios.get(`/api/staff/employees/${user.id}`)
+    .then((response) => {
+      const employees = response.data;
+      dispatch({ type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees });
+    }).catch((error) => {
+      console.log('Supervisor Employee List get error', error);
+      alert('Unable to GET supervisor employees');
+    })
+  };
 
   handleInputChange = formField => event => {
     // if the form field is for a boolean value...
@@ -139,7 +159,18 @@ class FeedbackFormView extends React.Component {
   };
 
   render() {
-    const {employeeId, quality_id, taskRelated, cultureRelated, details, followUpNeeded, followUpDate} = this.state;
+    const {
+      employeeId, 
+      quality_id, 
+      taskRelated, 
+      cultureRelated, 
+      details, 
+      followUpNeeded, 
+      followUpDate
+    } = this.state;
+
+    const { employees } = this.props;
+
     return (
       <Grid container>
         <Grid item xs={12}>
