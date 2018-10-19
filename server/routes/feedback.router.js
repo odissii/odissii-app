@@ -247,15 +247,16 @@ router.get('/supervisors/reports', (req, res) => {
 router.get('/employee/:id', (req, res) => {
     if(req.isAuthenticated()) {
         console.log('in GET /employee');
+        employeeId = req.params.id;
         const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."id", "details"
                                 FROM "feedback" 
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
                                 JOIN "employee"
                                 ON "feedback"."employee_id" = "employee"."id"
-                                WHERE "employee_id" = 1 
+                                WHERE "employee_id" = $1 
                                 ORDER BY "date_created" DESC`;
-  pool.query(empFeedbackQuery)
+  pool.query(empFeedbackQuery, [employeeId])
     .then(result => res.send(result.rows))
     .catch(error => {
       console.log('error in GET /employee', error);

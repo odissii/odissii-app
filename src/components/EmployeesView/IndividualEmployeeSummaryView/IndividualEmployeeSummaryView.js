@@ -48,7 +48,7 @@ class IndividualEmployeeSummaryView extends Component {
     componentDidMount() {
         this.getTotalFeedbackCount();
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
-        this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK });
+        this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK, payload: {id:this.props.id}});
     } //end of componentDidMount
 
     //This will get the total feedback of each category for the employee
