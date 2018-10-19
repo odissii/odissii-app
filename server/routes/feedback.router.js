@@ -266,7 +266,7 @@ router.get('/employee/:id', (req, res) => {
 });
 
 //will get all feedback count for specific employee
-router.get('/employeeFeedbackCount/1', (req, res) => {
+router.get('/employeeFeedbackCount/:id', (req, res) => {
     if(req.isAuthenticated()) {
         console.log('in GET /employeeFeedbackCount');
         const empFeedbackCntQuery = `SELECT DISTINCT

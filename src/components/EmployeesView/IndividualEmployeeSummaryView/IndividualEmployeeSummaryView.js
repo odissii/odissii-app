@@ -26,6 +26,7 @@ import TableRow from '@material-ui/core/TableRow';
 const mapStateToProps = state => ({
     user: state.user,
     feedback: state.feedback.feedback,
+    id: state.id,
 });
 
 const styles = {
@@ -52,7 +53,7 @@ class IndividualEmployeeSummaryView extends Component {
 
     //This will get the total feedback of each category for the employee
     getTotalFeedbackCount() {
-        axios.get(`/api/feedback/employeeFeedbackCount`)
+        axios.get(`/api/feedback/employeeFeedbackCount/${this.props.id}`)
             .then((response) => {
                 this.setState({
                     totalQualityCount: response.data
