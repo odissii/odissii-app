@@ -16,6 +16,7 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import Nav from '../Nav/Nav';
 
@@ -25,15 +26,6 @@ import { FEEDBACK_ACTIONS } from '../../redux/actions/feedbackActions';
 import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
 import { USER_ROLES } from '../../constants';
-
-// CREATE TABLE employee (
-//   id SERIAL PRIMARY KEY,
-//   employeeId VARCHAR (255) UNIQUE NOT NULL,
-//   first_name VARCHAR (255) NOT NULL,
-//   last_name VARCHAR (255) NOT NULL,
-//   image_path VARCHAR (255)
-// );
-
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -64,7 +56,6 @@ class FeedbackFormView extends React.Component {
     if (!this.props.quality_types.length) {
       this.props.dispatch({ type:  QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
     }
-    
   }
   
   componentDidUpdate() {
@@ -117,8 +108,6 @@ class FeedbackFormView extends React.Component {
         [formField]: event.target.value
       });
     }
-
-    // console.log(formField, event.target.value);
   };
 
   handleFormSubmit = event => {
@@ -126,6 +115,8 @@ class FeedbackFormView extends React.Component {
     const {employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details} = this.state;
     const supervisorId = this.props.user.id;
 
+    const employeeHasPendingFollowUp = this.props.employees.find(employee => employee.id == employeeId).incomplete;
+    
     const data = {
       supervisorId,
       employeeId,
@@ -141,7 +132,22 @@ class FeedbackFormView extends React.Component {
       payload: data
     });
 
-    if (followUpNeeded) {
+    if (employeeHasPendingFollowUp) {
+      axios.put(`/api/followup/complete/${employeeId}`)
+      .then(() => {
+        if (followUpNeeded) {
+          this.props.dispatch({
+            type: FOLLOW_UP_ACTIONS.ADD_FOLLOWUP,
+            payload: {
+              employeeId,
+              followUpDate
+            }
+          });
+        }
+      }).catch(error => {
+        console.log(`/api/followup/complete/${employeeId} PUT error:`, error);
+      });
+    } else if (followUpNeeded) {
       this.props.dispatch({
         type: FOLLOW_UP_ACTIONS.ADD_FOLLOWUP,
         payload: {
@@ -151,11 +157,7 @@ class FeedbackFormView extends React.Component {
       });
     }
 
-    console.log('form submitted:', data);
-  };
-
-  backToPreviousPage = event => {
-    console.log('back to previous page');
+    // console.log('form submitted:', data);
   };
 
   render() {
@@ -175,10 +177,10 @@ class FeedbackFormView extends React.Component {
       <Grid container>
         <Grid item xs={12}>
           <Nav />
-          <div>
-            This is the feedback form.
-          </div>
-          <form style={{width: '75%', maxWidth: '500px'}} onSubmit={this.handleFormSubmit}>
+          <Typography variant="h4" className="center">
+            New Feedback
+          </Typography>
+          <form onSubmit={this.handleFormSubmit}>
             <FormControl required>
               <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
               <NativeSelect
