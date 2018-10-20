@@ -70,7 +70,7 @@ class IndividualEmployeeSummaryView extends Component {
 
     render() {
         let btn = null;
-        if (this.props.user.isLoading && this.props.user.userName && this.props.user.role !== USER_ROLES.MANAGER) {
+        if (this.props.user.role === USER_ROLES.SUPERVISOR) {
             btn = (
                 <div className="btnContainer">
                     <Button variant="fab" color="secondary" aria-label="Edit" style={styles.stickyButton}
@@ -79,7 +79,7 @@ class IndividualEmployeeSummaryView extends Component {
                     </Button>
                 </div>
             )
-        } else if (this.props.user.isLoading && this.props.user.userName && this.props.user.role !== USER_ROLES.SUPERVISOR) {
+        } else if (this.props.user.role === USER_ROLES.MANAGER) {
             btn = (
                 <div></div>
             )
