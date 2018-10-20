@@ -5,12 +5,6 @@ import { Doughnut } from 'react-chartjs-2';
      responsive: true
  }
 class IndividualManagerGraph extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            
-        }
-    }
     render(){
         let supervisorSummary = {
             labels: ['Praise', 'Instruct', 'Correct'],

@@ -45,7 +45,6 @@ class ManagerDashboard extends React.Component {
       console.log('Error getting supervisors', error);
     })
   }
-
   //this gets the past twelve months of feedback counting how many praise, instruct, and correct feedback each supervisor has given 
   getFeedback = (idArray) => {
     let today = new Date();
@@ -68,6 +67,7 @@ class ManagerDashboard extends React.Component {
               supervisors: supervisorFeedback
             })
         }
+        this.sortData();
       }).catch((error) => {
         console.log('Error getting feedback counts', error);
       })
@@ -94,14 +94,6 @@ class ManagerDashboard extends React.Component {
     }))
     
   }
-  //this sorts the feedback and extracts each supervisor ID to send to two functions which GET two sets of feedback data 
-  // getSupervisorFeedbackReports = (array) => {
-  //   for (let i = 0; i < array.length; i++){
-  //     let id = array[i].supervisor_id; 
-  //     this.getFeedbackCounts(); 
-  //     this.getFeedbackDetails(id);
-  //   }
-  // }
   navTo = (id) => {
     //clears feedback in redux to prevent duplicate information when navigating back and forth to this page 
     this.props.dispatch({ type: 'CLEAR_FEEDBACK' });
@@ -129,31 +121,27 @@ class ManagerDashboard extends React.Component {
     this.getFeedback(IDs);
     this.getFeedbackDetails(IDs);
   }
-  sortData = (array) => {
-    console.log(array)
-    for (let i = 0; i < array.length; i++) {
-      let test = array.filter(feedback => feedback.sid === this.state.supervisors[feedback.sid]);
-      console.log(test);
-
-      // this.setState({
-      //   praise: [...this.state.praise, parseInt(array[i].praise)],
-      //   correct: [...this.state.correct, parseInt(array[i].correct)],
-      //   instruct: [...this.state.instruct, parseInt(array[i].instruct)],
-      // })   
+  sortData = () => {
+    let praise = this.state.supervisors.map(function(supervisor){return supervisor.praise} );
+    let instruct = this.state.supervisors.map(function(supervisor){return supervisor.instruct} );
+    let correct = this.state.supervisors.map(function(supervisor){return supervisor.correct} );
+      this.setState({
+        praise: praise,
+        correct: correct,
+        instruct: instruct,
+      });
     }
-  }
   render() {
-
     return (
       <div className="padding-bottom">
-        {JSON.stringify(this.state.reports)}
+      {JSON.stringify(this.state.supervisors)}
         <Grid container spacing={0}>
           <Grid item xs={12}>
             <Typography variant="display1" className="center">{this.props.user.first_name}'s Dashboard</Typography>
             <Typography variant="subheading" className="center">Feedback given past 12 months</Typography>
           </Grid>
           <Grid item xs={12}>
-            <ManagerOverviewGraph supervisors={this.state.sortedSupervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct} />
+            <ManagerOverviewGraph supervisors={this.state.supervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct} />
           </Grid>
           <Grid item xs={12}>
             <br />
