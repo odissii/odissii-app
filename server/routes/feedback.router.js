@@ -179,9 +179,7 @@ router.get('/supervisors/all', (req, res) => {
     res.sendStatus(403);
   }
 });
-// counts all praise, instruct, and correct feedback that a supervisor has given 
-// req.query will contain the supervisor id 
-// results are limited to 30. this can be a variable passed through the query if desired. 
+// counts all praise, instruct, and correct feedback that a supervisor has given  
 router.get('/supervisors/count', (req, res) => {
   if (req.isAuthenticated()) {
     const supervisor = req.query.id;
@@ -285,6 +283,7 @@ router.get('/employeeFeedbackCount/:id', (req, res) => {
                                 ON "feedback"."quality_id" = "quality_types"."id"
                                 WHERE "employee"."id" = $1
                                 GROUP BY "employee"."id", "quality_types"."name";`;
+
         pool.query(empFeedbackCntQuery, [employeeId])
             .then(result => res.send(result.rows))
             .catch(error => {
@@ -363,8 +362,8 @@ router.put('/', (req, res) => {
           WHERE "id" = $1;
         `;
         await pool.query(queryText, [
-          feedback.id, 
-          feedback.quality_id, 
+          feedback.id,
+          feedback.quality_id,
           feedback.task_related,
           feedback.culture_related,
           feedback.details,
@@ -400,7 +399,7 @@ router.put('/', (req, res) => {
 
         console.log('/api/feedback PUT success');
         res.sendStatus(200);
-      } catch(error) {
+      } catch (error) {
         throw error;
       }
     })().catch(error => {
