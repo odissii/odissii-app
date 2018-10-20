@@ -179,9 +179,7 @@ router.get('/supervisors/all', (req, res) => {
     res.sendStatus(403);
   }
 });
-// counts all praise, instruct, and correct feedback that a supervisor has given 
-// req.query will contain the supervisor id 
-// results are limited to 30. this can be a variable passed through the query if desired. 
+// counts all praise, instruct, and correct feedback that a supervisor has given  
 router.get('/supervisors/count', (req, res) => {
   if (req.isAuthenticated()) {
     const supervisor = req.query.id;
@@ -245,8 +243,11 @@ router.get('/supervisors/reports', (req, res) => {
 // and a join to get all follow-up records for all employees if no feedback has been given after the follow-up date
 // should set a limit of responses
 router.get('/employee', (req, res) => {
-    console.log('in GET /employee');
-    const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."id", "details"
+  if (req.isAuthenticated()) {
+
+  }
+  console.log('in GET /employee');
+  const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."id", "details"
                                 FROM "feedback" 
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
@@ -277,11 +278,11 @@ router.get('/employeeFeedbackCount/1', (req, res) => {
                                 ON "feedback"."quality_id" = "quality_types"."id"
                                 WHERE "employee"."id" = 1
                                 GROUP BY "employee"."id", "quality_types"."name";`;
-    pool.query(empFeedbackCntQuery)
-        .then(result => res.send(result.rows))
-        .catch(error => {
-            console.log('error in GET /employeeFeedbackCount', error);
-        });
+  pool.query(empFeedbackCntQuery)
+    .then(result => res.send(result.rows))
+    .catch(error => {
+      console.log('error in GET /employeeFeedbackCount', error);
+    });
 });
 
 // gets the most recent feedback record submitted where the req.user.id matches the manager ID
@@ -352,8 +353,8 @@ router.put('/', (req, res) => {
           WHERE "id" = $1;
         `;
         await pool.query(queryText, [
-          feedback.id, 
-          feedback.quality_id, 
+          feedback.id,
+          feedback.quality_id,
           feedback.task_related,
           feedback.culture_related,
           feedback.details,
@@ -389,7 +390,7 @@ router.put('/', (req, res) => {
 
         console.log('/api/feedback PUT success');
         res.sendStatus(200);
-      } catch(error) {
+      } catch (error) {
         throw error;
       }
     })().catch(error => {
