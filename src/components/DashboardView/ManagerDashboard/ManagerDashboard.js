@@ -23,6 +23,7 @@ class ManagerDashboard extends React.Component {
       praise: [],
       correct: [],
       instruct: [],
+      labels: [],
       reports: {},
       feedbackCounts: {},
     }
@@ -92,7 +93,6 @@ class ManagerDashboard extends React.Component {
     }).catch((error) => {
       console.log('Error getting feedback details', error);
     }))
-    
   }
   navTo = (id) => {
     //clears feedback in redux to prevent duplicate information when navigating back and forth to this page 
@@ -106,25 +106,29 @@ class ManagerDashboard extends React.Component {
     this.props.history.push(`/employees/`);
   }
   //this alphabetizes all supervisors and places the results into an object, starting all praise/instruct/correct counts at 0 
+  // labels array is used to label the manager overview bar chart 
   sortSupervisors = (array) => {
     let supervisors = [];
     let IDs = [];
+    let labels = []
     for (let i = 0; i < array.length; i++) {
       supervisors.push({ first_name: array[i].first_name, last_name: array[i].last_name, supervisor_id: array[i].supervisor_id, praise: 0, instruct: 0, correct: 0 });
       IDs.push(array[i].supervisor_id);
+      labels.push(array[i].last_name + ', ' + array[i].first_name);
     }
     //need this array to map over where there are 0 
     this.setState({
       ...this.state,
       supervisors: supervisors,
+      labels: labels
     });
     this.getFeedback(IDs);
     this.getFeedbackDetails(IDs);
   }
   sortData = () => {
-    let praise = this.state.supervisors.map(function(supervisor){return supervisor.praise} );
-    let instruct = this.state.supervisors.map(function(supervisor){return supervisor.instruct} );
-    let correct = this.state.supervisors.map(function(supervisor){return supervisor.correct} );
+    let praise = this.state.supervisors.map(supervisor => supervisor.praise);
+    let instruct = this.state.supervisors.map(supervisor => supervisor.instruct);
+    let correct = this.state.supervisors.map(supervisor => supervisor.correct);
       this.setState({
         praise: praise,
         correct: correct,
@@ -134,25 +138,23 @@ class ManagerDashboard extends React.Component {
   render() {
     return (
       <div className="padding-bottom">
-      {JSON.stringify(this.state.supervisors)}
         <Grid container spacing={0}>
           <Grid item xs={12}>
             <Typography variant="display1" className="center">{this.props.user.first_name}'s Dashboard</Typography>
             <Typography variant="subheading" className="center">Feedback given past 12 months</Typography>
           </Grid>
           <Grid item xs={12}>
-            <ManagerOverviewGraph supervisors={this.state.supervisors} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct} />
+            <ManagerOverviewGraph supervisors={this.state.labels} praise={this.state.praise} correct={this.state.correct} instruct={this.state.instruct} />
           </Grid>
           <Grid item xs={12}>
             <br />
             <Typography variant="headline" className="center">All Supervisors</Typography>
             <br />
           </Grid>
+            <div className="card-container">
           {this.state.supervisors.map((supervisor, i) => {
             return (
-              <Grid item xs={12} lg={8} key={i}>
-                <div className="card-container">
-                  <div className="card">
+                  <div className="card" key={i}>
                     <Typography variant="headline">{supervisor.first_name} {supervisor.last_name} <IconButton onClick={() => this.editPerson(supervisor.supervisor_id)}><Edit /></IconButton></Typography>
                     <Button color="primary" onClick={() => this.navTo(supervisor.supervisor_id)}>Summary</Button>
                     <Button color="primary" onClick={() => this.navToEmployees(supervisor.supervisor_id)}>Employees</Button>
@@ -163,10 +165,9 @@ class ManagerDashboard extends React.Component {
                       target="_blank"
                     >Download CSV</CSVLink>}
                   </div>
-                </div>
-              </Grid>
-            );
-          })}
+                );
+              })}
+            </div>
         </Grid>
       </div>
     );
