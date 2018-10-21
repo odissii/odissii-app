@@ -246,7 +246,7 @@ router.get('/employee/:id', (req, res) => {
     if(req.isAuthenticated()) {
         console.log('in GET /employee');
         employeeId = req.params.id;
-        const empFeedbackQuery = `SELECT "employee"."first_name", "date_created", "quality_types"."id", "details"
+        const empFeedbackQuery = `SELECT "employee"."first_name", "feedback"."id" as "feedbackId", "date_created", "quality_types"."id", "details"
                                 FROM "feedback" 
                                 JOIN "quality_types"
                                 ON "feedback"."quality_id" = "quality_types"."id"
