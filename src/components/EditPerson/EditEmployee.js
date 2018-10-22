@@ -74,16 +74,16 @@ class EditEmployee extends Component {
                 <h1>Edit Employee</h1>
                 <FormControl style={styles.formControl}>
                     <TextField label="First Name" value={this.state.employee.first_name} onChange={(event)=>this.handleChangeFor('first_name', event)}/>
-                </FormControl>
+                </FormControl><br/>
                 <FormControl style={styles.formControl}>
                     <TextField label="Last Name" value={this.state.employee.last_name} onChange={(event)=>this.handleChangeFor('last_name', event)}/>
-                </FormControl>
+                </FormControl><br/>
                 <FormControl style={styles.formControl}>
                     <TextField label="Employee ID" value={this.state.employee.employeeId} onChange={(event)=>this.handleChangeFor('employeeId', event)}/>
-                </FormControl>
+                </FormControl><br/>
                 <FormControl style={styles.formControl}>
                     <TextField label="Image Path" value={this.state.employee.image_path} onChange={(event)=>this.handleChangeFor('image_path', event)}/>
-                </FormControl>
+                </FormControl><br/>
                 <FormControl style={styles.formControl}>
                     <FormLabel>Reassign Supervisor</FormLabel>
                     <NativeSelect
@@ -95,7 +95,7 @@ class EditEmployee extends Component {
                           );
                       })}
                     </NativeSelect>
-                </FormControl>
+                </FormControl><br/>
                 <FormControl>
                     <FormLabel>Remove?
                     <Checkbox
