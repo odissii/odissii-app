@@ -14,7 +14,7 @@ import DisplaySwipeableTabs from './DisplaySwipeableTabs/DisplaySwipeableTabs';
 import './IndividualEmployeeSummaryView.css';
 import { withStyles } from '@material-ui/core/styles';
 //Buttons
-import { AppBar, Toolbar, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
@@ -47,11 +47,15 @@ const styles = {
     },
     tableCell: {
         textAlign: 'center',
+        padding: 0,
     },
     grid: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    color: {
+        color: '#f7fcff',
     }
 }; //end of styles
 
@@ -117,25 +121,23 @@ class IndividualEmployeeSummaryView extends Component {
         let data = orderBy(this.props.feedback.currentEmployee, this.props.sort.column, this.props.sort.direction);
 
         return (
-            <div>
+            <div className="container">
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
                         <div className="outer">
-                            <div className="header">
                                 <AppBar position="sticky">
                                     <Toolbar>
                                         {/* This arrow_back icon button will take the user back to the /employees view */}
                                         <IconButton component={Link} to={"/employees"}>
-                                            <ArrowBack />
+                                            <ArrowBack style={styles.color}/>
                                         </IconButton>
                                         {/* If the selected employee name is not yet render, display null, otherwise display the first name */}
                                         <h3>{this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}</h3>
                                         <div style={styles.grow} />
                                     </Toolbar>
                                 </AppBar>
-
-                            </div>
-                            <h2>Overall Summary:</h2>
+                            <br />
+                            <Typography variant="headline" className="center">Overall Summary:</Typography>
                             {/* {JSON.stringify(this.state.totalQualityCount)} */}
                             {/* This will map over the over the total feedback */}
                             {this.state.totalQualityCount.map((totalFeedback, index) => {
@@ -145,20 +147,23 @@ class IndividualEmployeeSummaryView extends Component {
                             })}
                             {/* This is the FAB for making a new feedback but will only show if the user is a supervisor */}
                             {btn}
-                            <h2>Feedbacks:</h2>
+                            < br/>
                             <DisplaySwipeableTabs />
-                            <h2>Latest Feedbacks:</h2>
+                            <Typography variant="subheading" className="center">Latest Feedbacks:</Typography>
                             <div>
                                 <Table>
                                     <TableHead>
-                                        <TableRow style={styles.row}>
+                                        <TableRow>
                                             <TableCell style={styles.tableCell} onClick={() => this.handleSort('id')}>
                                                 <Grid style={styles.grid}>
                                                     Category
                                                 {this.props.sort.column === 'id' ? (
                                                         this.props.sort.direction === 'asc' ? (
                                                             <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
-                                            <TableCell style={styles.tableCell}>Feedback</TableCell>
+                                            <TableCell style={styles.tableCell}>
+                                                <Grid style={styles.grid}>
+                                                    Feedback
+                                                </Grid></TableCell>
                                             <TableCell style={styles.tableCell} onClick={() => this.handleSort('date_created')}>
                                                 <Grid style={styles.grid}>
                                                     Date Given
