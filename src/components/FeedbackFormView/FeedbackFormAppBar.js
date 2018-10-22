@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 
 
@@ -18,8 +18,8 @@ class FeedbackFormAppBar extends React.Component {
         return (
             <AppBar position="sticky">
                 <Toolbar>
-                    <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
-                    <Typography>New Feedback</Typography>
+                    <IconButton onClick={this.handleClick}><ArrowBack style={{color: '#f7fcff'}} /></IconButton>
+                    <h3 style={{color: '#f7fcff'}}>New Feedback</h3>
                 </Toolbar>
             </AppBar>
         )
