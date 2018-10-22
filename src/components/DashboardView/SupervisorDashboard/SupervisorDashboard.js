@@ -43,26 +43,6 @@ class SupervisorDashboard extends React.Component {
           </Grid>
         </Grid>
       </div>
-
-
-
-      // this styling is here until we add padding to the container
-      // to compensate for when bottom nav is showing
-      // <div style={{paddingBottom: '70px'}}>
-      //   <h2>Supervisor Dashboard</h2>
-      //   <div>
-      //     Current Quarter
-      //     <QuarterlySummary data={feedbackHistory} />
-      //   </div>
-      //   <div>
-      //     Past Three Weeks
-      //     <PastThreeWeeks data={feedbackHistory} />
-      //   </div>
-      //   <div>
-      //     Past Twelve Months
-      //     <PastTwelveMonths data={feedbackHistory} />
-      //   </div>
-      // </div>
     );
   }
 }

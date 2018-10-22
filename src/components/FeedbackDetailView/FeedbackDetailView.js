@@ -7,25 +7,13 @@ import _ from 'lodash';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
 
-import Grid from '@material-ui/core/Grid';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBack from '@material-ui/icons/ArrowBack';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import FormGroup from '@material-ui/core/FormGroup';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { 
+  Grid, AppBar, Toolbar, IconButton, FormControl, FormLabel, 
+  FormControlLabel, RadioGroup, Radio, FormGroup, Switch, TextField, 
+  Checkbox, Button, Typography
+} from '@material-ui/core';
+
+import { ArrowBack } from '@material-ui/icons';
 
 const booleanFields = ['task_related', 'culture_related', 'follow_up_needed'];
 
