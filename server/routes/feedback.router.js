@@ -219,7 +219,8 @@ router.get('/supervisors/reports', (req, res) => {
     const supervisor = req.query.id;
     const start = req.query.start;
     const end = req.query.end;
-    const query = `SELECT  "feedback"."supervisor_id", ("person"."first_name" || ' ' || "person"."last_name") as supervisor, "feedback"."date_created", ( "employee"."first_name"  || ' ' || "employee"."last_name") as employee, "feedback"."details", "quality_types"."name" as "type"   
+    const query = `SELECT  "feedback"."supervisor_id", ("person"."first_name" || ' ' || "person"."last_name") as supervisor, "feedback"."date_created", 
+    ( "employee"."first_name"  || ' ' || "employee"."last_name") as employee, "feedback"."details", "quality_types"."name" as "type", "feedback_images"."image_path"   
                         FROM "feedback" 
                         JOIN "quality_types"
                         ON "quality_types"."id" = "feedback"."quality_id"
@@ -227,6 +228,8 @@ router.get('/supervisors/reports', (req, res) => {
                         ON "feedback"."supervisor_id" = "person"."id"
                         JOIN "employee" 
                         ON "feedback"."employee_id" = "employee"."id"
+                        FULL OUTER JOIN "feedback_images" 
+                        ON "feedback_images"."feedback_id" = "feedback"."id"
                         WHERE "feedback"."supervisor_id" = $1 AND "date_created" > $2 AND "date_created" < $3;`;
     pool.query(query, [supervisor, start, end]).then((results) => {
       res.send(results.rows);
