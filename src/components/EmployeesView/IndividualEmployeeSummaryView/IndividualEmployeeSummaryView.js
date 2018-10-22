@@ -16,7 +16,8 @@ import { withStyles } from '@material-ui/core/styles';
 //Buttons
 import { AppBar, Toolbar, IconButton } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-
+import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 //Material Table
@@ -26,22 +27,38 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import orderBy from 'lodash/orderBy';
+
+
 const mapStateToProps = state => ({
     user: state.user,
     feedback: state.feedback.feedback,
     id: state.id,
+    sort: state.sort
 });
 
 const styles = {
     row: {
         display: 'flex',
         justifyContent: 'center',
-        backgroundColor: 'black',
     },
     grow: {
         flexGrow: 1,
+    },
+    tableCell: {
+        textAlign: 'center',
+    },
+    grid: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 }; //end of styles
+
+const invertDirection = {
+    asc: 'desc',
+    desc: 'asc'
+}
 
 class IndividualEmployeeSummaryView extends Component {
     constructor(props) {
@@ -53,6 +70,7 @@ class IndividualEmployeeSummaryView extends Component {
 
     componentDidMount() {
         this.getTotalFeedbackCount();
+        orderBy(this.state.feedback, this.props.sort.column, this.props.sort.direction);
         this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
         this.props.dispatch({ type: FEEDBACK_ACTIONS.FETCH_CURRENT_EMPLOYEE_FEEDBACK, payload: { id: this.props.id } });
     } //end of componentDidMount
@@ -74,6 +92,12 @@ class IndividualEmployeeSummaryView extends Component {
         this.props.history.push('/feedback/new');
     }
 
+    handleSort = columnName => {
+        this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName });
+        let direction = this.props.sort.column === columnName ? invertDirection[this.props.sort.direction] : 'desc';
+        this.props.dispatch({ type: 'ADD_SORT_DIRECTION', payload: direction })
+    }
+
     render() {
         let btn = null;
         if (this.props.user.role === USER_ROLES.SUPERVISOR) {
@@ -90,6 +114,7 @@ class IndividualEmployeeSummaryView extends Component {
                 <div></div>
             )
         }
+        let data = orderBy(this.props.feedback.currentEmployee, this.props.sort.column, this.props.sort.direction);
 
         return (
             <div>
@@ -104,8 +129,8 @@ class IndividualEmployeeSummaryView extends Component {
                                             <ArrowBack />
                                         </IconButton>
                                         {/* If the selected employee name is not yet render, display null, otherwise display the first name */}
-                                        <h1>{this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}</h1>
-                                        <div style={styles.grow}/>
+                                        <h3>{this.props.feedback.currentEmployee[0] ? this.props.feedback.currentEmployee[0].first_name : null}</h3>
+                                        <div style={styles.grow} />
                                     </Toolbar>
                                 </AppBar>
 
@@ -126,16 +151,26 @@ class IndividualEmployeeSummaryView extends Component {
                             <div>
                                 <Table>
                                     <TableHead>
-                                        <TableRow styles={styles.row}>
-                                            <TableCell>Category</TableCell>
-                                            <TableCell>Feedback</TableCell>
-                                            <TableCell>Date Given</TableCell>
+                                        <TableRow style={styles.row}>
+                                            <TableCell style={styles.tableCell} onClick={() => this.handleSort('id')}>
+                                                <Grid style={styles.grid}>
+                                                    Category
+                                                {this.props.sort.column === 'id' ? (
+                                                        this.props.sort.direction === 'asc' ? (
+                                                            <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
+                                            <TableCell style={styles.tableCell}>Feedback</TableCell>
+                                            <TableCell style={styles.tableCell} onClick={() => this.handleSort('date_created')}>
+                                                <Grid style={styles.grid}>
+                                                    Date Given
+                                                {this.props.sort.column === 'date_created' ? (
+                                                        this.props.sort.direction === 'asc' ? (
+                                                            <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {/* {JSON.stringify(this.props.feedback.currentEmployee)} */}
+                                        {/* {JSON.stringify(data)} */}
                                         {/* This will map over the array and pass it as "feedback" to the DisplayFeedback Component */}
-                                        {this.props.feedback.currentEmployee.map((feedbacksAtIndex, index) => {
+                                        {data.map((feedbacksAtIndex, index) => {
                                             return (
                                                 <DisplayFeedback key={index} feedback={feedbacksAtIndex} history={this.props.history} />
                                             )
