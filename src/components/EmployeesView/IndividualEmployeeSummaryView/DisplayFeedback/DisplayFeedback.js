@@ -33,34 +33,42 @@ const styles = {
         backgroundColor: '#6C9BD1',
     },
     row: {
-        display: 'flex',
-        justifyContent: 'center',
+        // display: 'flex',
+        // justifyContent: 'center',
+        padding: 0,
     },
 }; //end of styles
 
 class DisplayFeedback extends Component {
+
+    clickHandler = (event) => {
+        this.props.history.push(`/feedback/detail/${this.props.feedback.feedbackId}`)
+    }
+
     render() {
 
         //This is how the avatar icon changes according to the category name of the feedback
         let content = null;
         if (this.props.feedback.id === 1) {
-            content = <TableCell><Avatar style={styles.praiseAvatar}><Icon>thumb_up</Icon></Avatar></TableCell>
+            content = <TableCell styles={styles.row}><Avatar style={styles.praiseAvatar}><Icon>thumb_up</Icon></Avatar></TableCell>
         } else if (this.props.feedback.id === 3) {
-            content = <TableCell><Avatar style={styles.correctAvatar}><Icon>thumb_down</Icon></Avatar></TableCell>
+            content = <TableCell styles={styles.row}><Avatar style={styles.correctAvatar}><Icon>thumb_down</Icon></Avatar></TableCell>
         } else if (this.props.feedback.id === 2) {
-            content = <TableCell><Avatar style={styles.instructAvatar}><Icon>thumbs_up_down</Icon></Avatar></TableCell>
+            content = <TableCell styles={styles.row}><Avatar style={styles.instructAvatar}><Icon>thumbs_up_down</Icon></Avatar></TableCell>
         }; //end of if-else
 
         return (
+            <div>
             <TableRow>
                 {/* {content} is coming from the changing avatar icon logic */}
                 { content }
                 {/* This is how the details of the feedback are only displaying up to a certain
                 character length instead of the whole feedback displaying */}
-                <TableCell>{this.props.feedback.details.slice(0,15)}...</TableCell>
+                <TableCell onClick={this.clickHandler} styles={styles.row}>{this.props.feedback.details.slice(0,15)}...</TableCell>
                 {/* This is how the date is formatted coming back from the server */}
-                <TableCell>{moment(this.props.feedback.date_created).format("MM/DD/YY")}</TableCell>
+                <TableCell styles={styles.row}>{moment(this.props.feedback.date_created).format("MM/DD/YY")}</TableCell>
             </TableRow>
+            </div>
         ) //end of return
     } //end of render
 } //end of DisplayFeedback

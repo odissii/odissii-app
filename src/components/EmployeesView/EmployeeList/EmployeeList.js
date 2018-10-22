@@ -7,6 +7,8 @@ import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import axios from 'axios';
 import { PEOPLE_ACTIONS } from '../../../redux/actions/peopleActions';
+import { USER_ROLES } from '../../../constants';
+
 import orderBy from 'lodash/orderBy';
 
 
@@ -18,6 +20,7 @@ const mapStateToProps = state => ({
     search: state.search,
     filter: state.filter,
     sort: state.sort,
+    people: state.people.staff.supervisorToView,
 })
 
 const styles = {
@@ -38,7 +41,7 @@ const styles = {
         alignItems: 'center',
     },
     avatar: {
-        marginRight: '10px', 
+        marginRight: '10px',
         marginLeft: '10px',
     }
 }
@@ -47,34 +50,53 @@ const invertDirection = {
     asc: 'desc',
     desc: 'asc'
 }
-class EmployeeList extends React.Component {
 
+class EmployeeList extends React.Component {
+    // Gets all the employee's associated the user/supervisor
+    // Initially orders the list of employees ascending by last name
     componentDidMount() {
         this.getEmployees();
         orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
     }
-
+    // Gets all the employees associated with supervisor's id
+    // if a manager is logged in it get's the employee's associated with the supervisor they selected.
     getEmployees = () => {
-        const id = this.props.user.id
-        axios({
-            method: 'GET',
-            url: '/api/staff/employees/' + id
-        }).then((response) => {
-            const employees = response.data;
-            const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
-            this.props.dispatch(action);
-        }).catch((error) => {
-            console.log('Supervisor Employee List get error', error);
-            alert('Unable to GET supervisor employees');
-        })
-    }
+        if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
+            const id = this.props.people.id;
+            axios({
+                method: 'GET',
+                url: '/api/staff/employees/' + id
+            }).then((response) => {
+                const employees = response.data;
+                const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
+                this.props.dispatch(action);
+            }).catch((error) => {
+                console.log('Supervisor Employee List get error', error);
+                alert('Unable to GET supervisor employees');
+            })
+        } else if (this.props.user.userName && this.props.user.role === USER_ROLES.SUPERVISOR) {
+            const id = this.props.user.id
+            axios({
+                method: 'GET',
+                url: '/api/staff/employees/' + id
+            }).then((response) => {
+                const employees = response.data;
+                const action = { type: PEOPLE_ACTIONS.SET_SUPERVISOR_EMPLOYEES, payload: employees };
+                this.props.dispatch(action);
+            }).catch((error) => {
+                console.log('Supervisor Employee List get error', error);
+                alert('Unable to GET supervisor employees');
+            })
+        }
 
+    }
+    // Updates redux with the column and direction to sort the information
     handleSort = columnName => {
         this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName });
         let direction = this.props.sort.column === columnName ? invertDirection[this.props.sort.direction] : 'desc';
         this.props.dispatch({ type: 'ADD_SORT_DIRECTION', payload: direction });
     }
-
+    // When a specific employee is clicked on the user is redirected to summary view for that employee
     handleClick = (event) => {
         this.props.dispatch({ type: 'EMPLOYEE_TO_VIEW', payload: event })
         this.props.history.push('/individualEmployee');
@@ -87,11 +109,11 @@ class EmployeeList extends React.Component {
         // lodash orderBy
         let data = orderBy(this.props.employees, this.props.sort.column, this.props.sort.direction);
 
-
         if (this.props.user.userName) {
             let filteredEmployees = data.filter(
                 (employee) => {
-                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 || employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
+                    return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 ||
+                        employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
                 }
             )
             content = (
@@ -110,7 +132,11 @@ class EmployeeList extends React.Component {
                                     Last&nbsp;Feedback{this.props.sort.column === 'recent' ? (
                                         this.props.sort.direction === 'asc' ? (
                                             <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
-                            <TableCell style={styles.tableCell}>Follow Up</TableCell>
+                            <TableCell style={styles.tableCell}
+                                onClick={() => this.handleSort('incomplete')}>
+                                <Grid style={styles.grid}>Follow Up{this.props.sort.column === 'followUp' ? (
+                                    this.props.sort.direction === 'asc' ? (
+                                        <ArrowDropUp />) : (<ArrowDropDown />)) : null}</Grid></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -118,8 +144,10 @@ class EmployeeList extends React.Component {
                             return <TableRow key={employee.id} value={employee} onClick={() => this.handleClick(employee.id)}>
                                 <TableCell style={styles.tableCell}>
                                     <Grid style={styles.gridRow}>
-                                        <Avatar style={styles.avatar} alt={employee.first_name && employee.last_name} src={employee.image_path || 'images/avatar.png'} />
-                                        {employee.first_name}&nbsp;{employee.last_name}</Grid>
+                                        <Avatar style={styles.avatar} alt={employee.first_name && employee.last_name}
+                                            src={employee.image_path || 'images/avatar.png'} />
+                                        {employee.first_name}&nbsp;{employee.last_name}
+                                    </Grid>
                                 </TableCell>
                                 <TableCell style={styles.tableCell}>
                                     {employee.recent && moment(employee.recent).format("MM/DD/YYYY")}

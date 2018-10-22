@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { triggerLogin, formError, clearError } from '../../redux/actions/loginActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
@@ -10,6 +9,13 @@ const mapStateToProps = state => ({
   user: state.user,
   login: state.login,
 });
+
+const styles = {
+  button: {
+      margin: 5,
+      width: 30,
+  },
+}
 
 class LoginPage extends Component {
   constructor(props) {
@@ -65,7 +71,7 @@ class LoginPage extends Component {
       <div>
         {this.renderAlert()}
         <form onSubmit={this.login}>
-          <h1>Login</h1>
+          <h1>odissii</h1>
           <div>
             <FormLabel  htmlFor="username">
               Username:
@@ -88,11 +94,10 @@ class LoginPage extends Component {
               />
             </FormLabel >
           </div>
-          <div>
-             <Button type={'submit'} variant="contained">Submit</Button>
-            <Button onClick={()=>this.props.history.push('/register')}>Register</Button>
-            <Button onClick={()=>this.props.history.push('/reset/password')}>Forgot Password?</Button>
-            </div>
+          <div className="align-right">
+          <Button onClick={()=>this.props.history.push('/reset/password')}>Forgot Password?</Button>
+            <Button style={styles.button} type={'submit'} variant="contained" color="primary">Login</Button>
+          </div>
         </form>
             
       </div>

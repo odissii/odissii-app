@@ -39,9 +39,9 @@ class ResetPassword extends Component {
             <Typography variant="headline" className="margin-bottom">Reset Password</Typography>
             <Typography>Enter the email address associated with this account.</Typography>
                 <Input onChange={this.handleChange} />
-                <Button onClick={()=>this.props.history.push('/home')}>Cancel</Button>
+                <br/><br/>
                 <Button variant="contained" color="primary" onClick={this.handleSubmit}>Submit</Button>
-                
+                <Button onClick={()=>this.props.history.push('/home')}>Cancel</Button>
             </div>
         </div>
         );
