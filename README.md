@@ -51,4 +51,4 @@ odissii is a full-stack, mobile first web application that allows supervisors to
 - [x] Supervisors are assigned a temporary password by their manager but they are able to reset their password after their account has been created. 
 
 ## Authors
-@m2vang, @pheggeseth, @larsz-o, @jenniferpetzoldt 
+[@m2vang](https://github.com/m2vang), [@pheggeseth](https://github.com/pheggeseth), [@larsz-o](https://github.com/larsz-o), [@jenniferpetzoldt](https://github.com/jenniferpetzoldt)
