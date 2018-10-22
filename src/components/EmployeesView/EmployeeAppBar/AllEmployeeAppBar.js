@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { AppBar, Toolbar, IconButton, Typography, InputBase } from '@material-ui/core';
+import { AppBar, Toolbar, IconButton, InputBase } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Search from '@material-ui/icons/Search';
 
@@ -30,6 +30,7 @@ class EmployeeAppBar extends React.Component {
     // When the back button is clicked the user is sent back to the dashboard view
     handleClick = (event) => {
         this.props.history.push('/dashboard');
+        this.props.dispatch({ type: 'ADD_NAV_VALUE', payload: 'dashboard'});
     }
     
     render() {

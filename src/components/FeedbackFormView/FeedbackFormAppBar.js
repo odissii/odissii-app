@@ -12,7 +12,8 @@ const styles = {
 
 class FeedbackFormAppBar extends React.Component {
     handleClick = (event) => {
-        this.props.history.push('/dashboard');
+        this.props.history.push('/employees');
+        this.props.dispatch({ type: 'ADD_NAV_VALUE', payload: 'employees'});
     };
 
     render() {

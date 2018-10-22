@@ -109,7 +109,6 @@ class EmployeeList extends React.Component {
         // lodash orderBy
         let data = orderBy(this.props.employees, this.props.sort.column, this.props.sort.direction);
 
-
         if (this.props.user.userName) {
             let filteredEmployees = data.filter(
                 (employee) => {

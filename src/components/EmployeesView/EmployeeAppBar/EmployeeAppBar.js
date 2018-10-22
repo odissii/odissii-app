@@ -31,6 +31,7 @@ class EmployeeAppBar extends React.Component {
     // When the back button is clicked the user is sent back to the dashboard view
     handleClick = (event) => {
         this.props.history.push('/dashboard');
+        this.props.dispatch({ type: 'ADD_NAV_VALUE', payload: 'dashboard'});
     }
     render() {
         return (
