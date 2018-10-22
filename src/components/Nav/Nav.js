@@ -9,7 +9,7 @@ import Group from '@material-ui/icons/Group';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import Create from '@material-ui/icons/Create';
 import ShowChart from '@material-ui/icons/ShowChart';
-import Menu from '@material-ui/icons/Menu';
+// import Menu from '@material-ui/icons/Menu';
 
 const mapStateToProps = state => ({
   user: state.user,

@@ -10,10 +10,6 @@ const mapStateToProps = state => ({
 
 // REACT COMPONENT
 class QuarterlySummary extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     if (!this.props.quality_types.length) {
       this.props.dispatch({type: QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES});
@@ -29,7 +25,7 @@ class QuarterlySummary extends React.Component {
             labels: ['Praise', 'Instruct', 'Correct'],
             datasets: [{
               data: feedbackQualityForCurrentQuarter(this.props.data, this.props.quality_types),
-              backgroundColor: ['#0f77e6', '#f17416', 'lightgray']
+              backgroundColor: ['#4AC985', '#6C9BD1', '#F79B1B']
             }]
           }
         }

@@ -37,17 +37,17 @@ class PastTwelveMonths extends React.Component {
       datasets: [
         {
           label: 'Correct',
-          backgroundColor: 'lightgray',
+          backgroundColor: '#F79B1B',
           data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'correct'))
         },
         {
           label: 'Instruct',
-          backgroundColor: '#f17416',
+          backgroundColor: '#6C9BD1',
           data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'instruct'))
         },
         {
           label: 'Praise',
-          backgroundColor: '#0f77e6',
+          backgroundColor: '#4AC985',
           data: qualityByMonth(monthlyTotals, getIdForQuality(quality_types, 'praise'))
         },
       ]
@@ -74,7 +74,6 @@ const qualityByMonth = (totals, qualityId) => Object.values(totals).map(month =>
 
 const totalsByMonth = (feedback, quality_types) => {
   const months = [12,11,10,9,8,7,6,5,4,3,2,1];
-  const now = moment();
   const feedbackByMonth = months.map(sortFeedbackByMonth(feedback));
 
   return feedbackByMonth.map(feedback => getQualityTotalsForMonth(feedback, quality_types));
