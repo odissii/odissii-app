@@ -130,7 +130,7 @@ class FeedbackFormView extends React.Component {
       type: FEEDBACK_ACTIONS.ADD_FEEDBACK,
       payload: data
     });
-    
+
 
     if (employeeHasPendingFollowUp) {
       axios.put(`/api/followup/complete/${employeeId}`)
@@ -171,7 +171,7 @@ class FeedbackFormView extends React.Component {
         console.log('Error', error);
       }
     })
-    this.props.dispatch({type:'ADD_IMAGE', payload: image});
+    this.props.dispatch({ type: 'ADD_IMAGE', payload: image });
   }
 
   backToDashboard = () => {
@@ -196,9 +196,9 @@ class FeedbackFormView extends React.Component {
         <Grid container>
           <Grid item xs={12}>
             <FeedbackFormAppBar />
-            <form style={{maxWidth: '350px', margin: 0, padding: '20px', textAlign: 'center'}} onSubmit={this.handleFormSubmit}>
-              <Grid item xs={12} style={{width: '100%'}}>
-                <FormControl style={{width: '75%', marginBottom: '20px'}} required>
+            <form style={{ maxWidth: '350px', margin: 0, padding: '20px', textAlign: 'center' }} onSubmit={this.handleFormSubmit}>
+              <Grid item xs={12} style={{ width: '100%' }}>
+                <FormControl style={{ width: '75%', marginBottom: '20px' }} required>
                   <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
                   <NativeSelect
                     value={employeeId}
@@ -215,7 +215,7 @@ class FeedbackFormView extends React.Component {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl style={{marginBottom: '20px'}} required>
+                <FormControl style={{ marginBottom: '20px' }} required>
                   <FormLabel>Feedback Quality</FormLabel>
                   <RadioGroup
                     aria-label="feedback-type"
@@ -224,27 +224,27 @@ class FeedbackFormView extends React.Component {
                     onChange={this.handleInputChange('quality_id')}
                   >
                     {this.props.quality_types.map(quality => (
-                      <FormControlLabel key={quality.id} value={quality.id.toString()} label={quality.name} control={<Radio />}/>
+                      <FormControlLabel key={quality.id} value={quality.id.toString()} label={quality.name} control={<Radio />} />
                     ))}
                   </RadioGroup>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl style={{marginBottom: '20px'}}>
+                <FormControl style={{ marginBottom: '20px' }}>
                   <FormLabel>This feedback is:</FormLabel>
                   <FormGroup>
-                    <FormControlLabel 
+                    <FormControlLabel
                       control={
-                        <Switch 
+                        <Switch
                           checked={taskRelated}
                           onChange={this.handleInputChange('taskRelated')}
                         />
                       }
                       label="Task-Related"
                     />
-                    <FormControlLabel 
+                    <FormControlLabel
                       control={
-                        <Switch 
+                        <Switch
                           checked={cultureRelated}
                           onChange={this.handleInputChange('cultureRelated')}
                         />
@@ -255,11 +255,11 @@ class FeedbackFormView extends React.Component {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl style={{marginBottom: '20px'}}>
-                  <FormControlLabel 
+                <FormControl style={{ marginBottom: '20px' }}>
+                  <FormControlLabel
                     label="Follow-Up Needed?"
                     control={
-                      <Checkbox 
+                      <Checkbox
                         checked={followUpNeeded}
                         onChange={this.handleInputChange('followUpNeeded')}
                       />
@@ -268,52 +268,47 @@ class FeedbackFormView extends React.Component {
                 </FormControl>
               </Grid>
               {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
-              {followUpNeeded && 
+              {followUpNeeded &&
+                <Grid item xs={12}>
+                  <FormControl style={{ marginBottom: '20px' }}>
+                    <TextField
+                      type="date"
+                      label="Follow-Up Date"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      value={followUpDate}
+                      onChange={this.handleInputChange('followUpDate')}
+                    />
+                  </FormControl>
+                </Grid>}
+              {/* input to upload images through cloudinary */}
               <Grid item xs={12}>
-                <FormControl style={{marginBottom: '20px'}}>
-                  <TextField 
-                    type="date"
-                    label="Follow-Up Date"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    value={followUpDate}
-                    onChange={this.handleInputChange('followUpDate')}
-                  />
-                </FormControl>
-              </Grid>}
+              <FormControl>
+                <Button onClick={this.openCloudinary}>
+                  <CloudUpload />
+                </Button>
+              </FormControl>
+              </Grid>
               <Grid item xs={12}>
-                <TextField style={{width: '75%', marginBottom: '20px'}} required
-                  label="Feedback Details"
-                  placeholder="Add feedback details"
-                  value={details}
-                  onChange={this.handleInputChange('details')}
-                  multiline
-                />
-              </FormControl>}
-            {/* input to upload images through cloudinary */}
-            <FormControl>
-              <Button onClick={this.openCloudinary}>
-                <CloudUpload />
-              </Button>
-            </FormControl>
-            <TextField required
-              label="Feedback Details"
-              placeholder="Add feedback details"
-              value={details}
-              onChange={this.handleInputChange('details')}
-              multiline
-            />
-            <div>
-              <Button onClick={this.backToDashboard}>Cancel</Button>
-              <Button type="submit" color="primary" variant="contained">Submit</Button>
-            </div>
-          </form>
-
-        </Grid>
+              <TextField required
+                label="Feedback Details"
+                placeholder="Add feedback details"
+                value={details}
+                onChange={this.handleInputChange('details')}
+                multiline
+              />
+              </Grid>
+              <div>
+                <Button onClick={this.backToDashboard}>Cancel</Button>
+                <Button type="submit" color="primary" variant="contained">Submit</Button>
+              </div>
+            </form>
+              </Grid>
+          </Grid>
       </div>
-    );
-  }
-}
-
+        );
+      }
+    }
+    
 export default connect(mapStateToProps)(FeedbackFormView);
