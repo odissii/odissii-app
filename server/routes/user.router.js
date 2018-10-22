@@ -79,7 +79,7 @@ router.put('/createtoken', (req, res) => {
   transporter.sendMail(mail, function(err, info) {
       if (err) {
           console.log('nodemailer error', err);
-          res.sendStatus(500);
+          
       } else {
           console.log("info.messageId: " + info.messageId);
           console.log("info.envelope: " + info.envelope);
