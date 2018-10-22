@@ -46,7 +46,6 @@ class FeedbackDetailView extends React.Component {
       history.push('/home');
     } else if (!user.isLoading && user.userName) {
       if (!this.state.originalFeedback) {
-        console.log('axios request')
         axios.get(`/api/feedback/detail/${this.props.match.params.feedbackId}`)
         .then(response => {
           const data = response.data;
