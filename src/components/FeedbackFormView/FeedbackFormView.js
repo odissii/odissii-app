@@ -115,7 +115,7 @@ class FeedbackFormView extends React.Component {
     const {employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details} = this.state;
     const supervisorId = this.props.user.id;
 
-    const employeeHasPendingFollowUp = this.props.employees.find(employee => employee.id == employeeId).incomplete;
+    const employeeHasPendingFollowUp = this.props.employees.find(employee => Number(employee.id) === Number(employeeId)).incomplete;
     
     const data = {
       supervisorId,

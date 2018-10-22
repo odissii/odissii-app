@@ -52,3 +52,4 @@ odissii is a full-stack, mobile first web application that allows supervisors to
 
 ## Authors
 @m2vang, @pheggeseth, @larsz-o, @jenniferpetzoldt 
+
