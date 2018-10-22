@@ -136,6 +136,7 @@ class IndividualEmployeeSummaryView extends Component {
                                         <div style={styles.grow} />
                                     </Toolbar>
                                 </AppBar>
+                            <br />
                             <Typography variant="headline" className="center">Overall Summary:</Typography>
                             {/* {JSON.stringify(this.state.totalQualityCount)} */}
                             {/* This will map over the over the total feedback */}
