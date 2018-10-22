@@ -329,6 +329,29 @@ router.post('/', (req, res) => {
     ]).then(response => {
       console.log(`/api/feedback POST success`);
       const newFeedbackRow = response.rows[0];
+      // nodemailer to send confirmation email to supervisor
+    //   let mail = {
+    //     from: "odissii <app.odissii@gmail.com>",
+    //     to: `${req.body.email}`,
+    //     subject: "odissii password reset",
+    //     text: "You requested a password reset for your odissii login.",
+    //     html: `<p>You requested a password reset for your odissii login.</p>
+    //     <p>http://localhost:3000/#/reset/password/${token}</p>`
+    // }
+    // console.log(`http://localhost:3000/#/reset/password/${token}`);
+    // transporter.sendMail(mail, function(err, info) {
+    //     if (err) {
+    //         console.log('nodemailer error', err);
+    //     } else {
+    //         console.log("info.messageId: " + info.messageId);
+    //         console.log("info.envelope: " + info.envelope);
+    //         console.log("info.accepted: " + info.accepted);
+    //         console.log("info.rejected: " + info.rejected);
+    //         console.log("info.pending: " + info.pending);
+    //         console.log("info.response: " + info.response);
+    //     }
+    //     transporter.close();
+    // })
       res.send(newFeedbackRow);
     }).catch(error => {
       console.log(`/api/feedback POST error:`, error);
