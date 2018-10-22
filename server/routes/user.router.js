@@ -76,7 +76,6 @@ router.put('/createtoken', (req, res) => {
       html: `<p>You requested a password reset for your odissii login.</p>
       <p>http://localhost:3000/#/reset/password/${token}</p>`
   }
-  console.log(`http://localhost:3000/#/reset/password/${token}`);
   transporter.sendMail(mail, function(err, info) {
       if (err) {
           console.log('nodemailer error', err);
@@ -100,7 +99,6 @@ router.put('/resetpassword', (req, res) => {
   const updates = req.body; 
   console.log(updates); 
   const password = encryptLib.encryptPassword(req.body.password);
-  console.log(password); 
   const query = `UPDATE "person" SET "password" = $1, "expiration" = now(), "token" = 'null' 
                 WHERE "token" = $2 AND "expiration" > now() AND "email_address" = $3;`;
   pool.query(query, [password, updates.token, updates.email_address]).then((results) => {
