@@ -16,6 +16,9 @@ const styles = {
     },
     input: {
         width: 100,
+    },
+    color: {
+        color: '#f7fcff',
     }
 }
 
@@ -33,8 +36,8 @@ class EmployeeAppBar extends React.Component {
         return (
             <AppBar position="sticky">
                 <Toolbar>
-                    <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
-                    <Typography>Employees</Typography>
+                    <IconButton onClick={this.handleClick}><ArrowBack style={styles.color}/></IconButton>
+                    <h3>Employees</h3>
                     <div style={styles.grow} />
                     <div>
                         <Search />

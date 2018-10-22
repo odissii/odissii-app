@@ -4,10 +4,11 @@ import { withRouter } from 'react-router';
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 
-
-// const mapStateToProps = state => ({
-//     user: state.user,
-// });
+const styles = {
+    color: {
+        color: '#f7fcff',
+    },
+}
 
 class FeedbackFormAppBar extends React.Component {
     handleClick = (event) => {
@@ -16,10 +17,10 @@ class FeedbackFormAppBar extends React.Component {
 
     render() {
         return (
-            <AppBar position="sticky">
+            <AppBar position="sticky" >
                 <Toolbar>
-                    <IconButton onClick={this.handleClick}><ArrowBack /></IconButton>
-                    <Typography>New Feedback</Typography>
+                    <IconButton onClick={this.handleClick}><ArrowBack style={styles.color}/></IconButton>
+                    <h3>New Feedback</h3>
                 </Toolbar>
             </AppBar>
         )
