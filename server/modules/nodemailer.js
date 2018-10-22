@@ -9,9 +9,7 @@ const transporter = nodemailer.createTransport({
         user: process.env.my_gmail_username,
         clientId: process.env.my_oauth_client_id,
         clientSecret: process.env.my_oauth_client_secret,
-        refreshToken: process.env.my_oauth_refresh_token,
-        // accessUrl: 'https://www.googleapis.com/oauth2/v4/token',
-        
+        refreshToken: process.env.my_oauth_refresh_token,  
     }
 });
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import {
   Grid, FormControl, FormLabel, NativeSelect, InputLabel, Input, FormControlLabel,
-  RadioGroup, Radio, FormGroup, Switch, TextField, Checkbox, Button, InputAdornment
+  RadioGroup, Radio, FormGroup, Switch, TextField, Checkbox, Button
 } from '@material-ui/core';
 import CloudUpload from '@material-ui/icons/CloudUpload';
 
@@ -47,6 +47,10 @@ class FeedbackFormView extends React.Component {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
     if (!this.props.quality_types.length) {
       this.props.dispatch({ type: QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES });
+    }
+    this.config = {
+      cloud_name: 'depzmhoab',
+      upload_preset: 'x6n4tbur',
     }
   }
 
@@ -104,12 +108,12 @@ class FeedbackFormView extends React.Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    const { employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details } = this.state;
+    const { employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details, image_path } = this.state;
     const supervisorId = this.props.user.id;
     const email = this.props.user.email_address;
 
     const employeeHasPendingFollowUp = this.props.employees.find(employee => Number(employee.id) === Number(employeeId)).incomplete;
-    
+
     const data = {
       supervisorId,
       employeeId,
@@ -119,14 +123,13 @@ class FeedbackFormView extends React.Component {
       cultureRelated,
       details,
       email,
+      image_path,
     };
 
     this.props.dispatch({
       type: FEEDBACK_ACTIONS.ADD_FEEDBACK,
       payload: data
     });
-
-    this.submitImage();
 
     if (employeeHasPendingFollowUp) {
       axios.put(`/api/followup/complete/${employeeId}`)
@@ -154,20 +157,18 @@ class FeedbackFormView extends React.Component {
     }
   };
 
-  submitImage = () => {
-    const image_path = this.state.image_path;
-    const email = this.props.user.email_address;
-    //need feeback id from response of feedback submit
-    const data = { image_path, email }
-    axios({
-      method: 'POST',
-      url: '/api/feedback/image',
-      data: data,
-    }).then((response) => {
-      console.log('submitImage response', response);
-    }).catch((error) => {
-      console.log('submitImage error', error);
-      alert('Unable to submit image');
+  openCloudinary = (event) => {
+    event.preventDefault();
+    window.cloudinary.openUploadWidget(this.config, (error, result) => {
+      if (result) {
+        console.log(result.info.url);
+        this.setState({
+          ...this.state,
+          image_path: result.info.url
+        });
+      } else if (error) {
+        console.log('Error', error);
+      }
     })
   }
 
@@ -271,16 +272,9 @@ class FeedbackFormView extends React.Component {
               </FormControl>}
             {/* input to upload images through cloudinary */}
             <FormControl>
-              <Input
-                name="image_path"
-                type="file"
-                startAdornment={
-                  <InputAdornment position="start">
-                    <CloudUpload />
-                  </InputAdornment>
-                }
-                onChange={this.handleInputChange('image_path')}
-              />
+              <Button onClick={this.openCloudinary}>
+                <CloudUpload />
+              </Button>
             </FormControl>
             <TextField required
               label="Feedback Details"

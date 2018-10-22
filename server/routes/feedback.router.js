@@ -308,29 +308,33 @@ router.get('/confirmation', (req, res) => {
 router.post('/', (req, res) => {
   if (req.isAuthenticated() && req.user.role === 'supervisor') {
     const data = req.body;
-
-    const queryText =
-      `INSERT INTO "feedback" (
-                "supervisor_id", 
-                "employee_id", 
-                "date_created", 
-                "quality_id", 
-                "task_related", 
-                "culture_related", 
-                "details"
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`;
-
-    pool.query(queryText, [
-      data.supervisorId,
-      data.employeeId,
-      data.dateCreated,
-      data.quality_id,
-      data.taskRelated,
-      data.cultureRelated,
-      data.details
-    ]).then(response => {
-      console.log(`/api/feedback POST success`);
-      const newFeedbackRow = response.rows[0];
+(async () => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    let query =  `INSERT INTO "feedback" ("supervisor_id", "employee_id", "date_created", "quality_id", "task_related", 
+      "culture_related", "details") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`;
+      let values = [ data.supervisorId, data.employeeId, data.dateCreated, data.quality_id, data.taskRelated, data.cultureRelated,
+        data.details];
+      const result = await client.query(query, values);
+      const newFeedbackRow = result.rows[0];
+      const id = result.rows[0].id;
+      query = `INSERT INTO "feedback_images" ("image_path", "feedback_id") VALUES ($1, $2);`;
+      await client.query(query, [data.image_path, id]);
+      await client.query('COMMIT');
+      res.send(newFeedbackRow);
+  } catch (error) {
+    console.log('ROLLBACK', error);
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+})().catch((error) => {
+  console.log('CATCH', error);
+  res.sendStatus(500);
+})
+  
       // nodemailer to send confirmation email to supervisor
     //   let mail = {
     //     from: "odissii <app.odissii@gmail.com>",
@@ -353,11 +357,7 @@ router.post('/', (req, res) => {
     //     }
     //     transporter.close();
     // })
-      res.send(newFeedbackRow);
-    }).catch(error => {
-      console.log(`/api/feedback POST error:`, error);
-      res.sendStatus(500);
-    });
+   
   } else {
     res.sendStatus(401);
   }
@@ -366,14 +366,7 @@ router.post('/', (req, res) => {
 // this must occur after the feedback post   
 router.post('/images', (req, res) => {
   if (req.isAuthenticated() && req.user.role === 'supervisor') {
-    const data = req.body;
-    const queryText = `INSERT INTO "feedback_images" ("image_path", "feedback_id") VALUES ($1, $2);`;
-    pool.query(queryText, [])
-    .then(response => {
 
-    }).catch(error => {
-
-    });
   }
 });
 /**
