@@ -106,6 +106,7 @@ class FeedbackFormView extends React.Component {
     event.preventDefault();
     const { employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details } = this.state;
     const supervisorId = this.props.user.id;
+    const email = this.props.user.email_address;
 
     const employeeHasPendingFollowUp = this.props.employees.find(employee => employee.id == employeeId).incomplete;
 
@@ -117,6 +118,7 @@ class FeedbackFormView extends React.Component {
       taskRelated,
       cultureRelated,
       details,
+      email,
     };
 
     this.props.dispatch({
@@ -149,6 +151,20 @@ class FeedbackFormView extends React.Component {
       });
     }
   };
+
+  submitImage = () => {
+    const image_path = this.state.image_path;
+    const email = this.props.user.email_address;
+    //need feeback id from response of feedback submit
+    const data = { image_path, email }
+    axios({
+      method: 'POST',
+      url: '/api/feedback/image',
+      data: data,
+    }).then((response) => {
+
+    })
+  }
 
   backToDashboard = () => {
     this.props.history.push('/dashboard');
@@ -257,7 +273,9 @@ class FeedbackFormView extends React.Component {
                   <InputAdornment position="start">
                     <CloudUpload />
                   </InputAdornment>
-                } />
+                }
+                onChange={this.handleInputChange('image_path')}
+              />
             </FormControl>
             <TextField required
               label="Feedback Details"

@@ -9,7 +9,6 @@ import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import orderBy from 'lodash/orderBy';
 
-
 const moment = require('moment');
 
 const mapStateToProps = state => ({
@@ -50,32 +49,39 @@ const invertDirection = {
 }
 
 class AllEmployeeList extends React.Component {
+    // Gets all the employees within the company
+    // initially orders the employees ascending by last name
     componentDidMount() {
         this.getEmployees();
         orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
     }
 
+    // activates the fetchAllEmployees function within the employeeSaga 
     getEmployees = () => {
         this.props.dispatch({ type: PEOPLE_ACTIONS.FETCH_ALL_EMPLOYEES });
     }
-
+    // Updates redux with the column and direction to sort the information
     handleSort = columnName => {
         this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName });
         let direction = this.props.sort.column === columnName ? invertDirection[this.props.sort.direction] : 'desc';
         this.props.dispatch({ type: 'ADD_SORT_DIRECTION', payload: direction });
     }
 
+    // When the edit button is clicked the user is redirected to the edit employee view associated with the employee id
     handleClick = (id) => {
         this.props.history.push(`/edit/employee/${id}`);
     }
 
     render() {
         let content = null;
+        // uses lodash orderBy function to sort the data based on column and direction
         let data = orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
-
+        // Conditionally renders content only if the user's role is 'manager'
         if (this.props.user.role === USER_ROLES.MANAGER) {
+            // filters the data based on the search paramiter entered in the search bar in the appbar
             let filteredEmployees = data.filter(
                 (employee) => {
+                    // toLowerCase removes case sensitivity from the search bar
                     return employee.first_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1 ||
                         employee.last_name.toLowerCase().indexOf(this.props.search.toLowerCase()) !== -1;
                 }

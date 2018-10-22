@@ -19,14 +19,16 @@ const styles = {
 }
 
 class EmployeeAppBar extends React.Component {
+     // This updates redux with the search paramiters
     handleChange = (event) => {
         this.props.dispatch({ type: 'ADD_SEARCH', payload: event.target.value });
     }
 
+    // When the back button is clicked the user is sent back to the dashboard view
     handleClick = (event) => {
-        console.log('in handleClick');
         this.props.history.push('/dashboard');
     }
+    
     render() {
         return (
             <AppBar position="sticky">

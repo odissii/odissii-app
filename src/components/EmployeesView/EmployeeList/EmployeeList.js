@@ -52,12 +52,14 @@ const invertDirection = {
 }
 
 class EmployeeList extends React.Component {
-
+    // Gets all the employee's associated the user/supervisor
+    // Initially orders the list of employees ascending by last name
     componentDidMount() {
         this.getEmployees();
         orderBy(this.props.people, this.props.sort.column, this.props.sort.direction);
     }
-
+    // Gets all the employees associated with supervisor's id
+    // if a manager is logged in it get's the employee's associated with the supervisor they selected.
     getEmployees = () => {
         if (this.props.user.userName && this.props.user.role === USER_ROLES.MANAGER) {
             const id = this.props.people.id;
@@ -88,13 +90,13 @@ class EmployeeList extends React.Component {
         }
 
     }
-
+    // Updates redux with the column and direction to sort the information
     handleSort = columnName => {
         this.props.dispatch({ type: 'ADD_COLUMN_TO_SORT', payload: columnName });
         let direction = this.props.sort.column === columnName ? invertDirection[this.props.sort.direction] : 'desc';
         this.props.dispatch({ type: 'ADD_SORT_DIRECTION', payload: direction });
     }
-
+    // When a specific employee is clicked on the user is redirected to summary view for that employee
     handleClick = (event) => {
         this.props.dispatch({ type: 'EMPLOYEE_TO_VIEW', payload: event })
         this.props.history.push('/individualEmployee');

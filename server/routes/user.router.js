@@ -101,7 +101,8 @@ router.put('/resetpassword', (req, res) => {
   console.log(updates); 
   const password = encryptLib.encryptPassword(req.body.password);
   console.log(password); 
-  const query = `UPDATE "person" SET "password" = $1, "expiration" = now(), "token" = 'null' WHERE "token" = $2 AND "expiration" > now() AND "email_address" = $3;`;
+  const query = `UPDATE "person" SET "password" = $1, "expiration" = now(), "token" = 'null' 
+                WHERE "token" = $2 AND "expiration" > now() AND "email_address" = $3;`;
   pool.query(query, [password, updates.token, updates.email_address]).then((results) => {
     res.sendStatus(200);
   }).catch((error) => {

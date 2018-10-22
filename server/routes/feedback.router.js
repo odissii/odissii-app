@@ -1,6 +1,8 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const transporter = require('../modules/nodemailer');
+const cloudinary = require('../modules/cloudinary');
 
 /**
  * GET routes
@@ -334,11 +336,10 @@ router.post('/', (req, res) => {
     //     from: "odissii <app.odissii@gmail.com>",
     //     to: `${req.body.email}`,
     //     subject: "odissii password reset",
-    //     text: "You requested a password reset for your odissii login.",
-    //     html: `<p>You requested a password reset for your odissii login.</p>
-    //     <p>http://localhost:3000/#/reset/password/${token}</p>`
+    //     text: "",
+    //     html: `<p></p>
+    //     <p></p>`
     // }
-    // console.log(`http://localhost:3000/#/reset/password/${token}`);
     // transporter.sendMail(mail, function(err, info) {
     //     if (err) {
     //         console.log('nodemailer error', err);
