@@ -126,6 +126,8 @@ class FeedbackFormView extends React.Component {
       payload: data
     });
 
+    this.submitImage();
+
     if (employeeHasPendingFollowUp) {
       axios.put(`/api/followup/complete/${employeeId}`)
         .then(() => {
@@ -162,7 +164,10 @@ class FeedbackFormView extends React.Component {
       url: '/api/feedback/image',
       data: data,
     }).then((response) => {
-
+      console.log('submitImage response', response);
+    }).catch((error) => {
+      console.log('submitImage error', error);
+      alert('Unable to submit image');
     })
   }
 

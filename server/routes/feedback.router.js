@@ -365,7 +365,16 @@ router.post('/', (req, res) => {
 // adds images associated with a feedback record, using the ID of the feedback record
 // this must occur after the feedback post   
 router.post('/images', (req, res) => {
+  if (req.isAuthenticated() && req.user.role === 'supervisor') {
+    const data = req.body;
+    const queryText = `INSERT INTO "feedback_images" ("image_path", "feedback_id") VALUES ($1, $2);`;
+    pool.query(queryText, [])
+    .then(response => {
 
+    }).catch(error => {
+
+    });
+  }
 });
 /**
  * PUT routes
