@@ -26,6 +26,8 @@ const mapStateToProps = state => ({
 const styles = {
     table: {
         marginTop: 5,
+        paddingBottom: '20vh',
+        backgroundColor: 'white',
     },
     tableCell: {
         padding: 0,
