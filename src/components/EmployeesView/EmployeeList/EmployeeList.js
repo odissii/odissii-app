@@ -28,7 +28,8 @@ const styles = {
         marginTop: 5,
         paddingBottom: '30vh',
         backgroundColor: 'white',
-    },
+           
+},
     tableCell: {
         padding: 0,
         textAlign: 'center',
