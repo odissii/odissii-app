@@ -18,6 +18,18 @@ import { FOLLOW_UP_ACTIONS } from '../../redux/actions/followupActions';
 import { QUALITY_ACTIONS } from '../../redux/actions/qualityActions';
 import { USER_ROLES } from '../../constants';
 
+const styles = {
+  grid: {
+    margin : 15,
+  },
+  form: { 
+    maxWidth: '350px', 
+    margin: '0 auto', 
+    padding: '20px', 
+    textAlign: 'center',
+  }
+};
+
 const mapStateToProps = state => ({
   user: state.user,
   quality_types: state.quality_types,
@@ -178,6 +190,8 @@ class FeedbackFormView extends React.Component {
     this.props.history.push('/dashboard');
   };
 
+  getQualityIdByName = name => this.props.quality_types.find(type => type.name === name).id;
+
   render() {
     const {
       employeeId,
@@ -191,122 +205,134 @@ class FeedbackFormView extends React.Component {
 
     const { employees } = this.props;
 
+    let praiseId, instructId, correctId;
+    if (this.props.quality_types.length) {
+      praiseId = this.getQualityIdByName('praise');
+      instructId = this.getQualityIdByName('instruct');
+      correctId = this.getQualityIdByName('correct');
+    }
+
     return (
-      <div className="padding-bottom">
-        <Grid container>
-          <Grid item xs={12}>
-            <FeedbackFormAppBar />
-            <form style={{ maxWidth: '350px', margin: 0, padding: '20px', textAlign: 'center' }} onSubmit={this.handleFormSubmit}>
-              <Grid item xs={12} style={{ width: '100%' }}>
-                <FormControl style={{ width: '75%', marginBottom: '20px' }} required>
-                  <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
-                  <NativeSelect
-                    value={employeeId}
-                    onChange={this.handleInputChange('employeeId')}
-                    input={<Input name="employee" id="employeeId" />}
-                  >
-                    <option value="" disabled>Select an employee...</option>
-                    {employees.map(employee => (
-                      <option key={employee.id} value={employee.id}>
-                        {`${employee.first_name} ${employee.last_name}`}
-                      </option>
-                    ))}
-                  </NativeSelect>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl style={{ marginBottom: '20px' }} required>
-                  <FormLabel>Feedback Quality</FormLabel>
-                  <RadioGroup
-                    aria-label="feedback-type"
-                    name="quality_id"
-                    value={quality_id}
-                    onChange={this.handleInputChange('quality_id')}
-                  >
-                    {this.props.quality_types.map(quality => (
-                      <FormControlLabel key={quality.id} value={quality.id.toString()} label={quality.name} control={<Radio />} />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl style={{ marginBottom: '20px' }}>
-                  <FormLabel>This feedback is:</FormLabel>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={taskRelated}
-                          onChange={this.handleInputChange('taskRelated')}
-                        />
-                      }
-                      label="Task-Related"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={cultureRelated}
-                          onChange={this.handleInputChange('cultureRelated')}
-                        />
-                      }
-                      label="Culture-Related"
-                    />
-                  </FormGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl style={{ marginBottom: '20px' }}>
+      <Grid container className="padding-bottom" style={{marginTop: 0}}>
+        <Grid item xs={12}>
+          <FeedbackFormAppBar />
+          <form style={styles.form} onSubmit={this.handleFormSubmit}>
+            <Grid item xs={12} style={{ width: '100%' }}>
+              <FormControl style={{ width: '75%', marginBottom: '20px' }} required>
+                <InputLabel shrink htmlFor="employeeId">Employee</InputLabel>
+                <NativeSelect
+                  value={employeeId}
+                  onChange={this.handleInputChange('employeeId')}
+                  input={<Input name="employee" id="employeeId" />}
+                >
+                  <option value="" disabled>Select an employee...</option>
+                  {employees.map(employee => (
+                    <option key={employee.id} value={employee.id}>
+                      {`${employee.first_name} ${employee.last_name}`}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl style={{ marginBottom: '20px' }} required>
+                <FormLabel>Feedback Quality</FormLabel>
+                <RadioGroup style={{display: 'flex', flexDirection: 'row'}}
+                  aria-label="feedback-type"
+                  name="quality_id"
+                  value={quality_id}
+                  onChange={this.handleInputChange('quality_id')}
+                >
+                  {praiseId && <FormControlLabel key={praiseId} value={praiseId.toString()} label={'Praise'} control={<Radio />} />}
+                  {instructId && <FormControlLabel key={instructId} value={instructId.toString()} label={'Instruct'} control={<Radio />} />}
+                  {correctId && <FormControlLabel key={correctId} value={correctId.toString()} label={'Correct'} control={<Radio />} />}
+                  
+
+                  {/* {this.props.quality_types.map(quality => (
+                    <FormControlLabel key={quality.id} value={quality.id.toString()} label={quality.name} control={<Radio />} />
+                  ))} */}
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl style={{ marginBottom: '10px' }}>
+                <FormLabel>This feedback is:</FormLabel>
+                <FormGroup style={{display: 'flex', flexDirection: 'row'}}>
                   <FormControlLabel
-                    label="Follow-Up Needed?"
                     control={
-                      <Checkbox
-                        checked={followUpNeeded}
-                        onChange={this.handleInputChange('followUpNeeded')}
+                      <Switch
+                        checked={taskRelated}
+                        onChange={this.handleInputChange('taskRelated')}
                       />
                     }
+                    label="Task-Related"
                   />
-                </FormControl>
-              </Grid>
-              {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
-              {followUpNeeded &&
-                <Grid item xs={12}>
-                  <FormControl style={{ marginBottom: '20px' }}>
-                    <TextField
-                      type="date"
-                      label="Follow-Up Date"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      value={followUpDate}
-                      onChange={this.handleInputChange('followUpDate')}
-                    />
-                  </FormControl>
-                </Grid>}
-              {/* input to upload images through cloudinary */}
-              <Grid item xs={12}>
-              <FormControl>
-                <Button onClick={this.openCloudinary}>
-                  <CloudUpload />
-                </Button>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={cultureRelated}
+                        onChange={this.handleInputChange('cultureRelated')}
+                      />
+                    }
+                    label="Culture-Related"
+                  />
+                </FormGroup>
               </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-              <TextField required
+            </Grid>
+            <Grid item xs={12}>
+              <TextField required style={{width: '75%', marginBottom: '20px' }}
+                type="text"
                 label="Feedback Details"
                 placeholder="Add feedback details"
                 value={details}
                 onChange={this.handleInputChange('details')}
                 multiline
+                rows="3"
               />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl>
+                <FormControlLabel
+                  label="Follow-Up Needed?"
+                  control={
+                    <Checkbox
+                      checked={followUpNeeded}
+                      onChange={this.handleInputChange('followUpNeeded')}
+                    />
+                  }
+                />
+              </FormControl>
+            </Grid>
+            {/* follow-up date picker renders if the user checks the "Follow-Up Needed? box" */}
+            {followUpNeeded &&
+              <Grid item xs={12}>
+                <FormControl style={{ marginBottom: '20px' }}>
+                  <TextField
+                    type="date"
+                    label="Follow-Up Date"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    value={followUpDate}
+                    onChange={this.handleInputChange('followUpDate')}
+                  />
+                </FormControl>
+              </Grid>}
+             {/* input to upload images through cloudinary */}
+             <Grid item xs={12} style={styles.grid}>
+                <FormControl>
+                  <Button onClick={this.openCloudinary}>
+                    <CloudUpload />&nbsp;Upload Image
+                  </Button>
+                </FormControl>
               </Grid>
-              <div>
-                <Button onClick={this.backToDashboard}>Cancel</Button>
-                <Button type="submit" color="primary" variant="contained">Submit</Button>
-              </div>
-            </form>
-              </Grid>
-          </Grid>
-      </div>
+            <div>
+              <Button onClick={this.backToDashboard}>Cancel</Button>
+              <Button type="submit" color="primary" variant="contained">Submit</Button>
+            </div>
+          </form>
+            </Grid>
+        </Grid>
         );
       }
     }
