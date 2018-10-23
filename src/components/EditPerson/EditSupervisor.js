@@ -60,7 +60,7 @@ class EditSupervisor extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="padding-bottom">
                 <AppBar />
                 <div className="edit-person-form">
                     <h1>Edit Supervisor</h1>
