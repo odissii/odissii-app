@@ -17,6 +17,7 @@ const styles = {
     color: {
         color: '#f7fcff'
     }
+
 }
 class EditPersonAppBar extends React.Component {
 
@@ -32,6 +33,7 @@ class EditPersonAppBar extends React.Component {
                 <IconButton onClick={this.handleClick}><ArrowBack style={styles.color}/></IconButton>
                 <h3>Edit Supervisor</h3>
                     <div style={styles.grow} />
+
                 </Toolbar>
             </AppBar>
         )

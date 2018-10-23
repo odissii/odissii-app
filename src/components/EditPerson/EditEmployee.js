@@ -16,6 +16,7 @@ const mapStateToProps = state => ({
         padding: 10,
         margin: 5
     },
+
 }
 
 class EditEmployee extends Component {
@@ -68,7 +69,7 @@ class EditEmployee extends Component {
       }
     render(){
         return(
-            <div>
+            <div className="padding-bottom">
             <AppBar/>
                 <div className="edit-person-form">
                 <h1>Edit Employee</h1>

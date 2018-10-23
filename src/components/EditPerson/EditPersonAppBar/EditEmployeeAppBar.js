@@ -17,6 +17,7 @@ const styles = {
     color: {
         color: '#f7fcff'
     }
+
 }
 class EditPersonAppBar extends React.Component {
 
