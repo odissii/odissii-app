@@ -39,7 +39,7 @@ const mapStateToProps = state => ({
 });
 
 const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNeeded'];
-let image = '';
+
 class FeedbackFormView extends React.Component {
   constructor(props) {
     super(props);
@@ -183,7 +183,6 @@ class FeedbackFormView extends React.Component {
         console.log('Error', error);
       }
     })
-    this.props.dispatch({ type: 'ADD_IMAGE', payload: image });
   }
 
   backToDashboard = () => {

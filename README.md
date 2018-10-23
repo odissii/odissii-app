@@ -23,12 +23,18 @@ odissii is a full-stack, mobile first web application that allows supervisors to
 2. Use the database.sql file to create all of the tables you will need to run this project.
 3. Start postgres if not running already by using ``brew services start postgresql``
 4. ``npm install``
-5. Create a .env file at the root of the project and paste this line into the file:
-    SERVER_SESSION_SECRET=superDuperSecret
-6. While you're in your new .env file, take the time to replace superDuperSecret with some long random string like 25POUbVtx6RKVNWszd9ERB9Bb6 to keep your application secure. Here's a site that can help you: https://passwordsgenerator.net/. If you don't do this step, create a secret with less than eight characters, or leave it as superDuperSecret, you will get a warning.
-7. You will need to sign up for accounts with the Cloudinary and Nodemailer APIs and put your API keys in the .env file as well.
-    Nodemailer: https://nodemailer.com/
+5. Create a .env file containing the following information:
+   SERVER_SESSION_SECRET
+    my_oauth_refresh_token
+    my_gmail_username
+    my_oauth_client_secret 
+    my_oauth_client_id
+
+    You will need to use the Goggle API Console to acquire the tokens needed.
+6. You will need to sign up for accounts with the Cloudinary as well and replace the FeedbackFormView and AddEmployee
     Cloudinary: https://cloudinary.com/documentation/react_integration 
+
+
 8. ``npm run server``
 9. Now that the server is running, start the client ``npm run client``
 10. Navigate to ``localhost:3000``
