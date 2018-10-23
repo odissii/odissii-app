@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-
 import axios from 'axios';
 import { FormControl, Input, Button, FormLabel, NativeSelect, Typography } from '@material-ui/core';
 import './addperson.css';
 import { connect } from 'react-redux';
-import AppBar from '../EditPerson/EditPersonAppBar/EditSupervisorAppBar';
+import AppBar from './AddPersonAppBar.js';
 import swal from 'sweetalert';
 
 const mapStateToProps = state => ({
@@ -123,7 +122,6 @@ class AddPerson extends Component {
       <div className="add-person-view">
         <AppBar />
         <div className="add-staff-div">
-          <Typography variant="display1">Add Staff</Typography>
           <br />
           <FormLabel className="label-spacing">Role:</FormLabel>
           <NativeSelect value={this.state.role_id} onChange={(event) => this.handleChangeFor('role_id', event)}>
