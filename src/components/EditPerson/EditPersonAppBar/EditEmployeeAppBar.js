@@ -15,22 +15,23 @@ const styles = {
         width: 100,
     },
     color: {
-        color: 'white'
-    },
+        color: '#f7fcff'
+    }
+
 }
 class EditPersonAppBar extends React.Component {
 
     handleClick = (event) => {
         this.props.history.push('/allEmployees');
+        this.props.dispatch({ type: 'ADD_NAV_VALUE', payload: 'employees'});
     }
     render() {
         return (
             <AppBar position="sticky">
                 <Toolbar>
                 <IconButton onClick={this.handleClick}><ArrowBack style={styles.color}/></IconButton>
-                    <div style={styles.grow}>
-                    <h3>Edit Employee</h3>
-                    </div>
+                <h3>Edit Employee</h3>
+                    <div style={styles.grow} />
                 </Toolbar>
             </AppBar>
         )
