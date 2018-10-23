@@ -28,7 +28,9 @@ class EditPersonAppBar extends React.Component {
             <AppBar position="sticky">
                 <Toolbar>
                 <IconButton onClick={this.handleClick}><ArrowBack style={styles.color}/></IconButton>
-                    <div style={styles.grow} />
+                    <div style={styles.grow}>
+                    <h3>Edit Employee</h3>
+                    </div>
                 </Toolbar>
             </AppBar>
         )
