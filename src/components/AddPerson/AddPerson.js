@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { FormControl, Input, Button, FormLabel, NativeSelect, Typography } from '@material-ui/core';
 import './addperson.css';
+import CloudUpload from '@material-ui/icons/CloudUpload';
 import { connect } from 'react-redux';
 import AppBar from './AddPersonAppBar.js';
 import swal from 'sweetalert';
@@ -23,11 +24,16 @@ class AddPerson extends Component {
       email_address: '',
       role_id: '',
       message: '',
-      supervisor_id: ''
+      supervisor_id: '', 
+      image_path: ''
     };
   }
   componentDidMount() {
     this.props.dispatch({ type: 'FETCH_SUPERVISORS' });
+    this.config = {
+      cloud_name: 'dnjpvylxb',
+      upload_preset: 'ijxdygxf',
+    }
   }
   componentDidUpdate() {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
@@ -102,7 +108,20 @@ class AddPerson extends Component {
       [propertyName]: event.target.value,
     });
   }
-
+  openCloudinary = (event) => {
+    event.preventDefault();
+    window.cloudinary.openUploadWidget(this.config, (error, result) => {
+      if (result) {
+        console.log(result.info.url);
+        this.setState({
+          ...this.state,
+          image_path: result.info.url
+        });
+      } else if (error) {
+        console.log('Error', error);
+      }
+    })
+  }
   renderAlert() {
     if (this.state.message !== '') {
       return (
@@ -176,8 +195,9 @@ class AddPerson extends Component {
             <Input type="text" onChange={(event) => this.handleChangeFor('employeeId', event)} required />
           </FormControl><br/>
           <FormControl>
-            <FormLabel>Image</FormLabel>
-            <Input type="text" onChange={(event) => this.handleChangeFor('image_path', event)} required />
+            <Button onClick={this.openCloudinary}>
+                    <CloudUpload />&nbsp;Upload Image
+            </Button>
           </FormControl><br/>
           <FormControl>
             <FormLabel>Assign Supervisor</FormLabel>
