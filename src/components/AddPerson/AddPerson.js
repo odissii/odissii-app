@@ -28,18 +28,24 @@ class AddPerson extends Component {
       image_path: ''
     };
   }
+  //gets the list of current supervisors to populate a select menu (assigning a supervisor to an employee) 
+  //and sets up the configuration for cloudinary upload 
   componentDidMount() {
     this.props.dispatch({ type: 'FETCH_SUPERVISORS' });
     this.config = {
       cloud_name: 'dnjpvylxb',
       upload_preset: 'ijxdygxf',
     }
-  }
+  } // end componentDidMount
+
+  //if a user is not logged in, push back to the login page 
   componentDidUpdate() {
     if (!this.props.user.isLoading && this.props.user.userName === null) {
       this.props.history.push('/home');
     }
-  }
+  } // end componentDidUpdate
+
+  // posts a new employee record to the database (employee is not a registered user and does not have its own username and password)
   createEmployee = () => {
     axios({
       method: 'POST',
@@ -63,8 +69,9 @@ class AddPerson extends Component {
       console.log('Error creating employee', error);
       swal('Something went wrong. Please try again.');
     })
+  }// end createEmployee
 
-  }
+  // creates a new user (Supervisor)
   createSupervisor = (event) => {
     event.preventDefault();
     if (this.state.username === '' || this.state.password === '') {
@@ -103,11 +110,14 @@ class AddPerson extends Component {
       });
   } // end createSupervisor
 
+  //sets the value of each input to state 
   handleChangeFor = (propertyName, event) => {
     this.setState({
       [propertyName]: event.target.value,
     });
-  }
+  }//end handleChangeFor
+
+  //opens the image upload widget and sets an uploaded image's URL to state 
   openCloudinary = (event) => {
     event.preventDefault();
     window.cloudinary.openUploadWidget(this.config, (error, result) => {
@@ -121,20 +131,7 @@ class AddPerson extends Component {
         console.log('Error', error);
       }
     })
-  }
-  renderAlert() {
-    if (this.state.message !== '') {
-      return (
-        <h2
-          className="alert"
-          role="alert"
-        >
-          {this.state.message}
-        </h2>
-      );
-    }
-    return (<span />);
-  }
+  }//end openCloundinary
 
   render() {
     return (
@@ -149,7 +146,7 @@ class AddPerson extends Component {
             <option value="employee">Employee</option>
           </NativeSelect>
         </div>
-
+  {/* A user selects what type of staff they'd like to add -- supervisor or employee. Then, the correct registration form renders on the DOM depending on what they chose.  */}
         {this.state.role_id === '1' && <div className="add-person-form">
           <Typography>Set up a supervisor's profile and create a username and password for them.</Typography>
           <br />
