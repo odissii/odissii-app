@@ -243,8 +243,8 @@ class FeedbackDetailView extends React.Component {
       <Grid container justify="center">
         <AppBar position="sticky">
           <Toolbar>
-            <IconButton onClick={this.backToPreviousPage}><ArrowBack /></IconButton>
-            <Typography>Feedback Detail</Typography>
+            <IconButton onClick={this.backToPreviousPage}><ArrowBack style={{color: '#f7fcff'}}/></IconButton>
+            <h3 style={{color: '#f7fcff'}}>Feedback Detail</h3>
           </Toolbar>
         </AppBar>
         <Grid item xs={12}>
