@@ -23,21 +23,17 @@ odissii is a full-stack, mobile first web application that allows supervisors to
 2. Use the database.sql file to create all of the tables you will need to run this project.
 3. Start postgres if not running already by using ``brew services start postgresql``
 4. ``npm install``
-5. Create a .env file containing the following information:
+5. Create a .env file containing the following information. You will need to use the Goggle API Console to acquire the tokens needed.
    SERVER_SESSION_SECRET
     my_oauth_refresh_token
     my_gmail_username
     my_oauth_client_secret 
     my_oauth_client_id
-
-    You will need to use the Goggle API Console to acquire the tokens needed.
-6. You will need to sign up for accounts with the Cloudinary as well and replace the FeedbackFormView and AddEmployee
+6. You will need to sign up for accounts with the Cloudinary as well and replace the FeedbackFormView and AddPerson in the componentDidMount function. 
     Cloudinary: https://cloudinary.com/documentation/react_integration 
-
-
-8. ``npm run server``
-9. Now that the server is running, start the client ``npm run client``
-10. Navigate to ``localhost:3000``
+7. ``npm run server``
+8. Now that the server is running, start the client ``npm run client``
+9. Navigate to ``localhost:3000``
 
 ## Screenshots
 
