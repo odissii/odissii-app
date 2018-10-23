@@ -29,7 +29,7 @@ odissii is a full-stack, mobile first web application that allows supervisors to
     my_gmail_username
     my_oauth_client_secret 
     my_oauth_client_id
-6. You will need to sign up for accounts with the Cloudinary as well and replace the FeedbackFormView and AddPerson in the componentDidMount function. 
+6. You will need to sign up for accounts with the Cloudinary as well and input credentials in the FeedbackFormView and AddPerson in the componentDidMount function. 
     Cloudinary: https://cloudinary.com/documentation/react_integration 
 7. ``npm run server``
 8. Now that the server is running, start the client ``npm run client``
