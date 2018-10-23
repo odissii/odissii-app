@@ -25,6 +25,6 @@ const store = combineReducers({
   id,
   quality_types,
   nav,
-  });
+});
 
 export default store;
