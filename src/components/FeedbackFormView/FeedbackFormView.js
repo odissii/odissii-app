@@ -61,8 +61,8 @@ class FeedbackFormView extends React.Component {
       this.props.dispatch({ type: QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES });
     }
     this.config = {
-      cloud_name: 'depzmhoab',
-      upload_preset: 'x6n4tbur',
+      cloud_name: 'dnjpvylxb',
+      upload_preset: 'ijxdygxf',
     }
   }
 
