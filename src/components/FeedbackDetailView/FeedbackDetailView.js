@@ -236,7 +236,7 @@ class FeedbackDetailView extends React.Component {
           </Toolbar>
         </AppBar>
         <Grid item xs={12}>
-          <div className="feedback-card">
+          <div className="padding-top">
             <Typography variant="h4" className="center">
               {`${originalFeedback.first_name} ${originalFeedback.last_name}`}
             </Typography>
