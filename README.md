@@ -34,7 +34,7 @@ odissii is a full-stack, mobile first web application that allows supervisors to
 10. Navigate to ``localhost:3000``
 
 ## Screenshots
-![supervisor dashboard](https://github.com/odissii/odissii-app/blob/master/public/images/supervisor_dashboard_clementine.png)![supervisor summary](https://github.com/odissii/odissii-app/blob/master/public/images/supevisor_overview_macey.png)
+![supervisor dashboard](https://github.com/odissii/odissii-app/blob/master/public/images/supervisor_dashboard_clementine.png)![supervisor summary](https://github.com/odissii/odissii-app/blob/master/public/images/overall_summary_macey.png)
 
 ![feedback details](https://github.com/odissii/odissii-app/blob/master/public/images/feedback_detail_macey.png)![feedback history](https://github.com/odissii/odissii-app/blob/master/public/images/feedback_history_macey.png) 
 
