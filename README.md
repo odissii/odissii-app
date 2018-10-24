@@ -36,7 +36,7 @@ odissii is a full-stack, mobile first web application that allows supervisors to
 ## Screenshots
 ![supervisor dashboard](https://github.com/odissii/odissii-app/blob/master/public/images/supervisor_dashboard.png) ![feedback details](https://github.com/odissii/odissii-app/blob/master/public/images/feedback_detail.png)
 
-![feedback history](https://github.com/odissii/odissii-app/blob/master/public/images/feedback_history.png) ![supervisor summary](https://github.com/odissii/odissii-app/blob/master/public/images/overall_summary.png)
+![feedback history](https://github.com/odissii/odissii-app/blob/master/public/images/feedback_history.png) ![supervisor summary](https://github.com/odissii/odissii-app/blob/master/public/images/supervisor_overview_macey.png)
 
 ## Completed Features
 - [x] Users (supervisors) can submit a feedback report after they have provided feedback to one of their employees. 
