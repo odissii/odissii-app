@@ -38,7 +38,7 @@ const mapStateToProps = state => ({
   newPostedFollowup: state.followup.newPostedFollowup,
 });
 
-const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNeeded'];
+
 let image = '';
 class FeedbackFormView extends React.Component {
   constructor(props) {
@@ -57,6 +57,8 @@ class FeedbackFormView extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_USER });
+
+    // if quality_types is not populated, fetch the data from the server
     if (!this.props.quality_types.length) {
       this.props.dispatch({ type: QUALITY_ACTIONS.FETCH_FEEDBACK_QUALITY_CATEGORIES });
     }
@@ -69,10 +71,13 @@ class FeedbackFormView extends React.Component {
   componentDidUpdate() {
     const { user, employees, newPostedFeedback, newPostedFollowup, dispatch, history } = this.props;
 
+    // if the user is unauthenticated, redirect to the home page
     if (!user.isLoading && user.userName === null) {
       history.push('/home');
+    // if the user is a manager and not a supervisor, redirect to the user to their dashboard
     } else if (!user.isLoading && user.userName && user.role !== USER_ROLES.SUPERVISOR) {
       history.push('/dashboard');
+    // 
     } else if (!user.isLoading && user.userName && user.role === USER_ROLES.SUPERVISOR) {
       if (!employees.length) {
         this.getEmployees();
@@ -105,13 +110,17 @@ class FeedbackFormView extends React.Component {
   };
 
   handleInputChange = formField => event => {
+    // these fields contain boolean values which need to be flipped if the user clicks them
+    const booleanFields = ['taskRelated', 'cultureRelated', 'followUpNeeded'];
+
     // if the form field is for a boolean value...
     if (booleanFields.includes(formField)) {
-      //...toggle that value
+      // ...toggle that value
       this.setState(prevState => ({
         [formField]: !prevState[formField]
       }));
     } else {
+      // or if not, set the form field to the new value
       this.setState({
         [formField]: event.target.value
       });
@@ -120,10 +129,17 @@ class FeedbackFormView extends React.Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
+
+    // form fields from the component state
     const { employeeId, quality_id, taskRelated, cultureRelated, followUpNeeded, followUpDate, details, image_path } = this.state;
+
+    // the id and email of the logged in, authenticated user
     const supervisorId = this.props.user.id;
     const email = this.props.user.email_address;
 
+    /*
+    find the employee from the list of employees stored in Redux using the "employeeId"
+    */
     const employeeHasPendingFollowUp = this.props.employees.find(employee => Number(employee.id) === Number(employeeId)).incomplete;
 
     const data = {
